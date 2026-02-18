@@ -129,7 +129,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors({
   origin: function (origin, callback) {
     // Agar origin list mein hai ya origin null hai (jaise mobile apps/curl) toh allow karo
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    if (!origin || origin.endsWith(".vercel.app") || origin.includes("localhost")) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -141,7 +141,13 @@ app.use(cors({
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { 
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      if (!origin || origin.endsWith(".vercel.app") || origin.includes("localhost")) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: ["GET", "POST"],
     credentials: true 
   },
