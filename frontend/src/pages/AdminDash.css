@@ -1,0 +1,209 @@
+.admin-container {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 0 20px;
+}
+
+.admin-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+  gap: 28px;
+  align-items: start;
+}
+
+
+.admin-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e6ecf2;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  padding: 22px;
+  transition: 0.25s ease;
+  display: block;   /* IMPORTANT */
+}
+
+.admin-card:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(0,0,0,0.10);
+}
+
+.admin-card h3 { margin: 0 0 5px 0; color: #2c3e50; }
+.admin-card p { margin: 2px 0; color: #64748b; font-size: 0.9rem; }
+
+.approve-btn {
+  background: #00d293;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.approve-btn:hover {
+  background: #00b37e;
+  transform: translateY(-2px);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  background: #f8fafc;
+  border-radius: 12px;
+  color: #94a3b8;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.reject-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.reject-btn:hover {
+  background: #cc0000;
+  transform: translateY(-2px);
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.admin-tabs button {
+  padding: 10px 20px;
+  border: none;
+  background: #f0f0f0;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.admin-tabs button.active-tab {
+  background: #007bff;
+  color: white;
+}
+
+.report-card {
+  background: #fffafa;
+  border: 1px solid #ffcccc;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.report-reason {
+  color: #d9534f;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.transcript-details {
+  margin-top: 10px;
+  background: #eee;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.transcript-box {
+  max-height: 150px;
+  overflow-y: auto;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.ban-btn {
+  margin-top: 10px;
+  background: black;
+  color: white;
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.verify-card{
+  width: 420px;
+  padding: 18px;
+}
+
+.verify-header{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding-bottom:14px;
+  border-bottom:1px solid #eef2f6;
+  margin-bottom:16px;
+}
+
+
+.verify-photo{
+  width:90px;
+  height:90px;
+  border-radius:14px;
+  object-fit:cover;
+  border:2px solid #dbeafe;
+  box-shadow:0 6px 14px rgba(0,0,0,0.15);
+}
+
+
+.verify-section{
+  background:#f8fbff;
+  border:1px solid #e3efff;
+  border-radius:12px;
+  padding:14px;
+  margin:16px 0;
+  font-size:14px;
+  line-height:1.6;
+}
+
+
+.verify-documents{
+  margin-top:12px;
+  padding:12px;
+  border-radius:12px;
+  background:#fffdf5;
+  border:1px dashed #ffd76a;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+
+.verify-documents a{
+  background:white;
+  padding:8px 10px;
+  border-radius:8px;
+  border:1px solid #e8edf3;
+  text-decoration:none;
+  color:#0a4db8;
+  font-weight:500;
+  transition:0.2s;
+}
+
+.verify-documents a:hover{
+  background:#f0f6ff;
+}
+
+.admin-actions{
+  margin-top:18px;
+  display:flex;
+  justify-content:flex-end;
+  gap:12px;
+}
+

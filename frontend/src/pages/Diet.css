@@ -1,0 +1,121 @@
+.diet-page-wrapper {
+  background-color: #f4f7fa;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.diet-container {
+  max-width: 750px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.diet-section-card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 25px;
+}
+
+.diet-section-card h2, .diet-section-card h3 {
+  margin-top: 0;
+  color: #0a4db8;
+  text-align: center;
+}
+
+.sub-text {
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* Form Styles */
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin: 10px 0 5px;
+  color: #444;
+}
+
+.stats-row {
+  display: flex;
+  gap: 10px;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: border 0.3s;
+}
+
+input:focus {
+  border-color: #0a4db8;
+  outline: none;
+}
+
+/* Buttons */
+.primary-btn {
+  background-color: #0a4db8;
+  color: white;
+  border: none;
+  padding: 15px;
+  width: 100%;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+/* ✅ RECIPE INPUT GROUP FIX */
+.recipe-input-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.recipe-input-group input {
+  flex: 2; /* Gives the text box more space */
+  min-width: 0;
+}
+
+.recipe-btn {
+  flex: 1; /* Keeps button size consistent */
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Result Displays */
+.diet-result, .recipe-result {
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  line-height: 1.6;
+}
+
+.diet-result {
+  background: #f0f4ff;
+  border-left: 6px solid #0a4db8;
+}
+
+.recipe-result {
+  background: #f6fff9;
+  border-left: 6px solid #28a745;
+}
+
+.diet-note {
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+  margin-top: 20px;
+}

@@ -1,0 +1,464 @@
+/* --- MAIN LAYOUT & WRAPPER --- */
+.pro-panel-layout {
+    height: 92vh;
+    background: #f0f2f5;
+    padding: 20px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 🚨 EMERGENCY NOTIFICATION BANNER */
+.emergency-notification-banner {
+    background: #ff4d4f;
+    color: white;
+    padding: 12px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(255, 77, 79, 0.3);
+    animation: slideDown 0.5s ease;
+    z-index: 1000;
+}
+
+.blink-icon { 
+    animation: blink 1s infinite; 
+    font-size: 20px; 
+}
+
+/* --- MAIN COMMAND CENTER GRID --- */
+.main-command-center {
+    display: flex;
+    height: 100%;
+    gap: 20px;
+}
+
+/* --- LEFT COLUMN: APPOINTMENT MANAGER --- */
+.column-left {
+    flex: 1.1; 
+    display: flex;
+    flex-direction: column;
+}
+
+.section-card {
+    background: white;
+    border-radius: 16px;
+    height: 100%;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e2e8f0;
+}
+
+.card-header-pro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 15px;
+}
+
+.card-header-pro h3 {
+    color: #1e293b;
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.count-badge {
+    background: #e0e7ff;
+    color: #0a4db8;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.queue-action-box {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.queue-action-box p {
+    margin-bottom: 10px;
+    color: #64748b;
+}
+
+.next-btn-pro {
+    width: 100%;
+    padding: 16px;
+    background: #0a4db8;
+    color: white;
+    border-radius: 12px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(10, 77, 184, 0.2);
+}
+
+.next-btn-pro:hover {
+    background: #083d91;
+    transform: translateY(-2px);
+}
+
+/* --- PROFESSIONAL TABLE STYLING --- */
+.appointment-table-container {
+    margin-top: 10px;
+    overflow-y: auto;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    flex: 1;
+}
+
+.appt-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    background: white;
+}
+
+.appt-table th {
+    background: #f8fafc;
+    padding: 12px 15px;
+    font-size: 0.8rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid #edf2f7;
+    position: sticky;
+    top: 0;
+}
+
+.appt-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.9rem;
+    color: #1e293b;
+}
+
+.appt-table tr.active-row {
+    background-color: #f0f7ff;
+    border-left: 4px solid #0a4db8;
+}
+
+.status-tag {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-tag.live { background: #dcfce7; color: #15803d; }
+.status-tag.waiting { background: #fef9c3; color: #854d0e; }
+
+/* --- RIGHT COLUMN: WHATSAPP-STYLE CHAT --- */
+.column-right {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-container-pro {
+    display: flex;
+    background: white;
+    border-radius: 16px;
+    height: 100%;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+/* CHAT SIDEBAR - WIDENED FOR LARGER DP */
+.chat-sidebar-pro {
+    width: 320px; /* Increased from 260px to fit 140px DP */
+    border-right: 1px solid #f1f5f9;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sidebar Doctor Identity - PRO UPDATE */
+.doctor-sidebar-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 15px; /* Increased padding */
+    border-bottom: 2px solid #f1f5f9;
+    margin-bottom: 10px;
+}
+
+.sidebar-doctor-avatar {
+    width: 140px;  /* ⬆️ Increased Size */
+    height: 140px; /* ⬆️ Increased Size */
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #0a4db8;
+    margin-bottom: 15px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+}
+
+.sidebar-doctor-avatar:hover {
+    transform: scale(1.05); /* Pro hover zoom */
+}
+
+.doctor-sidebar-profile h4 {
+    color: #1e293b;
+    font-size: 1.2rem; /* Matches larger DP */
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.chat-sidebar-pro h4 {
+    padding: 15px 20px;
+    margin: 0;
+    color: #64748b;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.chat-patient-item {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid #f8fafc;
+}
+
+.chat-patient-item.active {
+    background: #f0f7ff;
+    border-left: 4px solid #0a4db8;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background: #0a4db8;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.chat-meta p { margin: 0; }
+.chat-name { font-weight: 600; font-size: 0.95rem; color: #1e293b; }
+.chat-preview { font-size: 0.8rem; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+
+/* CHAT WINDOW */
+.chat-window-pro {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f8fafc;
+}
+
+.chat-header-pro {
+    padding: 15px 25px;
+    background: white;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* SUBTLE REPORT BUTTON */
+.report-btn-subtle {
+    background: transparent;
+    color: #94a3b8;
+    border: 1px solid #e2e8f0;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.report-btn-subtle:hover {
+    color: #ef4444;
+    border-color: #fecaca;
+    background: #fef2f2;
+}
+
+.message-list-pro {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+    background: #eef2f7;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.msg-row { display: flex; width: 100%; }
+.msg-row.right { justify-content: flex-end; }
+.msg-row.left { justify-content: flex-start; }
+
+.chat-msg-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 8px;
+    align-self: flex-end; 
+    border: 1px solid #0a4db8;
+}
+
+.msg-bubble-pro {
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    position: relative;
+}
+
+.msg-row.right .msg-bubble-pro {
+    background: #0a4db8;
+    color: white;
+    border-bottom-right-radius: 2px;
+}
+
+.msg-row.left .msg-bubble-pro {
+    background: white;
+    color: #334155;
+    border-bottom-left-radius: 2px;
+    border: 1px solid #e2e8f0;
+}
+
+.msg-time {
+    display: block;
+    font-size: 0.7rem;
+    margin-top: 5px;
+    opacity: 0.7;
+    text-align: right;
+}
+
+/* --- AUDIO PREVIEW OVERLAY --- */
+.audio-preview-overlay {
+    background: #ffffff;
+    padding: 15px 25px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    animation: slideUp 0.3s ease;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
+}
+
+.delete-mic-btn {
+    background: #fee2e2;
+    color: #ef4444;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: background 0.2s;
+}
+
+.delete-mic-btn:hover { background: #fecaca; }
+
+/* --- INPUT AREA --- */
+.input-area-pro {
+    padding: 20px;
+    background: white;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    border-top: 1px solid #f1f5f9;
+}
+
+.input-area-pro input {
+    flex: 1;
+    padding: 14px 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 25px;
+    outline: none;
+    background: #f8fafc;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+}
+
+.input-area-pro input:focus { border-color: #0a4db8; }
+
+.pro-mic-btn {
+    background: #f1f5f9;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pro-mic-btn.recording {
+    background: #fee2e2;
+    color: #ef4444;
+    animation: pulse 1.5s infinite;
+}
+
+.pro-send-btn {
+    background: #0a4db8;
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.pro-send-btn:hover { background: #083d91; }
+
+/* --- ANIMATIONS --- */
+@keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+/* Scrollbar Customization */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+.blink-icon {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% { opacity: 0; }
+}
+
+.emergency-notification-banner {
+  animation: pulse-border 1.5s infinite;
+}
+
+@keyframes pulse-border {
+  0% { box-shadow: 0 0 0 0 rgba(190, 18, 60, 0.4); }
+  70% { box-shadow: 0 0 0 15px rgba(190, 18, 60, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(190, 18, 60, 0); }
+}

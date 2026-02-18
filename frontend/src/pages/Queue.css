@@ -1,0 +1,231 @@
+.queue-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  overflow: hidden; /* 🔥 stops blue bar stretching */
+}
+
+
+.main-heading {
+  text-align: center;
+  color: #0a4db8;
+  margin-bottom: 30px;
+}
+
+/* ✅ NEW: Tab Menu Styling */
+.tab-menu {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+.tab-menu button {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #666;
+  transition: 0.3s;
+}
+
+.tab-menu button.active {
+  color: #0a4db8;
+  border-bottom: 3px solid #0a4db8;
+}
+
+/* ✅ Live Status Box (Enhanced) */
+.status-box {
+  background: #f9fbff;
+  border: 1px solid #e0e7ff;
+  border-radius: 15px;
+  padding: 40px;
+  text-align: center;
+  transition: transform 0.3s ease;
+  width: 100%;
+  max-width: 520px;
+}
+
+.token-display p {
+  font-size: 14px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.token-number {
+  font-size: 64px;
+  font-weight: 800;
+  color: #0a4db8;
+  margin: 10px 0;
+}
+
+/* ✅ Priority Glow Effect */
+.priority-glow {
+  border: 2px solid #ffcc00;
+  animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 5px rgba(255, 204, 0, 0.2); }
+  to { box-shadow: 0 0 20px rgba(255, 204, 0, 0.6); }
+}
+
+/* ✅ NEW: History List & Cards */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.history-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: left;
+  transition: 0.2s;
+}
+
+.history-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.date-tag {
+  font-size: 12px;
+  color: #888;
+  font-weight: bold;
+}
+
+.status-tag {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.status-tag.approved { background: #e8f5e9; color: #2e7d32; }
+.status-tag.checked-in { background: #e3f2fd; color: #1565c0; }
+
+.btn-view-report {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px;
+  background: #f0f4ff;
+  border: 1px solid #0a4db8;
+  color: #0a4db8;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.btn-view-report:hover {
+  background: #0a4db8;
+  color: white;
+}
+
+/* Utils */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  padding: 50px;
+}
+
+.upload-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  margin-top: 12px;
+  padding: 12px 22px;
+
+  background: linear-gradient(135deg, #0a4db8, #3b82f6);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.25s ease;
+
+  box-shadow: 0 6px 16px rgba(10,77,184,0.25);
+}
+
+.upload-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(10,77,184,0.35);
+}
+
+
+.view-report-btn {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 14px;
+  background: #e8f0ff;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #0a4db8;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.view-report-btn:hover {
+  background: #0a4db8;
+  color: white;
+}
+
+.queue-footer {
+  margin-top: 18px;
+
+  width: 100%;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+
+  text-align: center;
+  background: #f4f7ff;
+  border: 1px dashed #c7d6ff;
+  padding: 22px 20px;
+  border-radius: 14px;
+
+  transition: 0.25s ease;
+}
+
+.queue-footer p {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #444;
+  font-weight: 500;
+}
+
+.queue-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+

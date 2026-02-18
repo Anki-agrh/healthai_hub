@@ -1,0 +1,161 @@
+/* 1. GLOBAL WRAPPER */
+.landing-page {
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  background: #f8fbff;
+  min-height: 100vh;
+}
+
+/* 2. HERO SECTION WITH BACKGROUND & OVERLAY */
+.hero-section {
+  position: relative;
+  text-align: center;
+  /* Reduced padding to bring features up */
+  padding: 80px 20px 40px 20px; 
+  color: #1e293b;
+  overflow: hidden;
+  background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)),url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=2000');
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  /* Lowered opacity (0.4) makes the image 60% visible */
+  background: linear-gradient(
+    to bottom, 
+    rgba(240, 247, 255, 0.4) 0%, 
+    rgba(255, 255, 255, 0.9) 100%
+  );
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2; /* Sits above the faded overlay */
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.hero-title span { 
+  color: #0a4db8; 
+}
+
+.hero-description {
+  max-width: 750px;
+  margin: 0 auto 40px;
+  font-size: 1.2rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+/* 3. CTA BUTTONS */
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.main-cta {
+  background: #0a4db8;
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(10, 77, 184, 0.15); /* Softened shadow */
+  transition: all 0.3s ease;
+}
+
+.main-cta:hover {
+  transform: translateY(-3px);
+  background: #083d91;
+}
+
+.medical-disclaimer { 
+  font-size: 0.85rem; 
+  color: #94a3b8; 
+}
+
+/* 4. FEATURES GRID & CARDS */
+.features-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px; /* Reduced gap to bring cards up */
+  text-align: center;
+}
+
+.features-heading {
+  font-size: 2.2rem;
+  color: #1e293b;
+  margin-bottom: 30px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  justify-items: center;
+}
+
+.feature-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  border: 1px solid #eef2f6;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  /* Lightened shadow for a cleaner look */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); 
+}
+
+.feature-image-box {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 20px;
+  background: #ffffff;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Soft shadow makes icons look premium */
+  box-shadow: 0 8px 15px rgba(10, 77, 184, 0.1);
+  transition: transform 0.3s ease;
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 20px rgba(10, 77, 184, 0.2);
+}
+
+.feature-image-box img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.feature-card:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 20px rgba(10, 77, 184, 0.2);
+  border-color: #0a4db8;
+}
+
+.feature-card h3 {
+  color: #0a4db8;
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+}
+
+.feature-card p {
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.5;
+}
