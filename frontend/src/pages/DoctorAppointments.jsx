@@ -24,7 +24,11 @@ function DoctorAppointments() {
   useEffect(() => {
   if (!user || user.role !== "doctor") return;
 
-  fetch(`http://localhost:5000/api/doctor/appointments/${user._id}`)
+  fetch(`${process.env.REACT_APP_API}/api/doctor/appointments/${user._id}`, {
+  headers: {
+    "Authorization": `Bearer ${localStorage.getItem("token")}`
+  }
+})
     .then(res => res.json())
     .then(data => setAppointments(data))
     .finally(() => setLoading(false));
@@ -32,11 +36,15 @@ function DoctorAppointments() {
 }, [user]);
 
   const approve = (id) => {
-    fetch("http://localhost:5000/api/appointments/approve", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ appointmentId: id })
-    })
+    fetch(`${process.env.REACT_APP_API}/api/appointments/approve`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${localStorage.getItem("token")}`
+  },
+  body: JSON.stringify({ appointmentId: id })
+})
+
       .then(res => res.json())
       .then(() => {
         setAppointments(

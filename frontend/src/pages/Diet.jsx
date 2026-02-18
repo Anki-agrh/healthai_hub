@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown"; 
 import "./Diet.css";
+const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 function Diet() {
   const [form, setForm] = useState({
@@ -29,7 +30,7 @@ function Diet() {
     setDietPlan("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/ai/generate-diet", {
+      const response = await fetch(`${API_BASE}/api/ai/generate-diet`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -58,7 +59,7 @@ function Diet() {
     setRecipeResult("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/ai/suggest-recipe", {
+      const response = await fetch(`${API_BASE}/api/ai/suggest-recipe`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 

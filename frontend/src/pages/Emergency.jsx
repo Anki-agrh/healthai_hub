@@ -2,7 +2,7 @@ import { useState } from "react";
 import io from "socket.io-client";
 import "./Emergency.css";
 
-const socket = io.connect("http://localhost:5000");
+const socket = io(process.env.REACT_APP_API);
 
 function Emergency() {
   const [alertSent, setAlertSent] = useState(false);

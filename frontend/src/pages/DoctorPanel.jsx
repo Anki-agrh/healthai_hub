@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import "./DoctorPanel.css";
 
-const socket = io.connect("http://localhost:5000");
+const socket = io(process.env.REACT_APP_API);
 
 function DoctorPanel() {
 
@@ -86,7 +86,7 @@ function DoctorPanel() {
 
   const fetchDoctorData = async (docId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/doctors/approved`);
+      const res = await fetch(`${process.env.REACT_APP_API}/api/doctors/approved`);
       const data = await res.json();
       const myDoc = data.doctors.find(d => d._id === docId);
       if (myDoc) setAppointmentsCount(myDoc.queueLength || 0); 
@@ -104,7 +104,7 @@ function DoctorPanel() {
       chatTranscript: messages 
     };
     try {
-      const res = await fetch("http://localhost:5000/api/reports/submit", {
+      const res = await fetch(`${process.env.REACT_APP_API}/api/reports/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reportData)

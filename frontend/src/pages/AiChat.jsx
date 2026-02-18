@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, ContactShadows, Environment, Center, Stage } from '@react-three/drei';
 import HumanModel from '../components/HumanModel';
+const API = process.env.REACT_APP_API;
 
 function AiChat() {
   const [symptoms, setSymptoms] = useState("");
@@ -81,9 +82,9 @@ function AiChat() {
       if (file) {
         const formData = new FormData();
         formData.append("report", file);
-        res = await fetch("http://localhost:5000/api/ai/analyze-report", { method: "POST", body: formData });
+        res = await fetch(`${API}/api/ai/analyze-report`, { method: "POST", body: formData });
       } else {
-        res = await fetch("http://localhost:5000/api/ai/symptom-check", {
+        res = await fetch(`${API}/api/ai/symptom-check`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ symptoms: currentInput }),

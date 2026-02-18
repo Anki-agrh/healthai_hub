@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import "./Doctors.css";
 
-const socket = io.connect("http://localhost:5000");
+const socket = io(process.env.REACT_APP_API);
 
 function Doctors() {
   const [doctors, setDoctors] = useState([]);
@@ -45,7 +45,7 @@ function Doctors() {
 
   const fetchDoctors = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/doctors/approved");
+      const response = await fetch(`${process.env.REACT_APP_API}/api/doctors/approved`);
       const data = await response.json();
       if (data.success) {
         setDoctors(data.doctors);
@@ -125,7 +125,7 @@ function Doctors() {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/appointments", {
+      const res = await fetch(`${process.env.REACT_APP_API}/api/appointments`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -163,7 +163,7 @@ function Doctors() {
       chatTranscript: messages 
     };
     try {
-      const res = await fetch("http://localhost:5000/api/reports/submit", {
+      const res = await fetch(`${process.env.REACT_APP_API}/api/reports/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reportData)
@@ -286,7 +286,7 @@ const scheduleConsult = async () => {
     return;
   }
 
-  const res = await fetch("http://localhost:5000/api/consult/schedule", {
+  const res = await fetch(`${process.env.REACT_APP_API}/api/consult/schedule`, {
     method: "POST",
     headers: {"Content-Type":"application/json"},
     body: JSON.stringify({
@@ -337,7 +337,7 @@ const scheduleConsult = async () => {
           <div key={doc._id} className="doctor-card cuboidal-card">
             <div className="image-wrapper">
               <img 
-                src={doc.image ? `http://localhost:5000/uploads/${doc.image}` : "/assets/doc1.jpg"} 
+                src={doc.image ? `${process.env.REACT_APP_API}/uploads/${doc.image}` : "/assets/doc1.jpg"}
                 alt={doc.name} 
                 className="doctor-photo" 
               />

@@ -51,7 +51,7 @@ function Register() {
     verifyData.append("role", selectedRole);
 
     try {
-      const res = await fetch("http://localhost:5000/api/send-otp", {
+      const res = await fetch(`${process.env.REACT_APP_API}/api/send-otp`, {
         method: "POST",
         body: verifyData,
       });
@@ -112,7 +112,7 @@ function Register() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/register", {
+      const res = await fetch(`${process.env.REACT_APP_API}/api/register`, {
         method: "POST",
         body: formData,
       });

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import io from "socket.io-client";
 import "./Queue.css";
 
-const socket = io.connect("http://localhost:5000");
+const socket = io(process.env.REACT_APP_API);
 
 function Queue() {
   const [liveToken, setLiveToken] = useState(0);
@@ -21,19 +21,19 @@ function Queue() {
 
     try {
       // current appointment
-      const apptRes = await fetch(`http://localhost:5000/api/appointments/user/${loggedInUser._id}`);
+      const apptRes = await fetch(`${process.env.REACT_APP_API}/api/appointments/user/${loggedInUser._id}`);
       const apptData = await apptRes.json();
 
       if (apptData.success && apptData.appointment) {
         setMyAppointment(apptData.appointment);
 
-        const liveRes = await fetch(`http://localhost:5000/api/appointments/live-status/${apptData.appointment.doctorId}`);
+        const liveRes = await fetch(`${process.env.REACT_APP_API}/api/appointments/live-status/${apptData.appointment.doctorId}`);
         const liveData = await liveRes.json();
         if (liveData.success) setLiveToken(liveData.currentToken || 0);
       }
 
       // medical reports history
-      const historyRes = await fetch(`http://localhost:5000/api/patient/reports/${loggedInUser._id}`);
+      const historyRes = await fetch(`${process.env.REACT_APP_API}/api/patient/reports/${loggedInUser._id}`);
       const historyData = await historyRes.json();
       if (historyData.success) setHistory(historyData.reports);
 
@@ -96,7 +96,7 @@ function Queue() {
     formData.append("appointmentId", appointment._id);
     formData.append("date", appointment.date);
 
-    const res = await fetch("http://localhost:5000/api/patient/upload-report", {
+    const res = await fetch(`${process.env.REACT_APP_API}/api/patient/upload-report`, {
       method: "POST",
       body: formData
     });
@@ -189,7 +189,7 @@ if (loading)
                   <h4>Doctor: {record.doctorId}</h4>
 
                   <a
-                    href={`http://localhost:5000/uploads/${record.file}`}
+                    href={`${process.env.REACT_APP_API}/uploads/${record.file}`}
                     target="_blank"
                     rel="noreferrer"
                     className="view-report-btn"

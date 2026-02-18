@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+const API = process.env.REACT_APP_API;
+
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -61,14 +63,14 @@ function AdminDashboard() {
   const [doctors, setDoctors] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/admin/pending-doctors")
+    fetch(`${API}/api/admin/pending-doctors`)
       .then((res) => res.json())
       .then((data) => setDoctors(data))
       .catch((err) => console.error(err));
   }, []);
 
   const approveDoctor = (doctorId) => {
-    fetch("http://localhost:5000/api/admin/approve-doctor", {
+    fetch(`${API}/api/admin/approve-doctor`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

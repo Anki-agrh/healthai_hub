@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // ✅ Redirect ke liye zaroori hai
 import "./AdminDash.css";
+const API = process.env.REACT_APP_API;
 
 const AdminDash = () => {
   const [pendingDoctors, setPendingDoctors] = useState([]);
@@ -11,7 +12,7 @@ const AdminDash = () => {
   // --- DATA FETCHING ---
   const fetchPending = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/pending-doctors");
+      const res = await fetch(`${API}/api/admin/pending-doctors`);
       const data = await res.json();
       if (data.success) setPendingDoctors(data.doctors);
     } catch (err) { console.error("Fetch error:", err); }
@@ -19,7 +20,7 @@ const AdminDash = () => {
 
   const fetchReports = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/reports");
+      const res = await fetch(`${API}/api/admin/reports`);
       const data = await res.json();
       if (data.success) setReports(data.reports);
     } catch (err) { console.error("Report Fetch error:", err); }
@@ -51,7 +52,7 @@ const AdminDash = () => {
   // --- DOCTOR ACTIONS (handleApprove, handleReject) remain same ---
   const handleApprove = async (id) => {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/approve-doctor", {
+      const res = await fetch(`${API}/api/admin/approve-doctor`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ doctorId: id }),
@@ -67,7 +68,7 @@ const AdminDash = () => {
   const handleReject = async (id) => {
     if (window.confirm("Are you sure you want to reject and delete this request?")) {
       try {
-        const res = await fetch(`http://localhost:5000/api/admin/reject-doctor/${id}`, {
+        const res = await fetch(`${API}/api/admin/reject-doctor/${id}`, {
           method: "DELETE",
         });
         const data = await res.json();
@@ -109,7 +110,7 @@ const AdminDash = () => {
             pendingDoctors.map((doc) => (
               <div key={doc._id} className="admin-card verify-card">
                 <div className="verify-header">
-                  <img src={`http://localhost:5000/uploads/${doc.image}`} alt="doctor" className="verify-photo" />
+                  <img src={`${API}/uploads/${doc.image}`} alt="doctor" className="verify-photo" />
                   <div>
                     <h2>{doc.name}</h2>
                     <p><b>Email:</b> {doc.email}</p>

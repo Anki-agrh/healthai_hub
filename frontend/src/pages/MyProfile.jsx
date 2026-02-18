@@ -18,7 +18,7 @@ function MyProfile() {
   const user = JSON.parse(localStorage.getItem("user"));
   if (!user?._id) return;
 
-  fetch(`http://localhost:5000/api/doctors/${user._id}`)
+  fetch(`${process.env.REACT_APP_API}/api/doctors/${user._id}`)
     .then(res => res.json())
     .then(data => {
       setProfile({
@@ -34,7 +34,7 @@ function MyProfile() {
         city: data.city || "",
 
         profilePic: data.image
-          ? `http://localhost:5000/uploads/${data.image}`
+          ? `${process.env.REACT_APP_API}/uploads/${data.image}`
           : "https://via.placeholder.com/150"
       });
     });
@@ -70,7 +70,7 @@ function MyProfile() {
   }
 
   try {
-    const res = await fetch("http://localhost:5000/api/doctors/update-profile", {
+    const res = await fetch(`${process.env.REACT_APP_API}/api/doctors/update-profile`, {
       method: "PUT",
       body: formData
     });
