@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // ✅ Redirect ke liye zaroori hai
 import "./AdminDash.css";
-const API = process.env.REACT_APP_API;
+const API = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
 
 const AdminDash = () => {
   const [pendingDoctors, setPendingDoctors] = useState([]);

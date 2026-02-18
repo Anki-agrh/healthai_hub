@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import io from "socket.io-client";
-const socket = io(process.env.REACT_APP_API);
+const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
+const socket = io(API_BASE);
 
 function DoctorDash({ doctorId }) {
   const [incoming, setIncoming] = useState(false);

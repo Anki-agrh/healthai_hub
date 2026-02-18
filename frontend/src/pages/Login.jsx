@@ -19,7 +19,9 @@ function Login() {
       return;
     }
 
-    fetch(`${process.env.REACT_APP_API}/api/login`, {
+    const API_BASE_URL = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
+
+    fetch(`${API_BASE_URL}/api/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

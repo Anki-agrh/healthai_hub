@@ -18,7 +18,9 @@ function MyProfile() {
   const user = JSON.parse(localStorage.getItem("user"));
   if (!user?._id) return;
 
-  fetch(`${process.env.REACT_APP_API}/api/doctors/${user._id}`)
+  const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
+
+  fetch(`${API_BASE}/api/doctors/${user._id}`)
     .then(res => res.json())
     .then(data => {
       setProfile({
@@ -34,7 +36,7 @@ function MyProfile() {
         city: data.city || "",
 
         profilePic: data.image
-          ? `${process.env.REACT_APP_API}/uploads/${data.image}`
+          ? `${API_BASE}/uploads/${data.image}`
           : "https://via.placeholder.com/150"
       });
     });
@@ -56,6 +58,8 @@ function MyProfile() {
   const handleSave = async () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
 
+  const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
+
   const formData = new FormData();
   formData.append("userId", storedUser._id);
   formData.append("name", profile.name);
@@ -70,7 +74,7 @@ function MyProfile() {
   }
 
   try {
-    const res = await fetch(`${process.env.REACT_APP_API}/api/doctors/update-profile`, {
+    const res = await fetch(`${API_BASE}/api/doctors/update-profile`, {
       method: "PUT",
       body: formData
     });

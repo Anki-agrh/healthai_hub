@@ -2,7 +2,8 @@ import { useState } from "react";
 import io from "socket.io-client";
 import "./Emergency.css";
 
-const socket = io(process.env.REACT_APP_API);
+const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
+const socket = io(API_BASE);
 
 function Emergency() {
   const [alertSent, setAlertSent] = useState(false);

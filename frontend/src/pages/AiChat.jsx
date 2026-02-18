@@ -3,7 +3,8 @@ import ReactMarkdown from "react-markdown";
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, ContactShadows, Environment, Center, Stage } from '@react-three/drei';
 import HumanModel from '../components/HumanModel';
-const API = process.env.REACT_APP_API;
+
+const API = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
 
 function AiChat() {
   const [symptoms, setSymptoms] = useState("");

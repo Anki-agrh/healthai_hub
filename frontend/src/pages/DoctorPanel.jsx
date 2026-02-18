@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import "./DoctorPanel.css";
-
-const socket = io(process.env.REACT_APP_API);
+const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
+const socket = io(API_BASE);
 
 function DoctorPanel() {
 
@@ -85,8 +85,9 @@ function DoctorPanel() {
   }, []);
 
   const fetchDoctorData = async (docId) => {
+    const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
     try {
-      const res = await fetch(`${process.env.REACT_APP_API}/api/doctors/approved`);
+      const res = await fetch(`${API_BASE}/api/doctors/approved`);
       const data = await res.json();
       const myDoc = data.doctors.find(d => d._id === docId);
       if (myDoc) setAppointmentsCount(myDoc.queueLength || 0); 

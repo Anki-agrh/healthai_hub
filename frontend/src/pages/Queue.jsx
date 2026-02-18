@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import io from "socket.io-client";
 import "./Queue.css";
 
-const socket = io(process.env.REACT_APP_API);
+const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
+const socket = io(API_BASE);
 
 function Queue() {
   const [liveToken, setLiveToken] = useState(0);
@@ -18,10 +19,10 @@ function Queue() {
   // ================= FETCH DATA =================
   const fetchHealthHubData = async () => {
     if (!loggedInUser?._id) return;
-
+    const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
     try {
       // current appointment
-      const apptRes = await fetch(`${process.env.REACT_APP_API}/api/appointments/user/${loggedInUser._id}`);
+      const apptRes = await fetch(`${API_BASE}/api/appointments/user/${loggedInUser._id}`);
       const apptData = await apptRes.json();
 
       if (apptData.success && apptData.appointment) {
@@ -189,7 +190,7 @@ if (loading)
                   <h4>Doctor: {record.doctorId}</h4>
 
                   <a
-                    href={`${process.env.REACT_APP_API}/uploads/${record.file}`}
+                    href={`${process.env.REACT_APP_API || "https://healthai-hub.onrender.com"}/uploads/${record.file}`}
                     target="_blank"
                     rel="noreferrer"
                     className="view-report-btn"

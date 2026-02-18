@@ -23,8 +23,9 @@ function DoctorAppointments() {
 
   useEffect(() => {
   if (!user || user.role !== "doctor") return;
+  const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
 
-  fetch(`${process.env.REACT_APP_API}/api/doctor/appointments/${user._id}`, {
+  fetch(`${API_BASE}/api/doctor/appointments/${user._id}`, {
   headers: {
     "Authorization": `Bearer ${localStorage.getItem("token")}`
   }
@@ -36,7 +37,8 @@ function DoctorAppointments() {
 }, [user]);
 
   const approve = (id) => {
-    fetch(`${process.env.REACT_APP_API}/api/appointments/approve`, {
+    const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
+    fetch(`${API_BASE}/api/appointments/approve`, {
   method: "POST",
   headers: {
     "Content-Type": "application/json",

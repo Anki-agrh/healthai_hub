@@ -50,8 +50,10 @@ function Register() {
     verifyData.append("password", password);
     verifyData.append("role", selectedRole);
 
+    const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
+
     try {
-      const res = await fetch(`${process.env.REACT_APP_API}/api/send-otp`, {
+      const res = await fetch(`${API_BASE}/api/send-otp`, {
         method: "POST",
         body: verifyData,
       });
@@ -111,8 +113,10 @@ function Register() {
       formData.append("degreeCert", degreeCertFile);
     }
 
+    const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
+
     try {
-      const res = await fetch(`${process.env.REACT_APP_API}/api/register`, {
+      const res = await fetch(`${API_BASE}/api/register`, {
         method: "POST",
         body: formData,
       });

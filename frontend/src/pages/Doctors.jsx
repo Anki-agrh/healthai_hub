@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import "./Doctors.css";
 
-const socket = io(process.env.REACT_APP_API);
+const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
+const socket = io(API_BASE);
 
 function Doctors() {
   const [doctors, setDoctors] = useState([]);
@@ -44,8 +45,9 @@ function Doctors() {
   const [scheduleDate, setScheduleDate] = useState(new Date().toISOString().split('T')[0]);
 
   const fetchDoctors = async () => {
+    const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
     try {
-      const response = await fetch(`${process.env.REACT_APP_API}/api/doctors/approved`);
+      const response = await fetch(`${API_BASE}/api/doctors/approved`);
       const data = await response.json();
       if (data.success) {
         setDoctors(data.doctors);
@@ -337,7 +339,7 @@ const scheduleConsult = async () => {
           <div key={doc._id} className="doctor-card cuboidal-card">
             <div className="image-wrapper">
               <img 
-                src={doc.image ? `${process.env.REACT_APP_API}/uploads/${doc.image}` : "/assets/doc1.jpg"}
+                src={doc.image ? `${API_BASE}/uploads/${doc.image}` : "/assets/doc1.jpg"}
                 alt={doc.name} 
                 className="doctor-photo" 
               />

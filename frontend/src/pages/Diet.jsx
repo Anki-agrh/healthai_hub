@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown"; 
 import "./Diet.css";
-const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
 
 function Diet() {
   const [form, setForm] = useState({

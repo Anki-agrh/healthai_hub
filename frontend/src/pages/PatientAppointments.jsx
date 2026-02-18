@@ -5,7 +5,8 @@ function PatientAppointments() {
   const [time, setTime] = useState("");
 
   const bookAppointment = () => {
-    fetch(`${process.env.REACT_APP_API}/api/appointments`, {
+    const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
+    fetch(`${API_BASE}/api/appointments`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
