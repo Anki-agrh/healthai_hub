@@ -36,6 +36,11 @@ const {
   suggestRecipe
 } = require("./services/geminiService");
 
+const allowedOrigins = [
+  "https://healthai-hub.vercel.app",
+  "https://healthai-9mseqifpy-ankita-agraharis-projects.vercel.app" 
+];
+
 
 // =====================
 // EMAIL CONFIGURATION
@@ -122,15 +127,21 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(cors({
-  origin: ["https://healthai-hub.vercel.app", "http://localhost:5173"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: function (origin, callback) {
+    // Agar origin list mein hai ya origin null hai (jaise mobile apps/curl) toh allow karo
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { 
-    origin: "https://healthai-hub.vercel.app",
+    origin: allowedOrigins,,
     methods: ["GET", "POST"],
     credentials: true 
   },
