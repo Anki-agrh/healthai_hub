@@ -21,7 +21,7 @@ import AdminDash from "./pages/AdminDash";
 import MyProfile from "./pages/MyProfile";
 
 // ✅ Connect to your backend socket server
-const socket = io.connect("http://localhost:5000");
+const socket = io.connect("https://healthai-backend.onrender.com");
 
 function App() {
   useEffect(() => {
