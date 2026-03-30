@@ -46,13 +46,14 @@ const allowedOrigins = [
 // EMAIL CONFIGURATION
 // =====================
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com", // This IS the server for Gmail
-  port: 465,              // Use 465 for a secure SSL connection
-  secure: true,           // Must be true for port 465
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, 
   auth: {
-    user: process.env.EMAIL_USER, 
-    pass: process.env.EMAIL_PASS, 
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
+});
 
 transporter.verify(function (error, success) {
   if (error) {
