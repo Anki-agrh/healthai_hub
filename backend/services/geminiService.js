@@ -112,7 +112,6 @@ Provide:
 2. Macro Distribution (Protein, Carbs, Fats) in grams.
 3. 4-meal affordable plan (Breakfast, Lunch, Snack, Dinner).
 4. Specific advice for their activity level (${userData.activityLevel}).
-5. Display the meal plan in a MARKDOWN TABLE with columns: Day, Breakfast, Lunch, Evening Snack, and Dinner for a week.
 
 Add AI disclaimer.
 Format in Markdown.

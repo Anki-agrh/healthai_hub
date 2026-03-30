@@ -140,12 +140,12 @@ input:focus, select:focus {
 }
 
 /* MARKDOWN TABLE CORE STYLES */
-.diet-result table {
+/* .diet-result table {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
   min-width: 650px; /* Prevents table from squishing too much */
-}
+/* } */ 
 
 .diet-result th {
   background-color: #f1f5f9;
