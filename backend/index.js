@@ -517,11 +517,34 @@ app.post("/api/ai/analyze-report", upload.single("report"), async (req, res) => 
   } catch (error) { res.status(500).json({ success: false, message: "AI Analysis failed." }); }
 });
 
+
 app.post("/api/ai/generate-diet", async (req, res) => {
   try {
-    const result = await generateDietPlan(req.body);
+    // Destructure all fields coming from frontend
+    const { height, weight, age, gender, activityLevel, medicalIssues, dietType } = req.body;
+
+    // Validation check
+    if (!height || !weight || !age) {
+      return res.status(400).json({ success: false, message: "Missing required fields (height, weight, or age)." });
+    }
+
+    // Call the Gemini service with the full data object
+    const result = await generateDietPlan({
+      height,
+      weight,
+      age,
+      gender,
+      activityLevel,
+      medicalIssues,
+      dietType
+    });
+
     res.json({ success: true, result });
-  } catch (error) { res.status(500).json({ success: false }); }
+
+  } catch (error) {
+    console.error("Diet API Error:", error);
+    res.status(500).json({ success: false, message: "AI generation failed. Please try again." });
+  }
 });
 
 app.post("/api/ai/suggest-recipe", async (req, res) => {

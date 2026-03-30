@@ -97,17 +97,22 @@ async function suggestDoctorBySymptoms(symptoms) {
 /* -------------------- DIET PLAN -------------------- */
 async function generateDietPlan(userData) {
   const prompt = `
-You are a professional clinical nutritionist.
+You are a AI clinical nutritionist.
 
-Height: ${userData.height} cm
-Weight: ${userData.weight} kg
-Medical Issues: ${(userData.medicalIssues || []).join(", ") || "None"}
-Diet Type: ${userData.dietType}
+- Age: ${userData.age} years
+- Gender: ${userData.gender}
+- Height: ${userData.height} cm
+- Weight: ${userData.weight} kg
+- Activity Level: ${userData.activityLevel} (Consider this for TDEE and calorie calculation)
+- Medical Issues: ${(userData.medicalIssues || []).join(", ") || "None"}
+- Diet Type: ${userData.dietType}
 
 Provide:
-1. Estimated daily calories
-2. 4-meal plan (Breakfast, Lunch, Snack, Dinner)
-3. Advice based on medical conditions
+1. Estimated TDEE (Daily Calories) based on age, gender, and activity.
+2. Macro Distribution (Protein, Carbs, Fats) in grams.
+3. 4-meal affordable plan (Breakfast, Lunch, Snack, Dinner).
+4. Specific advice for their activity level (${userData.activityLevel}).
+5. Display the meal plan in a MARKDOWN TABLE with columns: Day, Breakfast, Lunch, Evening Snack, and Dinner for a week.
 
 Add AI disclaimer.
 Format in Markdown.

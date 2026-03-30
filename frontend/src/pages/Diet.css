@@ -1,121 +1,203 @@
+/* GLOBAL WRAPPER */
 .diet-page-wrapper {
-  background-color: #f4f7fa;
+  background-color: #f0f4f8;
   min-height: 100vh;
   padding: 40px 20px;
 }
 
 .diet-container {
-  max-width: 750px;
+  max-width: 850px; /* Slightly wider to accommodate tables */
   margin: 0 auto;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
 }
 
+/* SECTION CARDS */
 .diet-section-card {
-  background: white;
+  background: #ffffff;
   padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  margin-bottom: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+  border: 1px solid #e1e8ed;
 }
 
-.diet-section-card h2, .diet-section-card h3 {
+.diet-section-card h2 {
   margin-top: 0;
   color: #0a4db8;
+  font-size: 24px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
 .sub-text {
   font-size: 14px;
-  color: #666;
+  color: #64748b;
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 
-/* Form Styles */
+/* FORM STYLES */
 .form-group label {
   display: block;
   font-weight: 600;
-  margin: 10px 0 5px;
-  color: #444;
+  margin: 15px 0 8px;
+  color: #1e293b;
+  font-size: 14px;
 }
 
 .stats-row {
   display: flex;
-  gap: 10px;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.stats-row > div {
+  flex: 1;
 }
 
 input, select {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  padding: 12px 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
   font-size: 15px;
-  transition: border 0.3s;
+  color: #334155;
+  transition: all 0.3s ease;
+  background-color: #f8fafc;
 }
 
-input:focus {
+input:focus, select:focus {
   border-color: #0a4db8;
   outline: none;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(10, 77, 184, 0.1);
 }
 
-/* Buttons */
+/* BUTTONS */
 .primary-btn {
-  background-color: #0a4db8;
+  background: linear-gradient(135deg, #0a4db8 0%, #083d91 100%);
   color: white;
   border: none;
-  padding: 15px;
+  padding: 16px;
   width: 100%;
-  border-radius: 6px;
-  font-weight: bold;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
-  margin-top: 15px;
+  margin-top: 25px;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* ✅ RECIPE INPUT GROUP FIX */
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(10, 77, 184, 0.3);
+}
+
+.primary-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* RECIPE SEARCH GROUP */
 .recipe-input-group {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
 }
 
 .recipe-input-group input {
-  flex: 2; /* Gives the text box more space */
-  min-width: 0;
+  flex: 3;
 }
 
 .recipe-btn {
-  flex: 1; /* Keeps button size consistent */
-  background-color: #28a745;
+  flex: 1;
+  background-color: #10b981;
   color: white;
   border: none;
   padding: 12px;
-  border-radius: 6px;
-  font-weight: bold;
+  border-radius: 10px;
+  font-weight: 600;
   cursor: pointer;
-  white-space: nowrap;
 }
 
-/* Result Displays */
-.diet-result, .recipe-result {
-  padding: 20px;
-  border-radius: 8px;
-  margin-top: 20px;
-  line-height: 1.6;
-}
-
+/* 🗓️ DIET PLAN RESULT & TABLE STYLING */
 .diet-result {
-  background: #f0f4ff;
-  border-left: 6px solid #0a4db8;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  margin-top: 30px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  overflow-x: auto; /* Required for mobile scrolling of tables */
 }
 
+.diet-result h3 {
+  color: #0f172a;
+  border-bottom: 2px solid #0a4db8;
+  display: inline-block;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+}
+
+/* MARKDOWN TABLE CORE STYLES */
+.diet-result table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  min-width: 650px; /* Prevents table from squishing too much */
+}
+
+.diet-result th {
+  background-color: #f1f5f9;
+  color: #0a4db8;
+  font-weight: 700;
+  text-align: left;
+  padding: 15px;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.diet-result td {
+  padding: 14px 15px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  color: #475569;
+  vertical-align: top;
+}
+
+.diet-result tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+.diet-result tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* RECIPE RESULT STYLING */
 .recipe-result {
-  background: #f6fff9;
-  border-left: 6px solid #28a745;
+  background: #ecfdf5;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  border-left: 5px solid #10b981;
+  color: #065f46;
 }
 
 .diet-note {
   text-align: center;
-  font-size: 12px;
-  color: #888;
-  margin-top: 20px;
+  font-size: 13px;
+  color: #94a3b8;
+  margin-top: 30px;
+  font-style: italic;
+}
+
+/* RESPONSIVE FIXES */
+@media (max-width: 600px) {
+  .stats-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .recipe-input-group {
+    flex-direction: column;
+  }
 }

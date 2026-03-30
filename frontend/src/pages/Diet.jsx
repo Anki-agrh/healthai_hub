@@ -7,6 +7,9 @@ function Diet() {
   const [form, setForm] = useState({
     height: "",
     weight: "",
+    age: "",
+    gender: "male", 
+    activity: "no exercise",
     condition: "",
     preference: "vegetarian",
   });
@@ -36,6 +39,9 @@ function Diet() {
         body: JSON.stringify({
           height: Number(form.height),
           weight: Number(form.weight),
+          age: Number(form.age), 
+          gender: form.gender, 
+          activityLevel: form.activity,
           medicalIssues: form.condition ? [form.condition] : [],
           dietType: form.preference
         }),
@@ -90,6 +96,22 @@ function Diet() {
             <div className="stats-row">
               <input name="height" type="number" placeholder="Height (cm)" value={form.height} onChange={handleChange} />
               <input name="weight" type="number" placeholder="Weight (kg)" value={form.weight} onChange={handleChange} />
+              <input name="age" type="number" placeholder="Age" value={form.age} onChange={handleChange} />
+            </div>
+
+            <div className="stats-row" style={{ marginTop: '10px' }}>
+              <select name="gender" value={form.gender} onChange={handleChange}>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+
+              <select name="activity" value={form.activity} onChange={handleChange}>
+                <option value="no exercise">No Exercise</option>
+                <option value="walking">Walking</option>
+                <option value="yoga">Yoga</option>
+                <option value="gym">Gym / Heavy Workout</option>
+              </select>
             </div>
 
             <label>Health Conditions</label>
