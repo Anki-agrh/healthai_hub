@@ -1,21 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../context/ToastContext";
 
 function Login() {
-  // =====================
-  // 1️⃣ STATES
-  // =====================
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
-  // =====================
-  // 2️⃣ FUNCTION
-  // =====================
   const loginUser = () => {
     if (!email || !password) {
-      alert("Email and password are required");
+      showToast("Email and password are required", "warning");
       return;
     }
 
@@ -23,52 +18,38 @@ function Login() {
 
     fetch(`${API_BASE_URL}/api/login`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {
-          // ✅ 1. Save JWT Token
           localStorage.setItem("token", data.token);
-          
-          // ✅ 2. Save the User Role
           localStorage.setItem("role", data.user.role);
-
-          // ✅ 3. Save the FULL USER OBJECT (Crucial for Doctor ID)
-          // We stringify it because localStorage only stores strings
           localStorage.setItem("user", JSON.stringify(data.user));
 
-          alert("Login successful");
+          showToast(`Welcome back, ${data.user.name}!`, "success");
 
-          // ✅ 4. Smart Redirect based on Role
           if (data.user.role === "doctor") {
             navigate("/doctor-panel");
           } else {
-            navigate("/");
+            navigate("/dashboard");
           }
-          
         } else {
-          alert(data.message || "Login failed");
+          showToast(data.message || "Login failed", "error");
         }
       })
       .catch((err) => {
         console.error("Login Error:", err);
-        alert("Login failed. Please check if the backend is running.");
+        showToast("Login failed. Please check if the backend is running.", "error");
       });
   };
 
-  // =====================
-  // 3️⃣ UI
-  // =====================
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Login</h2>
+      <div style={styles.iconCircle}>🔐</div>
+      <h2 style={styles.title}>Welcome Back</h2>
+      <p style={styles.subtitle}>Log in to your HealthAI Hub account</p>
 
       <input
         style={styles.input}
@@ -83,6 +64,7 @@ function Login() {
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && loginUser()}
       />
 
       <button style={styles.button} onClick={loginUser}>
@@ -90,7 +72,8 @@ function Login() {
       </button>
       
       <p style={styles.footerText}>
-        Don't have an account? <span style={styles.link} onClick={() => navigate("/register")}>Register here</span>
+        Don't have an account?{" "}
+        <span style={styles.link} onClick={() => navigate("/register")}>Register here</span>
       </p>
     </div>
   );
@@ -98,48 +81,76 @@ function Login() {
 
 const styles = {
   container: {
-    maxWidth: "400px",
+    maxWidth: "420px",
     margin: "60px auto",
-    padding: "30px",
-    border: "1px solid #ddd",
-    borderRadius: "12px",
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
-    textAlign: "center"
+    padding: "40px 30px",
+    borderRadius: "20px",
+    fontFamily: "'Inter', 'Segoe UI', sans-serif",
+    boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
+    textAlign: "center",
+    background: "var(--card-bg, white)",
+    border: "1px solid var(--border-color, #e2e8f0)",
+  },
+  iconCircle: {
+    width: "60px",
+    height: "60px",
+    borderRadius: "50%",
+    background: "linear-gradient(135deg, rgba(10, 77, 184, 0.1), rgba(99, 102, 241, 0.1))",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "1.6rem",
+    margin: "0 auto 16px",
   },
   title: {
-    color: "#0a4db8",
-    marginBottom: "20px"
+    color: "var(--accent, #0a4db8)",
+    marginBottom: "6px",
+    fontSize: "1.6rem",
+    fontWeight: 800,
+  },
+  subtitle: {
+    color: "var(--text-secondary, #64748b)",
+    fontSize: "0.95rem",
+    marginBottom: "28px",
   },
   input: {
     width: "100%",
-    padding: "12px",
+    padding: "14px 16px",
     marginBottom: "15px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-    boxSizing: "border-box"
+    borderRadius: "12px",
+    border: "1px solid var(--input-border, #e2e8f0)",
+    boxSizing: "border-box",
+    fontSize: "0.95rem",
+    background: "var(--input-bg, white)",
+    color: "var(--text-primary, #1e293b)",
+    outline: "none",
+    transition: "border-color 0.2s",
   },
   button: {
     width: "100%",
-    padding: "12px",
-    backgroundColor: "#0a4db8",
+    padding: "14px",
+    background: "linear-gradient(135deg, #0a4db8, #1e6ff0)",
     color: "white",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "12px",
     cursor: "pointer",
-    fontSize: "16px",
-    fontWeight: "bold"
+    fontSize: "1rem",
+    fontWeight: "bold",
+    marginTop: "5px",
+    transition: "all 0.3s ease",
+    boxShadow: "0 4px 15px rgba(10, 77, 184, 0.25)",
   },
   footerText: {
-    marginTop: "20px",
-    fontSize: "14px",
-    color: "#666"
+    marginTop: "24px",
+    fontSize: "0.9rem",
+    color: "var(--text-secondary, #64748b)",
   },
   link: {
-    color: "#0a4db8",
+    color: "var(--accent, #0a4db8)",
     cursor: "pointer",
-    textDecoration: "underline"
-  }
+    textDecoration: "underline",
+    fontWeight: 600,
+  },
 };
 
 export default Login;

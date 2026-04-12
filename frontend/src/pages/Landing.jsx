@@ -81,9 +81,57 @@ function Landing() {
         </div>
       </section>
 
-      {/* 3. OPTIONAL GLASS FOOTER */}
+      {/* 3. PREMIUM FOOTER */}
       <footer className="landing-footer">
-        <p>© HealthAI Hub. All rights reserved. Made with Love by Ankita Agrahari</p>
+        <div className="footer-grid">
+          {/* Brand Column */}
+          <div className="footer-brand">
+            <h3>💙 Health<span>AI</span> Hub</h3>
+            <p>
+              Your one-stop AI-powered healthcare platform. We connect patients with certified doctors, 
+              provide instant symptom analysis, and help you build healthier habits — all in one place.
+            </p>
+            <div className="footer-socials">
+              <a href="#" className="social-icon" title="GitHub">🐙</a>
+              <a href="#" className="social-icon" title="LinkedIn">💼</a>
+              <a href="#" className="social-icon" title="Twitter">🐦</a>
+              <a href="#" className="social-icon" title="Instagram">📸</a>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="footer-col">
+            <h4>Quick Links</h4>
+            <a href="/ai">AI Assistant</a>
+            <a href="/diet">Diet Planner</a>
+            <a href="/consult">Consult Doctor</a>
+            <a href="/meds">Health Dashboard</a>
+            <a href="/emergency">Emergency SOS</a>
+          </div>
+
+          {/* Features */}
+          <div className="footer-col">
+            <h4>Features</h4>
+            <a href="/nearby-doctors">Nearby Doctors</a>
+            <a href="/queue">Live Queue</a>
+            <a href="/register">Register</a>
+            <a href="/login">Login</a>
+          </div>
+
+          {/* Contact */}
+          <div className="footer-col">
+            <h4>Contact</h4>
+            <a href="mailto:support@healthaihub.com">📧 support@healthaihub.com</a>
+            <a href="tel:+911234567890">📞 +91 12345 67890</a>
+            <a href="#">📍 India</a>
+          </div>
+        </div>
+
+        {/* Footer Bottom */}
+        <div className="footer-bottom">
+          <p>© {new Date().getFullYear()} HealthAI Hub. All rights reserved.</p>
+          <p>Made with ❤️ by <a href="#">Ankita Agrahari</a></p>
+        </div>
       </footer>
     </div>
   );

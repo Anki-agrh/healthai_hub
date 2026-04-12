@@ -2,7 +2,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import io from "socket.io-client";
 
+import { ToastProvider, useToast } from "./context/ToastContext";
+import ErrorBoundary from "./components/ErrorBoundary";
+import ScrollToTop from "./components/ScrollToTop";
 import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -19,11 +24,15 @@ import NearbyDoctors from "./pages/NearbyDoctors";
 import DoctorPanel from "./pages/DoctorPanel";
 import AdminDash from "./pages/AdminDash";
 import MyProfile from "./pages/MyProfile";
+import NotFound from "./pages/NotFound";
 
 // ✅ Connect to your backend socket server
-const socket = io.connect("https://healthai-backend.onrender.com");
+const API_BASE = process.env.REACT_APP_API || "http://localhost:5000";
+const socket = io.connect(API_BASE);
 
-function App() {
+function AppContent() {
+  const { showToast } = useToast();
+
   useEffect(() => {
     // ✅ GLOBAL LISTENER: Listen for Emergency SOS alerts from the server
     socket.on("receive_emergency_alert", (data) => {
@@ -34,75 +43,95 @@ function App() {
         
         // ✅ Verification: Only trigger the alert for users with the "doctor" role
         if (loggedInUser.role === "doctor") {
-          // You can replace this standard alert with a custom Modal or Toast for a better UI
-          alert(
-            `🚨 CRITICAL EMERGENCY ALERT 🚨\n\n` +
-            `Patient: ${data.patientName}\n` +
-            `Location: ${data.location || "Not Provided"}\n` +
-            `Message: ${data.message}\n` +
-            `Time: ${data.time}`
+          showToast(
+            `🚨 EMERGENCY: ${data.patientName} needs help! Location: ${data.location || "Unknown"}`,
+            "emergency"
           );
         }
       }
     });
 
-    function App() {
-  return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        {/* ... existing routes ... */}
-        
-        {/* ✅ NEW: Add the Profile Route */}
-        <Route path="/my-profile" element={<MyProfile />} />
+    // Clean up the socket listener on unmount to prevent memory leaks
+    return () => socket.off("receive_emergency_alert");
+  }, [showToast]);
 
+  return (
+    <>
+      <Navbar />
+      <ScrollToTop />
+      <Routes>
+        {/* --- PUBLIC & GENERAL ROUTES --- */}
+        <Route path="/" element={<div className="page-transition"><Landing /></div>} />
+        <Route path="/login" element={<div className="page-transition"><Login /></div>} />
+        <Route path="/register" element={<div className="page-transition"><Register /></div>} />
+        
+        {/* --- PROTECTED: Any logged-in user --- */}
+        <Route path="/dashboard" element={
+          <ProtectedRoute allowedRoles={["patient", "doctor", "admin"]}>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+        
+        {/* --- AI & HEALTH TOOLS --- */}
+        <Route path="/ai" element={<div className="page-transition"><AiChat /></div>} />
+        <Route path="/diet" element={<div className="page-transition"><Diet /></div>} />
+        <Route path="/meds" element={<div className="page-transition"><Meds /></div>} />
+        
+        {/* --- DOCTOR & CONSULTATION --- */}
+        <Route path="/nearby-doctors" element={<div className="page-transition"><NearbyDoctors /></div>} />
+        <Route path="/consult" element={<div className="page-transition"><Doctors /></div>} />
+        <Route path="/queue" element={<div className="page-transition"><Queue /></div>} />
+        <Route path="/emergency" element={<div className="page-transition"><Emergency /></div>} />
+        
+        {/* --- APPOINTMENT MANAGEMENT (Protected) --- */}
+        <Route path="/patient-appointments" element={
+          <ProtectedRoute allowedRoles={["patient"]}>
+            <div className="page-transition"><PatientAppointments /></div>
+          </ProtectedRoute>
+        } />
+        <Route path="/doctor-appointments" element={
+          <ProtectedRoute allowedRoles={["doctor"]}>
+            <div className="page-transition"><DoctorAppointments /></div>
+          </ProtectedRoute>
+        } />
+        
+        {/* --- PROFESSIONAL PANELS (Protected) --- */}
+        <Route path="/doctor-panel" element={
+          <ProtectedRoute allowedRoles={["doctor"]}>
+            <div className="page-transition"><DoctorPanel /></div>
+          </ProtectedRoute>
+        } />
+        
+        {/* --- ADMIN & VERIFICATION (Protected) --- */}
+        <Route path="/admin" element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <div className="page-transition"><AdminDash /></div>
+          </ProtectedRoute>
+        } />
+
+        {/* --- PROFILE (Protected) --- */}
+        <Route path="/my-profile" element={
+          <ProtectedRoute allowedRoles={["doctor"]}>
+            <div className="page-transition"><MyProfile /></div>
+          </ProtectedRoute>
+        } />
+
+        {/* --- 404 CATCH-ALL --- */}
+        <Route path="*" element={<div className="page-transition"><NotFound /></div>} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }
 
-    // Clean up the socket listener on unmount to prevent memory leaks
-    return () => socket.off("receive_emergency_alert");
-  }, []);
-
+function App() {
   return (
-    <BrowserRouter>
-      {/* Navbar stays at the top across all pages */}
-      <Navbar />
-
-      <Routes>
-        {/* --- PUBLIC & GENERAL ROUTES --- */}
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        
-        {/* --- AI & HEALTH TOOLS --- */}
-        <Route path="/ai" element={<AiChat />} /> 
-        <Route path="/diet" element={<Diet />} />
-        <Route path="/meds" element={<Meds />} />
-        
-        {/* --- DOCTOR & CONSULTATION --- */}
-        <Route path="/nearby-doctors" element={<NearbyDoctors />} />
-        <Route path="/consult" element={<Doctors />} />
-        <Route path="/queue" element={<Queue />} />
-        <Route path="/emergency" element={<Emergency />} />
-        
-        {/* --- APPOINTMENT MANAGEMENT --- */}
-        <Route path="/patient-appointments" element={<PatientAppointments />} />
-        <Route path="/doctor-appointments" element={<DoctorAppointments />} />  
-        
-        {/* --- PROFESSIONAL PANELS --- */}
-        <Route path="/doctor-panel" element={<DoctorPanel />} />
-        
-        {/* --- ADMIN & VERIFICATION --- */}
-        <Route path="/admin" element={<AdminDash />} />
-
-        {/* --- DOC PROFILE --- */}
-        <Route path="/my-profile" element={<MyProfile />} />
-
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <ToastProvider>
+          <AppContent />
+        </ToastProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

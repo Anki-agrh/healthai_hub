@@ -1,8 +1,10 @@
 import React from 'react';
 import { useGLTF } from '@react-three/drei';
 
-export default function HumanModel({ onPartClick, pointerPos, ...props }) {
-  const { nodes, materials } = useGLTF('/Male base.glb');
+export default function HumanModel({ onPartClick, pointerPos, gender = "Male", ...props }) {
+  // Gracefully load Male or Female based on toggle
+  const modelPath = gender === "Female" ? '/Female_base.glb' : '/Male_base.glb';
+  const { nodes, materials } = useGLTF(modelPath);
   
   const handleInteraction = (e) => {
     e.stopPropagation(); 

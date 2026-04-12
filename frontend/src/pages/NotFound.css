@@ -1,0 +1,83 @@
+/* ========================================
+   404 NOT FOUND PAGE
+   ======================================== */
+
+.notfound-page {
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: var(--bg-primary, #f8fafc);
+  padding: 20px;
+  text-align: center;
+}
+
+.notfound-code {
+  font-size: 8rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #0a4db8 0%, #6366f1 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 10px;
+  animation: float404 3s ease-in-out infinite;
+}
+
+.notfound-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  animation: spin404 4s linear infinite;
+}
+
+.notfound-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary, #1e293b);
+  margin-bottom: 10px;
+}
+
+.notfound-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary, #64748b);
+  max-width: 450px;
+  line-height: 1.6;
+  margin-bottom: 35px;
+}
+
+.notfound-btn {
+  padding: 14px 40px;
+  background: linear-gradient(135deg, #0a4db8, #1e6ff0);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(10, 77, 184, 0.3);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.notfound-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(10, 77, 184, 0.4);
+}
+
+@keyframes float404 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes spin404 {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Dark mode */
+body.dark-mode .notfound-page {
+  background: var(--bg-primary);
+}

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../context/ToastContext";
 
 function Register() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [role, setRole] = useState("");
   const [name, setName] = useState("");
@@ -40,7 +42,7 @@ function Register() {
   // ================= SEND OTP =================
   const sendOtp = async (selectedRole) => {
     if (!name || !email || !password) {
-      alert("Please fill Name, Email & Password first");
+      showToast("Please fill Name, Email & Password first", "warning");
       return;
     }
 
@@ -61,13 +63,13 @@ function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("OTP sent to your email (valid 10 minutes)");
+        showToast("OTP sent to your email (valid 10 minutes)", "success");
         setOtpSent(true);
       } else {
-        alert(data.message || "Failed to send OTP");
+        showToast(data.message || "Failed to send OTP", "error");
       }
     } catch (err) {
-      alert("Server error while sending OTP");
+      showToast("Server error while sending OTP", "error");
     }
   };
 
@@ -79,13 +81,13 @@ function Register() {
     }
 
     if (!otp) {
-      alert("Enter OTP first");
+      showToast("Enter OTP first", "warning");
       return;
     }
 
     if (selectedRole === "doctor") {
       if (!profilePic || !licenseFile || !aadhaarFile || !degreeCertFile) {
-        alert("Please upload all verification documents");
+        showToast("Please upload all verification documents", "warning");
         return;
       }
     }
@@ -124,42 +126,43 @@ function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        alert(data.message);
+        showToast(data.message || "Registration successful!", "success");
         if (selectedRole === "patient") {
           navigate("/login");
         } else {
           setRole("");
           setOtpSent(false);
-          alert("Admin will review your documents shortly.");
+          showToast("Admin will review your documents shortly.", "info");
         }
       } else {
-        alert(data.message || "Registration failed");
+        showToast(data.message || "Registration failed", "error");
       }
     } catch (error) {
       console.error(error);
-      alert("Server error");
+      showToast("Server error during registration", "error");
     }
   };
 
   return (
     <div style={styles.container}>
-      <h2 style={{ textAlign: "center", color: "#0a4db8" }}>HealthAI Hub - Register</h2>
+      <div style={styles.iconCircle}>📋</div>
+      <h2 style={styles.heading}>HealthAI Hub - Register</h2>
 
       {!role && (
         <div style={{ textAlign: "center" }}>
-          <p>Select your role</p>
+          <p style={styles.subtitle}>Select your role to get started</p>
           <button style={styles.roleBtn} onClick={() => setRole("patient")}>
-            Register as Patient
+            🧑 Register as Patient
           </button>
           <button style={styles.roleBtn} onClick={() => setRole("doctor")}>
-            Register as Doctor
+            👨‍⚕️ Register as Doctor
           </button>
         </div>
       )}
 
       {role === "patient" && (
         <>
-          <h3>Patient Registration</h3>
+          <h3 style={styles.sectionTitle}>Patient Registration</h3>
           <input style={styles.input} placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} />
           <input style={styles.input} placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} />
           <input style={styles.input} type="password" placeholder="Create Password" value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -172,12 +175,12 @@ function Register() {
 
       {role === "doctor" && (
         <>
-          <h3>Doctor Registration</h3>
+          <h3 style={styles.sectionTitle}>Doctor Registration</h3>
 
           <div style={styles.imageUpload}>
             {preview && <img src={preview} alt="Preview" style={styles.previewImg} />}
             <label style={styles.uploadLabel}>
-              Upload Photo
+              📷 Upload Photo
               <input type="file" hidden onChange={handleImageUpload} accept="image/*" />
             </label>
           </div>
@@ -196,7 +199,7 @@ function Register() {
           <input style={styles.input} placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} />
           
           <textarea 
-            style={{ ...styles.input, minHeight: "80px", fontFamily: "inherit" }} 
+            style={{ ...styles.input, minHeight: "80px", fontFamily: "inherit", resize: "vertical" }} 
             placeholder="Tell us about yourself (Bio)" 
             value={bio} 
             onChange={(e) => setBio(e.target.value)} 
@@ -229,15 +232,114 @@ function Register() {
 }
 
 const styles = {
-  container: { maxWidth: "550px", margin: "40px auto", padding: "30px", border: "1px solid #ddd", borderRadius: "12px", backgroundColor: "#fff", boxShadow: "0px 4px 10px rgba(0,0,0,0.1)" },
-  input: { width: "100%", padding: "12px", marginBottom: "12px", borderRadius: "6px", border: "1px solid #ccc", boxSizing: "border-box" },
-  button: { width: "100%", padding: "14px", backgroundColor: "#0a4db8", color: "white", border: "none", borderRadius: "6px", fontWeight: "bold", cursor: "pointer", marginTop: "10px" },
-  roleBtn: { width: "100%", padding: "14px", marginBottom: "10px", borderRadius: "6px", border: "1px solid #0a4db8", backgroundColor: "#fff", color: "#0a4db8", fontWeight: "bold", cursor: "pointer" },
+  container: {
+    maxWidth: "550px",
+    margin: "40px auto",
+    padding: "35px 30px",
+    borderRadius: "20px",
+    background: "var(--card-bg, #fff)",
+    border: "1px solid var(--border-color, #e2e8f0)",
+    boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
+    fontFamily: "'Inter', 'Segoe UI', sans-serif",
+  },
+  iconCircle: {
+    width: "60px",
+    height: "60px",
+    borderRadius: "50%",
+    background: "linear-gradient(135deg, rgba(10, 77, 184, 0.1), rgba(99, 102, 241, 0.1))",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "1.6rem",
+    margin: "0 auto 16px",
+  },
+  heading: {
+    textAlign: "center",
+    color: "var(--accent, #0a4db8)",
+    fontSize: "1.5rem",
+    fontWeight: 800,
+    marginBottom: "8px",
+  },
+  subtitle: {
+    color: "var(--text-secondary, #64748b)",
+    fontSize: "0.95rem",
+    marginBottom: "20px",
+  },
+  sectionTitle: {
+    color: "var(--text-primary, #1e293b)",
+    fontSize: "1.1rem",
+    fontWeight: 700,
+    marginBottom: "16px",
+  },
+  input: {
+    width: "100%",
+    padding: "14px 16px",
+    marginBottom: "12px",
+    borderRadius: "12px",
+    border: "1px solid var(--input-border, #e2e8f0)",
+    boxSizing: "border-box",
+    fontSize: "0.95rem",
+    background: "var(--input-bg, white)",
+    color: "var(--text-primary, #1e293b)",
+    outline: "none",
+  },
+  button: {
+    width: "100%",
+    padding: "14px",
+    background: "linear-gradient(135deg, #0a4db8, #1e6ff0)",
+    color: "white",
+    border: "none",
+    borderRadius: "12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    marginTop: "10px",
+    fontSize: "1rem",
+    boxShadow: "0 4px 15px rgba(10, 77, 184, 0.25)",
+    transition: "all 0.3s",
+  },
+  roleBtn: {
+    width: "100%",
+    padding: "16px",
+    marginBottom: "12px",
+    borderRadius: "12px",
+    border: "1px solid var(--border-color, #e2e8f0)",
+    background: "var(--card-bg, #fff)",
+    color: "var(--accent, #0a4db8)",
+    fontWeight: "bold",
+    cursor: "pointer",
+    fontSize: "1rem",
+    transition: "all 0.3s",
+  },
   imageUpload: { textAlign: "center", marginBottom: "20px" },
-  previewImg: { width: "100px", height: "100px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px", border: "2px solid #0a4db8" },
-  uploadLabel: { display: "block", color: "#0a4db8", cursor: "pointer", fontWeight: "bold" },
-  fileBox: { marginBottom: "15px", padding: "10px", backgroundColor: "#f9f9f9", borderRadius: "6px", border: "1px dashed #ccc" },
-  fileLabel: { display: "block", marginBottom: "5px", fontWeight: "600", fontSize: "14px" }
+  previewImg: {
+    width: "100px",
+    height: "100px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    marginBottom: "10px",
+    border: "3px solid var(--accent, #0a4db8)",
+  },
+  uploadLabel: {
+    display: "block",
+    color: "var(--accent, #0a4db8)",
+    cursor: "pointer",
+    fontWeight: "bold",
+    fontSize: "0.95rem",
+  },
+  fileBox: {
+    marginBottom: "15px",
+    padding: "14px",
+    background: "var(--bg-primary, #f9f9f9)",
+    borderRadius: "12px",
+    border: "1px dashed var(--border-color, #e2e8f0)",
+  },
+  fileLabel: {
+    display: "block",
+    marginBottom: "8px",
+    fontWeight: "600",
+    fontSize: "0.9rem",
+    color: "var(--text-primary, #1e293b)",
+  },
 };
 
 export default Register;

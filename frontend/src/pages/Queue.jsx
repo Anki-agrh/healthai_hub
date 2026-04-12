@@ -12,6 +12,9 @@ function Queue() {
   const [activeTab, setActiveTab] = useState("live");
   const [loading, setLoading] = useState(true);
 
+  const [aiSummary, setAiSummary] = useState({});
+  const [summarizing, setSummarizing] = useState(false);
+
   const [loggedInUser, setLoggedInUser] = useState(undefined);
 
 
@@ -28,13 +31,13 @@ function Queue() {
       if (apptData.success && apptData.appointment) {
         setMyAppointment(apptData.appointment);
 
-        const liveRes = await fetch(`${process.env.REACT_APP_API}/api/appointments/live-status/${apptData.appointment.doctorId}`);
+        const liveRes = await fetch(`${API_BASE}/api/appointments/live-status/${apptData.appointment.doctorId}`);
         const liveData = await liveRes.json();
         if (liveData.success) setLiveToken(liveData.currentToken || 0);
       }
 
       // medical reports history
-      const historyRes = await fetch(`${process.env.REACT_APP_API}/api/patient/reports/${loggedInUser._id}`);
+      const historyRes = await fetch(`${API_BASE}/api/patient/reports/${loggedInUser._id}`);
       const historyData = await historyRes.json();
       if (historyData.success) setHistory(historyData.reports);
 
@@ -97,7 +100,7 @@ function Queue() {
     formData.append("appointmentId", appointment._id);
     formData.append("date", appointment.date);
 
-    const res = await fetch(`${process.env.REACT_APP_API}/api/patient/upload-report`, {
+    const res = await fetch(`${API_BASE}/api/patient/upload-report`, {
       method: "POST",
       body: formData
     });
@@ -113,8 +116,29 @@ function Queue() {
     }
   };
 
+  const getAiSummary = async (filename) => {
+    setSummarizing(filename);
+    try {
+      const res = await fetch(`${API_BASE}/api/ai/analyze-existing-report`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setAiSummary(prev => ({ ...prev, [filename]: data.result }));
+      } else {
+        alert("AI could not summarize this file.");
+      }
+    } catch (err) {
+      alert("AI Summary failed.");
+    } finally {
+      setSummarizing(false);
+    }
+  };
+
   if (loggedInUser === undefined)
-  return <div className="loader">Checking Login...</div>;
+    return <div className="loader">Checking Login...</div>;
 
 if (loading)
   return <div className="loader">Syncing your Health Records...</div>;
@@ -189,14 +213,32 @@ if (loading)
 
                   <h4>Doctor: {record.doctorId}</h4>
 
-                  <a
-                    href={`${process.env.REACT_APP_API || "https://healthai-hub.onrender.com"}/uploads/${record.file}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="view-report-btn"
-                  >
-                    📄 View Uploaded Report
-                  </a>
+                  <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
+                    <a
+                      href={`${API_BASE}/uploads/${record.file}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="view-report-btn"
+                      style={{ flex: 1, textAlign: "center" }}
+                    >
+                      📄 View Record
+                    </a>
+                    <button 
+                      onClick={() => getAiSummary(record.file)} 
+                      disabled={summarizing === record.file}
+                      className="view-report-btn"
+                      style={{ flex: 1, background: "#10b981" }}
+                    >
+                      {summarizing === record.file ? "🤖 Reading..." : "✨ AI Summarize"}
+                    </button>
+                  </div>
+
+                  {aiSummary[record.file] && (
+                    <div style={{ marginTop: "15px", padding: "12px", background: "#f8fafc", borderRadius: "8px", borderLeft: "4px solid #10b981", fontSize: "14px", color: "#334155" }}>
+                      <strong>🤖 AI Layman Summary:</strong>
+                      <div style={{ marginTop: "8px", whiteSpace: "pre-line" }}>{aiSummary[record.file]}</div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

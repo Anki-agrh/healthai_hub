@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
+import { AlertTriangle, MapPin, Phone, Flag, Mic, Square, Send, X, Circle, Bot } from "lucide-react";
 import "./DoctorPanel.css";
 const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
 const socket = io(API_BASE);
@@ -58,7 +59,7 @@ function DoctorPanel() {
       });
 
       socket.on("receive_message", (data) => {
-        if (data.sender === "Patient") {
+        if (data.sender === "Patient" || data.sender === "System") {
           setMessages((prev) => [...prev, data]);
         }
       });
@@ -188,7 +189,7 @@ function DoctorPanel() {
             boxShadow: '0 10px 25px rgba(190, 18, 60, 0.2)'
         }}>
           <div className="banner-content" style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-            <span className="blink-icon" style={{ fontSize: '2.5rem' }}>🚨</span>
+            <span className="blink-icon" style={{ display: 'flex', alignItems: 'center' }}><AlertTriangle size={40} color="#be123c" /></span>
             <div>
               <h3 style={{ color: '#9f1239', margin: 0 }}>CRITICAL EMERGENCY ALERT</h3>
               <p style={{ margin: '5px 0', fontSize: '1.1rem' }}>
@@ -199,9 +200,9 @@ function DoctorPanel() {
       href={emergencyAlert.locationLink} 
       target="_blank" 
       rel="noopener noreferrer"
-      style={{ color: '#2563eb', fontWeight: 'bold', textDecoration: 'underline' }}
+      style={{ color: '#2563eb', fontWeight: 'bold', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
     >
-      📍 Open in Google Maps
+      <MapPin size={16} /> Open in Google Maps
     </a>
   ) : (
     <span style={{color: 'gray'}}>Not Shared</span>
@@ -212,9 +213,9 @@ function DoctorPanel() {
           <div style={{ display: 'flex', gap: '10px' }}>
             <button 
               onClick={() => window.open(`tel:${emergencyAlert.patientPhone}`)}
-              style={{ padding: '12px 24px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
             >
-              📞 CALL NOW
+              <Phone size={18} /> CALL NOW
             </button>
             <button 
               onClick={() => setEmergencyAlert(null)}
@@ -282,16 +283,24 @@ function DoctorPanel() {
 
             <div className="chat-window-pro">
               <header className="chat-header-pro">
-                <div className="patient-status">
-                  <strong>Ankita</strong> 🟢 <span style={{fontSize: '12px', color: '#64748b'}}>Online</span>
+                <div className="patient-status" style={{display: 'flex', alignItems: 'center', gap: '6px'}}>
+                  <strong>Ankita</strong> <Circle size={10} fill="#22c55e" color="#22c55e" /> <span style={{fontSize: '12px', color: '#64748b'}}>Online</span>
                 </div>
-                <button className="report-btn-subtle" onClick={handleReportClick}>
-                  🚫 Report
+                <button className="report-btn-subtle" onClick={handleReportClick} style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                  <Flag size={14} /> Report
                 </button>
               </header>
 
               <div className="message-list-pro">
-                {messages.map((m, i) => (
+                {/* AI Brief Banner */}
+                {messages.find(m => m.isAiBrief) && (
+                  <div className="ai-brief-banner slide-down">
+                    <span className="ai-icon"><Bot size={20} color="var(--accent, #0a4db8)" /></span>
+                    <p><strong>Pre-Consultation Summary:</strong> {messages.find(m => m.isAiBrief).message.replace("System Auto-Brief: ", "")}</p>
+                  </div>
+                )}
+
+                {messages.filter(m => !m.isAiBrief).map((m, i) => (
                   <div key={i} className={`msg-row ${m.sender === doctorName ? "right" : "left"}`}>
                     <div className="msg-bubble-pro">
                       {m.audio ? <audio controls src={m.audio} /> : <p>{m.message}</p>}
@@ -306,9 +315,9 @@ function DoctorPanel() {
               {/* ✅ Audio Preview with Discard Option */}
               {audioPreview && (
                 <div className="audio-preview-overlay">
-                  <button className="delete-mic-btn" onClick={() => {setAudioPreview(null); setRecordedBase64(null);}} title="Discard Recording">✕</button>
+                  <button className="delete-mic-btn" onClick={() => {setAudioPreview(null); setRecordedBase64(null);}} title="Discard Recording"><X size={18} /></button>
                   <audio src={audioPreview} controls style={{flex: 1, height: '35px'}} />
-                  <button className="pro-send-btn" onClick={handleConfirmSendAudio}>➤</button>
+                  <button className="pro-send-btn" onClick={handleConfirmSendAudio}><Send size={18} /></button>
                 </div>
               )}
 
@@ -320,9 +329,9 @@ function DoctorPanel() {
                   onKeyDown={(e) => e.key === 'Enter' && sendReply()} 
                 />
                 <button className={`pro-mic-btn ${isRecording ? "recording" : ""}`} onClick={isRecording ? stopRecording : startRecording}>
-                  {isRecording ? "🛑" : "🎤"}
+                  {isRecording ? <Square size={20} fill="currentColor" color="#ef4444" /> : <Mic size={20} />}
                 </button>
-                <button onClick={sendReply} className="pro-send-btn">➤</button>
+                <button onClick={sendReply} className="pro-send-btn"><Send size={18} /></button>
               </div>
             </div>
           </div>

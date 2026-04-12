@@ -21,28 +21,33 @@ async function createMeeting(doctorEmail, patientEmail, date, time) {
   const start = dayjs(`${date} ${time}`).toISOString();
   const end = dayjs(start).add(20, "minute").toISOString();
 
-  const event = await calendar.events.insert({
-    calendarId: "primary",
-    conferenceDataVersion: 1,
-    requestBody: {
-      summary: "Doctor Consultation",
-      description: "HealthAI Hub Online Visit",
-      start: { dateTime: start, timeZone: "Asia/Kolkata" },
-      end: { dateTime: end, timeZone: "Asia/Kolkata" },
-      attendees: [
-        { email: doctorEmail },
-        { email: patientEmail }
-      ],
-      conferenceData: {
-        createRequest: {
-          requestId: Date.now().toString(),
-          conferenceSolutionKey: { type: "hangoutsMeet" }
+  try {
+    const event = await calendar.events.insert({
+      calendarId: "primary",
+      conferenceDataVersion: 1,
+      requestBody: {
+        summary: "Doctor Consultation",
+        description: "HealthAI Hub Online Visit",
+        start: { dateTime: start, timeZone: "Asia/Kolkata" },
+        end: { dateTime: end, timeZone: "Asia/Kolkata" },
+        attendees: [
+          { email: doctorEmail },
+          { email: patientEmail }
+        ],
+        conferenceData: {
+          createRequest: {
+            requestId: Date.now().toString(),
+            conferenceSolutionKey: { type: "hangoutsMeet" }
+          }
         }
       }
-    }
-  });
+    });
 
-  return event.data.hangoutLink;
+    return event.data.hangoutLink;
+  } catch (error) {
+    console.error("Google Meet API Error (Fallback to pending link):", error.message);
+    return "https://meet.google.com/pending-authorization"; // Graceful fallback
+  }
 }
 
 module.exports = createMeeting;

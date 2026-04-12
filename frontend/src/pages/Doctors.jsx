@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Star, Calendar, Bot, Flag, Mic, Square, Send, X } from "lucide-react";
 import io from "socket.io-client";
 import "./Doctors.css";
 
@@ -127,7 +128,7 @@ function Doctors() {
     };
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API}/api/appointments`, {
+      const res = await fetch(`${API_BASE}/api/appointments`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -165,7 +166,7 @@ function Doctors() {
       chatTranscript: messages 
     };
     try {
-      const res = await fetch(`${process.env.REACT_APP_API}/api/reports/submit`, {
+      const res = await fetch(`${API_BASE}/api/reports/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reportData)
@@ -237,6 +238,27 @@ function Doctors() {
     setConsultMode(mode);
     socket.emit("join_consultation", `${selectedDoc._id}-consult`);
     setChatStep(2);
+
+    // Push precise AI Summary Brief to the room if available
+    const savedAiHistory = localStorage.getItem("ai_chat_history");
+    if (savedAiHistory) {
+      try {
+        const history = JSON.parse(savedAiHistory);
+        const userMsgs = history.filter(h => h.role === "user").map(h => h.text);
+        if (userMsgs.length > 0) {
+           const aiSummaryText = "System Auto-Brief: Patient reported symptoms: " + userMsgs.slice(-3).join(", ");
+           const summaryPayload = {
+             roomId: `${selectedDoc._id}-consult`,
+             sender: "System",
+             message: aiSummaryText,
+             isAiBrief: true,
+             time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+           };
+           socket.emit("send_message", summaryPayload);
+        }
+      } catch (e) { console.error(e); }
+    }
+
     if (symptoms.trim() !== "") sendMessage(`Health Brief: ${symptoms}`);
   };
 
@@ -288,7 +310,7 @@ const scheduleConsult = async () => {
     return;
   }
 
-  const res = await fetch(`${process.env.REACT_APP_API}/api/consult/schedule`, {
+  const res = await fetch(`${API_BASE}/api/consult/schedule`, {
     method: "POST",
     headers: {"Content-Type":"application/json"},
     body: JSON.stringify({
@@ -343,7 +365,9 @@ const scheduleConsult = async () => {
                 alt={doc.name} 
                 className="doctor-photo" 
               />
-              <div className="rating-tag">⭐ {doc.averageRating || "4.8"}</div>
+              <div className="rating-tag" style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                <Star size={14} fill="currentColor" /> {doc.averageRating || "4.8"}
+              </div>
             </div>
             <div className="card-body">
               <span className="specialty-label">{doc.specialization}</span>
@@ -355,7 +379,7 @@ const scheduleConsult = async () => {
               <p className="sub-text">{doc.degree} • {doc.experience} Years Exp.</p>
               <p className="hospital-text">
  {doc.hospitalName}<br/>
-<span style={{fontSize:"12px",color:"#666"}}>{doc.hospitalAddress}, {doc.city}</span>
+<span style={{fontSize:"12px",color:"var(--text-secondary, #666)"}}>{doc.hospitalAddress}, {doc.city}</span>
 </p>
 
             </div>
@@ -373,7 +397,7 @@ const scheduleConsult = async () => {
             <button className="absolute-close" onClick={() => setShowBookingModal(false)}>×</button>
             <div className="menu-container fade-in">
               <div className="bot-header">
-                <span className="bot-icon">📅</span>
+                <span className="bot-icon"><Calendar size={32} color="#0a4db8" /></span>
                 <p>Book Appointment with <strong>{selectedDoc?.name}</strong></p>
               </div>
               <div className="booking-form">
@@ -394,7 +418,10 @@ const scheduleConsult = async () => {
             <button className="absolute-close" onClick={closeModal}>×</button>
             {chatStep === 1 && (
               <div className="menu-container fade-in">
-                <div className="bot-header"><span className="bot-icon">🤖</span><p>Connect with <strong>{selectedDoc?.name}</strong>?</p></div>
+                <div className="bot-header">
+                  <span className="bot-icon"><Bot size={32} color="#0a4db8" /></span>
+                  <p>Connect with <strong>{selectedDoc?.name}</strong>?</p>
+                </div>
                 <textarea className="modern-textarea" placeholder="Describe symptoms..." value={symptoms} onChange={(e) => setSymptoms(e.target.value)} />
                   {scheduleMode && (
   <div className="schedule-box">
@@ -424,11 +451,9 @@ const scheduleConsult = async () => {
                   <div className="choice-item" onClick={() => handleModeSelection("Chat")}><span>Live Chat</span></div>
                   <div className="choice-item" onClick={() => {
                     setScheduleMode("voice");
-                    setShowBookingModal(true);
                   }}> <span>Voice Call</span></div>
                   <div className="choice-item" onClick={() => {
                     setScheduleMode("video");
-                    setShowBookingModal(true);
                   }}> <span>Video Call</span></div>
                 </div>
               </div>
@@ -438,7 +463,9 @@ const scheduleConsult = async () => {
                 <div className="chat-header">
                   <div className="doc-info"><div className="online-dot"></div><h4>{selectedDoc?.name}</h4></div>
                   <div className="chat-header-actions">
-                    <button className="report-btn-danger" onClick={handleReportClick}>🚩 Report</button>
+                    <button className="report-btn-danger" onClick={handleReportClick} style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                      <Flag size={14} /> Report
+                    </button>
                     <span className="mode-badge">{consultMode}</span>
                   </div>
                 </div>
@@ -462,14 +489,16 @@ const scheduleConsult = async () => {
                 {audioPreview && (
                   <div className="audio-preview-bar">
                     <audio src={audioPreview} controls />
-                    <button onClick={cancelRecording}>❌</button>
-                    <button onClick={handleConfirmSendAudio}>➤ Send</button>
+                    <button onClick={cancelRecording} style={{display: 'flex', alignItems:'center', gap:'5px'}}><X size={16} /> Cancel</button>
+                    <button onClick={handleConfirmSendAudio} style={{display: 'flex', alignItems:'center', gap:'5px'}}><Send size={16} /> Send</button>
                   </div>
                 )}
-                <div className="chat-input-area">
+                <div className="chat-input-area" style={{display: 'flex', gap: '10px'}}>
                   <input type="text" value={currentMsg} onChange={handleTyping} onKeyDown={(e) => e.key === "Enter" && sendMessage()} />
-                  <button onClick={isRecording ? stopRecording : startRecording}>{isRecording ? "🛑" : "🎤"}</button>
-                  <button onClick={() => sendMessage()}>➤</button>
+                  <button onClick={isRecording ? stopRecording : startRecording} style={{padding: '10px'}}>
+                    {isRecording ? <Square size={20} fill="currentColor" color="var(--danger, #ef4444)" /> : <Mic size={20} />}
+                  </button>
+                  <button onClick={() => sendMessage()} style={{padding: '10px'}}><Send size={20} /></button>
                 </div>
                 <button className="end-session-btn" onClick={() => setChatStep(3)}>End & Rate</button>
               </div>
@@ -478,17 +507,17 @@ const scheduleConsult = async () => {
               <div className="rating-container">
                 <h3>Rate your experience</h3>
                 <div className="star-rating">
-  {[1,2,3,4,5].map((s) => (
-    <button
-      type="button"
-      key={s}
-      className={`star ${userRating >= s ? "active" : ""}`}
-      onClick={() => setUserRating(s)}
-    >
-      ★
-    </button>
-  ))}
-</div>
+                  {[1,2,3,4,5].map((s) => (
+                    <button
+                      type="button"
+                      key={s}
+                      className={`star ${userRating >= s ? "active" : ""}`}
+                      onClick={() => setUserRating(s)}
+                    >
+                      <Star size={34} fill={userRating >= s ? "currentColor" : "none"} />
+                    </button>
+                  ))}
+                </div>
 
                 <button onClick={closeModal} className="submit-rating-btn">Submit</button>
               </div>

@@ -1,0 +1,270 @@
+/* ========================================
+   DASHBOARD - COMPLETE REDESIGN
+   ======================================== */
+
+.dashboard-page {
+  min-height: 90vh;
+  padding: 30px 5%;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: var(--bg-primary, #f0f5ff);
+}
+
+/* --- Welcome Header --- */
+.dash-welcome {
+  margin-bottom: 35px;
+}
+
+.dash-welcome h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-primary, #1e293b);
+  margin: 0 0 8px 0;
+}
+
+.dash-welcome h1 span {
+  background: linear-gradient(135deg, #0a4db8, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dash-welcome p {
+  color: var(--text-secondary, #64748b);
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+/* --- Quick Stats Row --- */
+.dash-stats-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.dash-stat-card {
+  flex: 1;
+  min-width: 200px;
+  background: var(--card-bg, white);
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.dash-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(10, 77, 184, 0.12);
+}
+
+.stat-icon-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.stat-icon-box.blue { background: rgba(59, 130, 246, 0.12); }
+.stat-icon-box.green { background: rgba(16, 185, 129, 0.12); }
+.stat-icon-box.purple { background: rgba(139, 92, 246, 0.12); }
+.stat-icon-box.red { background: rgba(239, 68, 68, 0.12); }
+
+.stat-info h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary, #1e293b);
+}
+
+.stat-info p {
+  margin: 2px 0 0 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary, #94a3b8);
+}
+
+/* --- Action Cards Grid --- */
+.dash-actions-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary, #1e293b);
+  margin-bottom: 20px;
+}
+
+.dash-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.dash-action-card {
+  background: var(--card-bg, white);
+  border-radius: 16px;
+  padding: 28px 24px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.dash-action-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-radius: 16px 16px 0 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.dash-action-card:hover::before {
+  opacity: 1;
+}
+
+.dash-action-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(10, 77, 184, 0.15);
+  border-color: #0a4db8;
+}
+
+.dash-action-card .card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 18px;
+}
+
+/* Color variants for card icons */
+.card-icon.ai { background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(99, 102, 241, 0.15)); }
+.card-icon.diet { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15)); }
+.card-icon.consult { background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(124, 58, 237, 0.15)); }
+.card-icon.queue { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.15)); }
+.card-icon.meds { background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(219, 39, 119, 0.15)); }
+.card-icon.emergency { background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.15)); }
+.card-icon.nearby { background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(13, 148, 136, 0.15)); }
+.card-icon.appointments { background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(234, 88, 12, 0.15)); }
+
+/* Color top-bars for hover */
+.dash-action-card.ai-card::before { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+.dash-action-card.diet-card::before { background: linear-gradient(90deg, #10b981, #059669); }
+.dash-action-card.consult-card::before { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+.dash-action-card.queue-card::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.dash-action-card.meds-card::before { background: linear-gradient(90deg, #ec4899, #db2777); }
+.dash-action-card.emergency-card::before { background: linear-gradient(90deg, #ef4444, #dc2626); }
+.dash-action-card.nearby-card::before { background: linear-gradient(90deg, #14b8a6, #0d9488); }
+.dash-action-card.appointments-card::before { background: linear-gradient(90deg, #f97316, #ea580c); }
+
+.dash-action-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary, #1e293b);
+  margin: 0 0 8px 0;
+}
+
+.dash-action-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #64748b);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.card-arrow {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-size: 1.2rem;
+  color: var(--text-secondary, #94a3b8);
+  transition: all 0.3s;
+}
+
+.dash-action-card:hover .card-arrow {
+  color: #0a4db8;
+  transform: translateX(4px);
+}
+
+/* --- Doctor Dashboard Specifics --- */
+.dash-pending-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.dash-pending-badge.approved {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
+/* --- Admin Card Styles --- */
+.admin-approval-card {
+  background: var(--card-bg, white);
+  border-radius: 16px;
+  padding: 20px 24px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  transition: all 0.3s ease;
+}
+
+.admin-approval-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.approval-info h4 {
+  margin: 0 0 4px 0;
+  color: var(--text-primary, #1e293b);
+  font-size: 1.05rem;
+}
+
+.approval-info p {
+  margin: 0;
+  color: var(--text-secondary, #64748b);
+  font-size: 0.85rem;
+}
+
+.approve-btn {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.approve-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-page { padding: 20px 4%; }
+  .dash-welcome h1 { font-size: 1.6rem; }
+  .dash-stats-row { flex-direction: column; }
+  .dash-actions-grid { grid-template-columns: 1fr; }
+}
