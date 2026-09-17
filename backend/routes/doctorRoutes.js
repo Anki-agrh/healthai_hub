@@ -56,6 +56,57 @@ router.get("/search", async (req, res) => {
   } catch (error) { res.status(500).json({ success: false, message: "Search Error" }); }
 });
 
+// ✅ Nearby healthcare proxy — avoids CORS issues with Overpass API
+router.get("/nearby", async (req, res) => {
+  try {
+    let { lat, lng, city } = req.query;
+
+    // If city is provided, geocode it first via Nominatim
+    if (city && (!lat || !lng)) {
+      const geoRes = await axios.get(`https://nominatim.openstreetmap.org/search`, {
+        params: { q: city, format: 'json', limit: 1 },
+        headers: { 'User-Agent': 'HealthAI-Hub-Project' }
+      });
+      if (geoRes.data.length > 0) {
+        lat = geoRes.data[0].lat;
+        lng = geoRes.data[0].lon;
+      } else {
+        return res.json({ success: false, message: "Location not found.", doctors: [] });
+      }
+    }
+
+    if (!lat || !lng) {
+      return res.status(400).json({ success: false, message: "Coordinates or city required.", doctors: [] });
+    }
+
+    // Query Overpass API for nearby healthcare facilities
+    const overpassQuery = `[out:json];(node["amenity"="doctors"](around:5000, ${lat}, ${lng});node["amenity"="clinic"](around:5000, ${lat}, ${lng});node["amenity"="hospital"](around:5000, ${lat}, ${lng}););out body;`;
+    const overpassRes = await axios.get('https://overpass-api.de/api/interpreter', {
+      params: { data: overpassQuery },
+      headers: { 'User-Agent': 'HealthAI-Hub-Project' }
+    });
+
+    const doctorList = (overpassRes.data.elements || []).map(el => ({
+      id: el.id,
+      name: el.tags?.name || "Healthcare Facility",
+      type: el.tags?.amenity || "clinic",
+      address: el.tags?.["addr:street"] || "Nearby Area",
+      distance: calculateDistance(lat, lng, el.lat, el.lon).toFixed(2),
+      lat: el.lat,
+      lng: el.lon
+    }));
+
+    res.json({ 
+      success: true, 
+      doctors: doctorList,
+      center: { lat: parseFloat(lat), lng: parseFloat(lng) }
+    });
+  } catch (error) {
+    console.error("Nearby search error:", error.message);
+    res.status(500).json({ success: false, message: "Nearby search failed.", doctors: [] });
+  }
+});
+
 router.get("/approved", async (req, res) => {
   try {
     const doctors = await User.find({ role: 'doctor', status: 'approved' }).lean();
