@@ -46,20 +46,20 @@ function Login() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.iconCircle}>🔐</div>
-      <h2 style={styles.title}>Welcome Back</h2>
-      <p style={styles.subtitle}>Log in to your HealthAI Hub account</p>
+    <div className="max-w-[420px] mx-auto my-[60px] p-[40px_30px] rounded-[20px] font-sans shadow-[0_8px_30px_rgba(0,0,0,0.08)] text-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+      <div className="w-[60px] h-[60px] rounded-full bg-gradient-to-br from-[#0a4db8]/10 to-[#6366f1]/10 flex items-center justify-center text-[1.6rem] mx-auto mb-[16px]">🔐</div>
+      <h2 className="text-accent mb-[6px] text-[1.6rem] font-extrabold">Welcome Back</h2>
+      <p className="text-slate-500 dark:text-slate-400 text-[0.95rem] mb-[28px]">Log in to your HealthAI Hub account</p>
 
       <input
-        style={styles.input}
+        className="w-full p-[14px_16px] mb-[15px] rounded-[12px] border border-slate-200 dark:border-slate-600 text-[0.95rem] bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 outline-none transition-colors focus:border-accent box-border"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
 
       <input
-        style={styles.input}
+        className="w-full p-[14px_16px] mb-[15px] rounded-[12px] border border-slate-200 dark:border-slate-600 text-[0.95rem] bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 outline-none transition-colors focus:border-accent box-border"
         type="password"
         placeholder="Password"
         value={password}
@@ -67,90 +67,16 @@ function Login() {
         onKeyDown={(e) => e.key === "Enter" && loginUser()}
       />
 
-      <button style={styles.button} onClick={loginUser}>
+      <button className="w-full p-[14px] bg-gradient-to-br from-[#0a4db8] to-[#1e6ff0] text-white border-none rounded-[12px] cursor-pointer text-[1rem] font-bold mt-[5px] transition-all shadow-[0_4px_15px_rgba(10,77,184,0.25)] hover:-translate-y-[2px]" onClick={loginUser}>
         Login
       </button>
       
-      <p style={styles.footerText}>
+      <p className="mt-[24px] text-[0.9rem] text-slate-500 dark:text-slate-400">
         Don't have an account?{" "}
-        <span style={styles.link} onClick={() => navigate("/register")}>Register here</span>
+        <span className="text-accent cursor-pointer underline font-semibold" onClick={() => navigate("/register")}>Register here</span>
       </p>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    maxWidth: "420px",
-    margin: "60px auto",
-    padding: "40px 30px",
-    borderRadius: "20px",
-    fontFamily: "'Inter', 'Segoe UI', sans-serif",
-    boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
-    textAlign: "center",
-    background: "var(--card-bg, white)",
-    border: "1px solid var(--border-color, #e2e8f0)",
-  },
-  iconCircle: {
-    width: "60px",
-    height: "60px",
-    borderRadius: "50%",
-    background: "linear-gradient(135deg, rgba(10, 77, 184, 0.1), rgba(99, 102, 241, 0.1))",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "1.6rem",
-    margin: "0 auto 16px",
-  },
-  title: {
-    color: "var(--accent, #0a4db8)",
-    marginBottom: "6px",
-    fontSize: "1.6rem",
-    fontWeight: 800,
-  },
-  subtitle: {
-    color: "var(--text-secondary, #64748b)",
-    fontSize: "0.95rem",
-    marginBottom: "28px",
-  },
-  input: {
-    width: "100%",
-    padding: "14px 16px",
-    marginBottom: "15px",
-    borderRadius: "12px",
-    border: "1px solid var(--input-border, #e2e8f0)",
-    boxSizing: "border-box",
-    fontSize: "0.95rem",
-    background: "var(--input-bg, white)",
-    color: "var(--text-primary, #1e293b)",
-    outline: "none",
-    transition: "border-color 0.2s",
-  },
-  button: {
-    width: "100%",
-    padding: "14px",
-    background: "linear-gradient(135deg, #0a4db8, #1e6ff0)",
-    color: "white",
-    border: "none",
-    borderRadius: "12px",
-    cursor: "pointer",
-    fontSize: "1rem",
-    fontWeight: "bold",
-    marginTop: "5px",
-    transition: "all 0.3s ease",
-    boxShadow: "0 4px 15px rgba(10, 77, 184, 0.25)",
-  },
-  footerText: {
-    marginTop: "24px",
-    fontSize: "0.9rem",
-    color: "var(--text-secondary, #64748b)",
-  },
-  link: {
-    color: "var(--accent, #0a4db8)",
-    cursor: "pointer",
-    textDecoration: "underline",
-    fontWeight: 600,
-  },
-};
 
 export default Login;

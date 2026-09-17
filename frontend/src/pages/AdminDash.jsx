@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // ✅ Redirect ke liye zaroori hai
-import "./AdminDash.css";
+
 const API = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
 
 const AdminDash = () => {
@@ -81,20 +81,20 @@ const AdminDash = () => {
   };
 
   return (
-    <div className="admin-container">
-      <h2 className="admin-title">Admin Management Portal</h2>
+    <div className="max-w-[1000px] mx-auto my-[50px] px-[20px] font-sans">
+      <h2 className="text-center mb-[40px] text-3xl font-bold text-slate-800 dark:text-slate-100">Admin Management Portal</h2>
       {/* ... Baki ka UI code jo aapne likha hai (Tabs and Grids) ... */}
       
       {/* Tab Navigation */}
-      <div className="admin-tabs">
+      <div className="flex gap-[20px] mb-[20px]">
         <button 
-          className={activeTab === "doctors" ? "active-tab" : ""} 
+          className={`p-[10px_20px] border-none cursor-pointer rounded-[5px] font-bold transition-colors ${activeTab === "doctors" ? "bg-blue-600 text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200"}`} 
           onClick={() => setActiveTab("doctors")}
         >
           Pending Doctors ({pendingDoctors.length})
         </button>
         <button 
-          className={activeTab === "reports" ? "active-tab" : ""} 
+          className={`p-[10px_20px] border-none cursor-pointer rounded-[5px] font-bold transition-colors ${activeTab === "reports" ? "bg-blue-600 text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200"}`} 
           onClick={() => setActiveTab("reports")}
         >
           User Reports ({reports.length})
@@ -105,63 +105,63 @@ const AdminDash = () => {
 
       {/* Render logic starts here */}
       {activeTab === "doctors" && (
-        <div className="admin-grid fade-in">
+        <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(420px,1fr))] gap-[28px] items-start animate-fadeIn mt-5">
           {pendingDoctors.length > 0 ? (
             pendingDoctors.map((doc) => (
-              <div key={doc._id} className="admin-card verify-card">
-                <div className="verify-header">
-                  <img src={`${API}/uploads/${doc.image}`} alt="doctor" className="verify-photo" />
+              <div key={doc._id} className="bg-white dark:bg-slate-800 rounded-[16px] border border-slate-200 dark:border-slate-700 shadow-[0_10px_25px_rgba(0,0,0,0.06)] p-[18px] md:p-[22px] transition-all hover:-translate-y-[3px] hover:shadow-[0_14px_32px_rgba(0,0,0,0.10)] block w-full">
+                <div className="flex items-center gap-[18px] pb-[14px] border-b border-slate-100 dark:border-slate-700 mb-[16px]">
+                  <img src={`${API}/uploads/${doc.image}`} alt="doctor" className="w-[90px] h-[90px] rounded-[14px] object-cover border-[2px] border-blue-100 dark:border-blue-900 shadow-[0_6px_14px_rgba(0,0,0,0.15)]" />
                   <div>
-                    <h2>{doc.name}</h2>
-                    <p><b>Email:</b> {doc.email}</p>
-                    <p><b>Specialization:</b> {doc.specialization}</p>
+                    <h2 className="m-0 mb-1 text-slate-800 dark:text-slate-100 text-xl font-bold">{doc.name}</h2>
+                    <p className="m-[2px_0] text-slate-500 dark:text-slate-400 text-[0.9rem]"><b>Email:</b> {doc.email}</p>
+                    <p className="m-[2px_0] text-slate-500 dark:text-slate-400 text-[0.9rem]"><b>Specialization:</b> {doc.specialization}</p>
                   </div>
                 </div>
-                <div className="verify-section">
-                  <p><b>Degree:</b> {doc.degree}</p>
-                  <p><b>Experience:</b> {doc.experience} Years</p>
+                <div className="bg-blue-50 dark:bg-slate-700 border border-blue-100 dark:border-slate-600 rounded-[12px] p-[14px] my-[16px] text-[14px] leading-[1.6] text-slate-800 dark:text-slate-200">
+                  <p className="m-0"><b>Degree:</b> {doc.degree}</p>
+                  <p className="m-0"><b>Experience:</b> {doc.experience} Years</p>
                 </div>
-                <div className="admin-actions">
-                  <button className="approve-btn" onClick={() => handleApprove(doc._id)}>Approve</button>
-                  <button className="reject-btn" onClick={() => handleReject(doc._id)}>Reject</button>
+                <div className="flex gap-[10px] mt-[18px] justify-end">
+                  <button className="bg-[#00d293] hover:bg-[#00b37e] text-white border-none p-[12px_25px] rounded-[8px] font-bold cursor-pointer transition-transform hover:-translate-y-[2px]" onClick={() => handleApprove(doc._id)}>Approve</button>
+                  <button className="bg-[#ff4d4d] hover:bg-[#cc0000] text-white border-none p-[12px_25px] rounded-[8px] font-bold cursor-pointer transition-transform hover:-translate-y-[2px]" onClick={() => handleReject(doc._id)}>Reject</button>
                 </div>
               </div>
             ))
           ) : (
-            <p className="no-data">All quiet! No pending doctor registrations.</p>
+            <p className="text-center p-[40px] bg-slate-50 dark:bg-slate-900 rounded-[12px] text-slate-400">All quiet! No pending doctor registrations.</p>
           )}
         </div>
       )}
 
       {/* Reports logic... same as yours */}
       {activeTab === "reports" && (
-        <div className="admin-grid fade-in">
+        <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(420px,1fr))] gap-[28px] items-start animate-fadeIn mt-5">
           {reports.length > 0 ? (
             reports.map((rep) => (
-              <div key={rep._id} className="report-card">
-                <div className="report-header">
-                  <span className="report-reason">⚠️ {rep.reason}</span>
-                  <span className="report-date">{new Date(rep.createdAt).toLocaleDateString()}</span>
+              <div key={rep._id} className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/30 p-[15px] rounded-[8px] mb-[15px] text-slate-800 dark:text-slate-200">
+                <div className="flex justify-between items-center mb-[10px]">
+                  <span className="text-[#d9534f] font-bold text-[1.1rem]">⚠️ {rep.reason}</span>
+                  <span className="text-slate-500 text-sm">{new Date(rep.createdAt).toLocaleDateString()}</span>
                 </div>
-                <div className="report-body">
+                <div className="flex flex-col gap-1">
                   <p><strong>Room ID:</strong> {rep.roomId}</p>
                   <p><strong>Reporter:</strong> {rep.reporterId?.name || "Unknown"}</p>
-                  <details className="transcript-details">
+                  <details className="mt-[10px] bg-slate-100 dark:bg-slate-800 p-[10px] rounded-[5px] cursor-pointer">
                     <summary>View Chat Transcript</summary>
-                    <div className="transcript-box">
+                    <div className="max-h-[150px] overflow-y-auto text-[0.9rem] mt-[5px] bg-white dark:bg-slate-900 p-2 rounded">
                       {rep.chatTranscript?.map((msg, i) => (
-                        <div key={i} className="transcript-msg">
+                        <div key={i} className="mb-1">
                           <strong>{msg.sender}:</strong> {msg.message}
                         </div>
                       ))}
                     </div>
                   </details>
                 </div>
-                <button className="ban-btn" onClick={() => alert("Action coming soon!")}>Punish / Ban</button>
+                <button className="mt-[10px] bg-black text-white w-full p-[8px] rounded-[4px] cursor-pointer hover:bg-slate-800" onClick={() => alert("Action coming soon!")}>Punish / Ban</button>
               </div>
             ))
           ) : (
-            <p className="no-data">No user reports filed yet.</p>
+            <p className="text-center p-[40px] bg-slate-50 dark:bg-slate-900 rounded-[12px] text-slate-400">No user reports filed yet.</p>
           )}
         </div>
       )}

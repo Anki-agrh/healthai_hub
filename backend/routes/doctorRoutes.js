@@ -81,10 +81,20 @@ router.get("/nearby", async (req, res) => {
 
     // Query Overpass API for nearby healthcare facilities
     const overpassQuery = `[out:json];(node["amenity"="doctors"](around:5000, ${lat}, ${lng});node["amenity"="clinic"](around:5000, ${lat}, ${lng});node["amenity"="hospital"](around:5000, ${lat}, ${lng}););out body;`;
-    const overpassRes = await axios.get('https://overpass-api.de/api/interpreter', {
-      params: { data: overpassQuery },
-      headers: { 'User-Agent': 'HealthAI-Hub-Project' }
-    });
+    
+    let overpassRes;
+    try {
+      overpassRes = await axios.get('https://overpass-api.de/api/interpreter', {
+        params: { data: overpassQuery },
+        headers: { 'User-Agent': 'HealthAI-Hub-Project' }
+      });
+    } catch (apiErr) {
+      console.warn("Primary Overpass failed, trying fallback...", apiErr.message);
+      overpassRes = await axios.get('https://overpass.kumi.systems/api/interpreter', {
+        params: { data: overpassQuery },
+        headers: { 'User-Agent': 'HealthAI-Hub-Project' }
+      });
+    }
 
     const doctorList = (overpassRes.data.elements || []).map(el => ({
       id: el.id,
@@ -103,7 +113,7 @@ router.get("/nearby", async (req, res) => {
     });
   } catch (error) {
     console.error("Nearby search error:", error.message);
-    res.status(500).json({ success: false, message: "Nearby search failed.", doctors: [] });
+    res.status(500).json({ success: false, message: `Nearby search failed: ${error.message}`, doctors: [] });
   }
 });
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import './Meds.css';
+
 
 const Meds = () => {
   // ✅ PERSISTENCE: Initializing states from LocalStorage
@@ -175,80 +175,80 @@ const Meds = () => {
   const addWater = (ml) => setWater(prev => Math.min(prev + (ml / 1000), dailyGoal));
 
   return (
-    <div className="dashboard-container">
+    <div className="p-5 bg-slate-50 dark:bg-slate-900 min-h-screen relative font-sans transition-colors duration-300">
       {showQuote && (
-        <div className="quote-overlay-mini">
-          <button className="close-quote-btn" onClick={() => setShowQuote(false)}>×</button>
-          <div className="quote-content-mini"><p>"{quote}"</p></div>
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-[15px_45px] rounded-full border-4 border-accent shadow-[0_15px_50px_rgba(10,77,184,0.3)] text-center z-[10001] max-w-[450px] w-[90%] animate-[slidePop_0.4s_ease-out]">
+          <button className="absolute -top-3 right-3 bg-accent text-white border-none w-[26px] h-[26px] rounded-full cursor-pointer flex items-center justify-center font-bold shadow-md hover:scale-110 transition-transform" onClick={() => setShowQuote(false)}>×</button>
+          <div className="m-0 text-[1.1rem] font-bold text-slate-800 dark:text-slate-100 italic"><p>"{quote}"</p></div>
         </div>
       )}
 
       {showAddModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[10000] p-4">
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl flex flex-col gap-4 w-[300px] border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 shadow-xl">
             <h3>💊 Add Medicine</h3>
-            <input type="text" placeholder="Medicine Name" onChange={e => setNewMed({...newMed, name: e.target.value})} />
-            <input type="time" onChange={e => setNewMed({...newMed, time: e.target.value})} />
-            <div className="modal-actions">
-              <button className="modal-btn-add" onClick={handleAddMed}>Add</button>
-              <button className="modal-btn-cancel" onClick={() => setShowAddModal(false)}>Cancel</button>
+            <input className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 outline-none focus:border-accent" type="text" placeholder="Medicine Name" onChange={e => setNewMed({...newMed, name: e.target.value})} />
+            <input className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 outline-none focus:border-accent" type="time" onChange={e => setNewMed({...newMed, time: e.target.value})} />
+            <div className="flex gap-2.5">
+              <button className="flex-1 p-2.5 rounded-xl border-none bg-accent text-white font-bold cursor-pointer transition-transform hover:scale-105" onClick={handleAddMed}>Add</button>
+              <button className="flex-1 p-2.5 rounded-xl border-none bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-100 font-bold cursor-pointer transition-transform hover:scale-105" onClick={() => setShowAddModal(false)}>Cancel</button>
             </div>
           </div>
         </div>
       )}
 
-      <h1 className="main-heading">Health Dashboard</h1>
+      <h1 className="text-center text-slate-800 dark:text-slate-100 mb-2.5 text-3xl font-bold">Health Dashboard</h1>
 
-      <div className="top-stats-row">
-        <div className="points-badge">🏆 Points: {points}</div>
+      <div className="flex flex-col md:flex-row justify-between items-center my-0 mx-auto mb-[30px] max-w-[1200px] px-5 gap-2.5">
+        <div className="font-bold text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-800 px-5 py-2.5 rounded-xl shadow-[0_4px_6px_rgba(0,0,0,0.05)] border border-slate-200 dark:border-slate-700">🏆 Points: {points}</div>
         
-        <div className="notif-wrapper" style={{ position: 'relative' }}>
+        <div className="relative ml-auto md:ml-0 md:pr-2.5" style={{ position: 'relative' }}>
           <div 
-            className={`notif-bell ${pendingNotifs.length > 0 ? 'red-alert' : ''}`} 
+            className={`text-2xl cursor-pointer ml-auto pr-2.5 ${pendingNotifs.length > 0 ? "text-red-500 animate-[shake_0.5s_infinite]" : "text-slate-600 dark:text-slate-300"}`} 
             onClick={() => setShowNotifDropdown(!showNotifDropdown)}
             style={{ cursor: 'pointer' }}
           >
-            🔔 {pendingNotifs.length > 0 && <span className="red-dot"></span>}
+            🔔 {pendingNotifs.length > 0 && <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full"></span>}
           </div>
 
           {showNotifDropdown && (
-            <div className="notif-dropdown">
+            <div className="absolute right-0 top-10 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg p-4 w-[250px] z-50">
               <h4>Notifications</h4>
               {pendingNotifs.length === 0 ? <p>No upcoming meds.</p> : pendingNotifs.map((n, idx) => (
-                <div key={idx} className="notif-item">Take <strong>{n.name}</strong> at {n.time}</div>
+                <div key={idx} className="p-2 border-b border-slate-100 dark:border-slate-700 last:border-b-0 text-sm text-slate-700 dark:text-slate-300">Take <strong>{n.name}</strong> at {n.time}</div>
               ))}
             </div>
           )}
         </div>
       </div>
 
-      <div className="main-layout">
-        <div className="left-panel expanded-vertical">
-          <div className="med-header">
-            <h2 className="section-title">Med-Reminder</h2>
-            <button className="add-med-btn-header" onClick={() => setShowAddModal(true)}>+ Add</button>
+      <div className="flex flex-col md:flex-row gap-[30px] max-w-[1200px] mx-auto">
+        <div className="flex-[2] flex flex-col min-h-[auto] md:min-h-[850px] bg-white dark:bg-slate-800 rounded-[20px] p-[15px] md:p-[30px] shadow-[0_5px_15px_rgba(0,0,0,0.05)] border border-slate-200 dark:border-slate-700 transition-colors">
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 m-0">Med-Reminder</h2>
+            <button className="bg-accent text-white border-none p-[8px_20px] rounded-xl font-bold cursor-pointer transition-all hover:bg-accent-hover hover:scale-105 shadow-[0_4px_6px_rgba(0,0,0,0.05)]" onClick={() => setShowAddModal(true)}>+ Add</button>
           </div>
 
-          <div className="pillar-container vertical-stage">
+          <div className="flex items-end justify-start gap-5 h-[400px] md:h-[550px] mt-5 mb-12 border-b-4 border-slate-100 dark:border-slate-700 pb-[60px] overflow-x-auto overflow-y-visible px-2.5">
             {sortedMeds.map((med, i) => (
-              <div key={i} className={`pillar cuboidal-pillar p-dynamic ${currentIndex === i ? 'current-p' : ''}`} style={{ height: med.height }}>
-                {i !== 0 && <button className="delete-med-btn" onClick={() => deleteMed(i)}>×</button>}
-                <div className="pillar-content">
-                  <div className="pillar-vertical-text" style={{ fontSize: parseInt(med.height) < 140 ? '0.7rem' : '0.9rem' }}>{med.name}</div>
+              <div key={i} className={`relative w-[55px] shrink-0 flex flex-col justify-center items-center rounded-sm transition-all duration-[400ms] mr-6 ${currentIndex === i ? "bg-gradient-to-b from-[#4facfe] to-[#00f2fe] shadow-[8px_0px_0px_#00c9db,0px_15px_30px_rgba(0,242,254,0.4)] -translate-y-2.5 scale-105 z-10" : "bg-gradient-to-b from-[#71b1ff] to-[#4a90e2] shadow-[8px_0px_0px_#3470b9,12px_10px_20px_rgba(0,0,0,0.15)] z-0"}`} style={{ height: med.height }}>
+                {i !== 0 && <button className="absolute top-2 right-2 w-[22px] h-[22px] bg-white/20 text-white rounded-full flex items-center justify-center font-bold text-sm border-none cursor-pointer hover:bg-red-500 hover:scale-110 hover:rotate-90 transition-all z-20 shadow-sm" onClick={() => deleteMed(i)}>×</button>}
+                <div className="flex items-center justify-center h-full w-full overflow-hidden py-1">
+                  <div className="[writing-mode:vertical-rl] font-extrabold text-white tracking-wider uppercase drop-shadow-md text-center transition-all" style={{ fontSize: parseInt(med.height) < 140 ? '0.7rem' : '0.9rem' }}>{med.name}</div>
                 </div>
-                <div className="pillar-horizontal-time">{med.time}</div>
-                {currentIndex === i && <img src="/assets/shinchan.png" alt="Shinchan" className="shinchan-image" />}
+                <div className="absolute -bottom-[30px] text-[0.8rem] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">{med.time}</div>
+                {currentIndex === i && <img src="/assets/shinchan.png" alt="Shinchan" className="absolute -top-[95px] md:-top-[95px] w-[60px] md:w-[90px] h-auto left-1/2 -translate-x-1/2 z-15 drop-shadow-lg animate-[victory-bounce_0.8s_infinite_alternate_ease-in-out]" />}
                 {currentIndex === i && i !== sortedMeds.length - 1 && (
-                  <div className="jump-controls">
-                    <button className="done-btn" onClick={() => handleAction('done')}>Done</button>
-                    <button className="skip-btn" onClick={() => handleAction('skip')}>Skip</button>
+                  <div className="absolute -top-[150px] flex gap-2.5 left-1/2 -translate-x-1/2">
+                    <button className="px-3 py-1.5 rounded-full border-none bg-green-500 hover:bg-green-600 text-white text-xs cursor-pointer font-bold transition-colors" onClick={() => handleAction('done')}>Done</button>
+                    <button className="px-3 py-1.5 rounded-full border-none bg-orange-500 hover:bg-orange-600 text-white text-xs cursor-pointer font-bold transition-colors" onClick={() => handleAction('skip')}>Skip</button>
                   </div>
                 )}
               </div>
             ))}
           </div>
 
-          <div className="consistency-note-box bottom-note">
+          <div className="mt-auto p-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl border-l-4 border-accent text-[0.85rem] text-slate-600 dark:text-slate-300">
             <p><strong>📝 Note:</strong> Consistency Condition</p>
             <ul>
                 <li>Water intake &ge; 80%.</li>
@@ -258,71 +258,71 @@ const Meds = () => {
           </div>
         </div>
 
-        <div className="right-panel">
-          <div className="info-box meditation-box">
-            <div className="med-header">
+        <div className="flex-1 flex flex-col gap-5 justify-start">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-[0_5px_15px_rgba(0,0,0,0.05)] border border-slate-200 dark:border-slate-700">
+            <div className="flex justify-between items-center">
               <h3>🧘 Meditation Track</h3>
-              <span className="total-day-label">Total: {formatTime(totalDayMeditation)}</span>
+              <span className="text-[0.85rem] bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-md text-accent font-bold">Total: {formatTime(totalDayMeditation)}</span>
             </div>
-            <div className="stopwatch-display">{formatTime(time)}</div>
-            <button className={`stopwatch-btn ${isActive ? 'active' : ''}`} onClick={handleStartStop}>
+            <div className="font-mono text-[2.5rem] text-center text-slate-800 dark:text-slate-100 my-2.5 font-bold">{formatTime(time)}</div>
+            <button className={`w-full p-3 rounded-xl border-none font-bold cursor-pointer transition-colors ${isActive ? "bg-red-500 hover:bg-red-600 text-white" : "bg-accent hover:bg-accent-hover text-white"}`} onClick={handleStartStop}>
               {isActive ? 'Stop Session' : 'Start Meditating'}
             </button>
           </div>
 
-          <div className="info-box water-box">
-            <div className="med-header">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-[0_5px_15px_rgba(0,0,0,0.05)] border border-slate-200 dark:border-slate-700">
+            <div className="flex justify-between items-center">
               <h3>💧 Water Intake</h3>
-              <div className="gender-selector-header">
-                <select value={gender} onChange={handleGenderChange}>
+              <div className="">
+                <select className="p-1 px-2 rounded-lg border border-accent bg-blue-50 dark:bg-blue-900/30 text-[0.75rem] font-bold text-accent outline-none cursor-pointer" value={gender} onChange={handleGenderChange}>
                   <option value="female">Woman (2L)</option>
                   <option value="male">Man (3L)</option>
                 </select>
               </div>
             </div>
-            <div className="water-drop-container">
-               <div className="water-drop">
-                  <div className="water-wave" style={{ top: `${100 - (water / dailyGoal) * 100}%` }}></div>
-                  <div className="water-percentage">{Math.round((water / dailyGoal) * 100)}%</div>
+            <div className="flex justify-center my-4">
+               <div className="relative w-[130px] h-[130px] bg-blue-50 dark:bg-blue-900/30 rounded-full border-[5px] border-accent overflow-hidden flex items-center justify-center shadow-[inset_0_0_15px_rgba(0,0,0,0.1)]">
+                  <div className="absolute w-[250%] h-[250%] bg-accent -left-[75%] rounded-[38%] animate-[wave-rotate_6s_linear_infinite] transition-all duration-700 z-0" style={{ top: `${100 - (water / dailyGoal) * 100}%` }}></div>
+                  <div className="relative z-10 font-bold text-slate-800 dark:text-white text-2xl drop-shadow-md">{Math.round((water / dailyGoal) * 100)}%</div>
                </div>
             </div>
-            <div className="water-stats">{water.toFixed(3)}L / {dailyGoal}L</div>
-            <div className="water-controls">
-              <button onClick={() => addWater(50)}>+ 50 ml</button>
-              <button onClick={() => addWater(100)}>+ 100 ml</button>
+            <div className="text-center font-bold text-slate-800 dark:text-slate-100 mb-2.5">{water.toFixed(3)}L / {dailyGoal}L</div>
+            <div className="flex justify-center gap-2.5 mt-2.5">
+              <button className="bg-accent hover:bg-accent-hover text-white border-none px-3 py-2 rounded-xl font-bold cursor-pointer transition-colors" onClick={() => addWater(50)}>+ 50 ml</button>
+              <button className="bg-accent hover:bg-accent-hover text-white border-none px-3 py-2 rounded-xl font-bold cursor-pointer transition-colors" onClick={() => addWater(100)}>+ 100 ml</button>
             </div>
           </div>
 
-          <div className="info-box streak-box calendar-box-expanded">
-            <h3>📅 {monthName} {year}</h3>
-            <div className="calendar-day-labels">{dayLabels.map(l => <span key={l}>{l}</span>)}</div>
-            <div className="calendar-grid-large">
-              {[...Array(startOffset)].map((_, i) => <div key={`empty-${i}`} className="calendar-cell empty"></div>)}
+          <div className="flex-1 flex flex-col bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-[0_5px_15px_rgba(0,0,0,0.05)] border border-slate-200 dark:border-slate-700">
+            <h3 className="text-center font-bold text-xl mb-4 text-slate-800 dark:text-slate-100">📅 {monthName} {year}</h3>
+            <div className="grid grid-cols-7 text-center font-bold text-[0.75rem] text-accent mb-2">{dayLabels.map(l => <span key={l}>{l}</span>)}</div>
+            <div className="grid grid-cols-7 gap-1.5 flex-1">
+              {[...Array(startOffset)].map((_, i) => <div key={`empty-${i}`} className="aspect-square bg-transparent rounded-lg flex flex-col items-center justify-center"></div>)}
               {[...Array(daysInMonth)].map((_, i) => {
                 const dayNum = i + 1;
                 const dateKey = `${year}-${(month + 1).toString().padStart(2, '0')}-${dayNum.toString().padStart(2, '0')}`;
                 const isSuccess = completedDays.includes(dateKey);
                 return (
-                  <div key={i} className={`calendar-cell ${isSuccess ? 'cell-success' : ''} ${dayNum === todayDateNum ? 'today-highlight' : ''}`}>
-                    <span className="cell-date">{dayNum}</span>
-                    {isSuccess && <span className="cell-tick">✅</span>}
+                  <div key={i} className={`aspect-square rounded-lg flex flex-col items-center justify-center text-[0.75rem] transition-colors relative ${isSuccess ? "bg-green-100 dark:bg-green-900/30 border border-green-500" : "bg-slate-100 dark:bg-slate-700"} ${dayNum === todayDateNum ? "border-2 border-accent bg-blue-50 dark:bg-blue-900/30 shadow-[0_0_8px_rgba(113,177,255,0.5)] font-bold" : ""}`}>
+                    <span className="text-slate-800 dark:text-slate-200">{dayNum}</span>
+                    {isSuccess && <span className="text-[0.6rem] md:text-[0.8rem] mt-0.5">✅</span>}
                   </div>
                 );
               })}
             </div>
 
-            <div className="calendar-stats-footer">
-              <div className="stat-item">
-                <span className="stat-label">🔥 Max Streak</span>
-                <span className="stat-value">{completedDays.length} Days</span>
+            <div className="mt-5 pt-4 border-t-2 border-slate-100 dark:border-slate-700">
+              <div className="flex justify-between items-center mb-2.5">
+                <span className="font-bold text-slate-600 dark:text-slate-400 text-[0.9rem]">🔥 Max Streak</span>
+                <span className="text-accent font-extrabold text-[1.1rem]">{completedDays.length} Days</span>
               </div>
-              <div className="streak-progress-bar">
+              <div className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden mb-2">
                 <div 
-                  className="streak-fill" 
+                  className="h-full bg-gradient-to-r from-[#71b1ff] to-[#51cf66] transition-all duration-500" 
                   style={{ width: `${(completedDays.length / daysInMonth) * 100}%` }}
                 ></div>
               </div>
-              <p className="stat-hint">Consistent efforts lead to great rewards!</p>
+              <p className="text-[0.7rem] text-slate-400 dark:text-slate-500 italic text-center m-0">Consistent efforts lead to great rewards!</p>
             </div>
           </div>
         </div>

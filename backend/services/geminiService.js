@@ -64,6 +64,7 @@ async function safeGenerate(prompt, parts = null) {
       return "⚠️ AI quota finished for today. Please try again tomorrow.";
     }
 
+    activeModel = null; // Reset cache on failure
     console.error("Gemini Error:", error.message);
     return "AI temporarily unavailable. Please try again later.";
   }

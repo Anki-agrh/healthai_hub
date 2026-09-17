@@ -12,21 +12,4 @@ const isEmergency = (text) => {
   );
 };
 
-module.exports = { isEmergency };
-
-
-const EMERGENCY_TERMS = [
-  "critical",
-  "very high",
-  "very low",
-  "life threatening",
-  "emergency",
-];
-
-function detectDanger(text) {
-  return EMERGENCY_TERMS.some(word =>
-    text.toLowerCase().includes(word)
-  );
-}
-
-module.exports = { detectDanger };
+module.exports = { isEmergency, detectDanger };

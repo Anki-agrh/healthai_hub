@@ -4,7 +4,7 @@ import { Mic, Square, Trash2, Send, Camera, Volume2 } from "lucide-react";
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, ContactShadows, Environment, Center, Stage } from '@react-three/drei';
 import HumanModel from '../components/HumanModel';
-import "./AiChat.css";
+
 
 const API = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
 
@@ -184,18 +184,17 @@ function AiChat() {
   };
 
   return (
-    <div style={{ maxWidth: "1300px", margin: "20px auto", display: "flex", gap: "25px", padding: "20px", height: "88vh" }}>
+    <div className="max-w-[1300px] mx-auto flex flex-col lg:flex-row gap-6 p-5 h-auto lg:h-[88vh]">
       
       {/* --- LEFT SIDE: 3D MODEL --- */}
-      <div style={{ flex: 1.2, background: "var(--bg-secondary, #f8fafc)", borderRadius: "16px", overflow: "hidden", position: "relative", border: "1px solid var(--border-color, #e2e8f0)" }}>
+      <div className="flex-[1.2] bg-slate-50 dark:bg-slate-900 rounded-2xl overflow-hidden relative border border-slate-200 dark:border-slate-700 min-h-[400px] md:min-h-[auto]">
         
         {/* pointer-events: none ensures this doesn't block clicks */}
-        <div style={{ position: "absolute", top: "20px", left: "20px", zIndex: 10, background: "var(--card-bg, white)", padding: "10px 20px", borderRadius: "30px", border: "2px solid var(--accent, #0a4db8)", fontWeight: "bold", pointerEvents: "none", color: "var(--text-primary, #1e293b)" }}>
+        <div className="absolute top-5 left-5 z-10 bg-white dark:bg-slate-800 px-5 py-2.5 rounded-full border-2 border-accent font-bold pointer-events-none text-slate-800 dark:text-slate-200 shadow-md">
           Target: {selectedPart || "Select Location"}
         </div>
-
     
-        <Canvas shadows camera={{ position: [0, 0, 45], fov: 45 }}>
+        <Canvas shadows camera={{ position: [0, 0, 45], fov: 45 }} className="w-full h-full mt-10 md:mt-0">
           <Suspense fallback={null}>
             <ambientLight intensity={0.5} />
             <Stage environment="city" intensity={0.6} contactShadow={true}>
@@ -209,49 +208,47 @@ function AiChat() {
       </div>
 
       {/* --- RIGHT SIDE: CHAT INTERFACE --- */}
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "var(--card-bg, white)", borderRadius: "16px", boxShadow: "var(--shadow-lg, 0 10px 25px rgba(0,0,0,0.1))", border: "1px solid var(--border-color, #eee)", position: "relative" }}>
+      <div className="flex-1 flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 relative overflow-hidden h-[600px] lg:h-auto">
         
         {isSpeaking && (
-          <div style={{ position: "absolute", top: "70px", right: "20px", display: "flex", alignItems: "center", gap: "8px", background: "rgba(10, 77, 184, 0.9)", color: "white", padding: "8px 15px", borderRadius: "20px", fontSize: "12px", zIndex: 5, animation: "pulse 1.5s infinite", cursor: "pointer" }} onClick={stopSpeaking}>
+          <div 
+            className="absolute top-[70px] right-5 flex items-center gap-2 bg-accent/90 text-white px-4 py-2 rounded-full text-xs z-10 animate-pulse cursor-pointer shadow-md" 
+            onClick={stopSpeaking}
+          >
             <Volume2 size={16} /> AI is speaking (Click to Stop)
           </div>
         )}
 
-        <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border-color, #f1f5f9)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <h2 style={{ margin: 0, color: "var(--accent, #0a4db8)", fontSize: "1.15rem" }}>HealthAI Consultant</h2>
+        <div className="p-4 md:px-5 md:py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between bg-white dark:bg-slate-800 z-10">
+          <h2 className="m-0 text-accent text-[1.15rem] font-bold">HealthAI Consultant</h2>
           <button
             onClick={clearChat}
-            style={{ display: "flex", alignItems: "center", gap: "5px", background: "var(--accent-light, rgba(239, 68, 68, 0.08))", border: "1px solid var(--border-color, #e2e8f0)", color: "var(--danger, #ef4444)", padding: "6px 14px", borderRadius: "8px", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600, transition: "all 0.2s" }}
+            className="flex items-center gap-1.5 bg-red-500/10 border border-slate-200 dark:border-slate-700 text-danger px-3.5 py-1.5 rounded-lg cursor-pointer text-xs font-semibold transition-all hover:bg-red-500/20"
             title="Clear chat history"
           >
             <Trash2 size={14} /> Clear
           </button>
         </div>
 
-        <div style={{ flex: 1, overflowY: "auto", padding: "20px", background: "var(--bg-primary, #fdfdfd)", display: "flex", flexDirection: "column", gap: "12px" }}>
-          {messages.length === 0 && <p style={{ textAlign: "center", color: "#999", marginTop: "40%" }}>Pinpoint pain on the model or type below.</p>}
+        <div className="flex-1 overflow-y-auto p-5 bg-slate-50 dark:bg-slate-900 flex flex-col gap-3">
+          {messages.length === 0 && <p className="text-center text-slate-400 mt-[40%]">Pinpoint pain on the model or type below.</p>}
           {messages.map((msg, i) => (
-            <div key={i} style={{ 
-              alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
-              maxWidth: "85%", padding: "12px 16px", borderRadius: "15px",
-              background: msg.role === "user" ? "var(--accent, #0a4db8)" : "var(--bg-secondary, #f1f3f5)",
-              color: msg.role === "user" ? "white" : "var(--text-primary, #333)"
-            }}>
+            <div key={i} className={`max-w-[85%] px-4 py-3 rounded-2xl prose prose-sm dark:prose-invert ${msg.role === "user" ? "self-end bg-accent text-white rounded-br-sm" : "self-start bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-bl-sm shadow-sm"}`}>
               <ReactMarkdown>{msg.text}</ReactMarkdown>
             </div>
           ))}
           <div ref={chatEndRef} />
         </div>
 
-        <div style={{ padding: "20px", borderTop: "1px solid var(--border-color, #f1f5f9)", display: "flex", alignItems: "center", gap: "10px" }}>
-          <label style={{ cursor: "pointer", display: "flex", alignItems: "center" }}>
-            <Camera color="var(--accent, #0a4db8)" size={28} />
+        <div className="p-4 md:p-5 border-t border-slate-100 dark:border-slate-700 flex items-center gap-2 md:gap-2.5 bg-white dark:bg-slate-800">
+          <label className="cursor-pointer flex items-center hover:scale-110 transition-transform">
+            <Camera className="text-accent" size={28} />
             <input type="file" hidden onChange={(e) => setFile(e.target.files[0])} />
           </label>
           
           <button 
             onClick={toggleListen}
-            style={{ background: isListening ? "var(--danger, #ef4444)" : "var(--bg-secondary, #f1f5f9)", color: isListening ? "white" : "var(--text-secondary, #64748b)", border: "none", width: "45px", height: "45px", borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "0.2s" }}
+            className={`w-10 h-10 md:w-11 md:h-11 rounded-full cursor-pointer flex items-center justify-center transition-colors border-none shrink-0 ${isListening ? "bg-danger text-white" : "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600"}`}
             title="Speech to Text"
           >
             {isListening ? <Square size={20} fill="currentColor" /> : <Mic size={20} />}
@@ -262,9 +259,9 @@ function AiChat() {
             value={symptoms}
             onChange={(e) => setSymptoms(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && analyze()}
-            style={{ flex: 1, padding: "12px 20px", borderRadius: "25px", border: "1px solid var(--border-color, #e2e8f0)", outline: "none", background: "var(--input-bg, white)", color: "var(--text-primary, #333)" }}
+            className="flex-1 px-4 py-2.5 md:py-3 rounded-full border border-slate-200 dark:border-slate-600 outline-none bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:border-accent transition-colors"
           />
-          <button onClick={() => analyze()} disabled={loading} style={{ background: "var(--accent, #0a4db8)", color: "white", border: "none", width: "45px", height: "45px", borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <button onClick={() => analyze()} disabled={loading} className="bg-accent text-white border-none w-10 h-10 md:w-11 md:h-11 rounded-full cursor-pointer flex items-center justify-center hover:bg-accent-hover disabled:opacity-70 transition-colors shrink-0">
             <Send size={18} />
           </button>
         </div>

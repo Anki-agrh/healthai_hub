@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const Otp = require("../models/Otp");
 const otpGenerator = require("otp-generator");
@@ -29,10 +30,14 @@ const registerUser = async (req, res) => {
 
     await Otp.deleteMany({ email });
 
+    // Hash the password securely
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const user = new User({
       name: req.body.name,
       email,
-      password,
+      password: hashedPassword,
       role: req.body.role,
       specialization: req.body.specialization || "",
       experience: req.body.experience || "",
@@ -70,9 +75,16 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email.trim().toLowerCase(), password });
+    const user = await User.findOne({ email: email.trim().toLowerCase() });
 
     if (!user) return res.status(401).json({ message: "Invalid credentials" });
+    
+    // Support both hashed (new) and plaintext (legacy) passwords for smooth migration
+    const isMatch = await bcrypt.compare(password, user.password).catch(() => false);
+    if (!isMatch && user.password !== password) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
     if (user.role === "doctor" && user.status !== "approved")
       return res.status(403).json({ message: "Doctor not approved yet by admin" });
 

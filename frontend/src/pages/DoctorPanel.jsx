@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import { AlertTriangle, MapPin, Phone, Flag, Mic, Square, Send, X, Circle, Bot } from "lucide-react";
-import "./DoctorPanel.css";
+
 const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
 const socket = io(API_BASE);
 
@@ -174,10 +174,10 @@ function DoctorPanel() {
   };
 
   return (
-    <div className="pro-panel-layout">
+    <div className="h-[92vh] bg-[#f0f2f5] dark:bg-slate-900 p-5 overflow-hidden font-sans flex flex-col gap-4">
       {/* 🚨 UPDATED EMERGENCY BANNER */}
       {emergencyAlert && (
-        <div className="emergency-notification-banner" style={{
+        <div className="bg-[#ff4d4f] text-white p-3 md:p-6 flex justify-between items-center rounded-xl mb-4 shadow-[0_4px_15px_rgba(255,77,79,0.3)] animate-[pulse-border_1.5s_infinite] z-[1000]" style={{
             background: '#fff1f2',
             border: '4px solid #be123c',
             margin: '20px',
@@ -188,8 +188,8 @@ function DoctorPanel() {
             alignItems: 'center',
             boxShadow: '0 10px 25px rgba(190, 18, 60, 0.2)'
         }}>
-          <div className="banner-content" style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-            <span className="blink-icon" style={{ display: 'flex', alignItems: 'center' }}><AlertTriangle size={40} color="#be123c" /></span>
+          <div className="flex gap-5 items-center" style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <span className="animate-[blinker_1s_linear_infinite] text-[20px] flex items-center" style={{ display: 'flex', alignItems: 'center' }}><AlertTriangle size={40} color="#be123c" /></span>
             <div>
               <h3 style={{ color: '#9f1239', margin: 0 }}>CRITICAL EMERGENCY ALERT</h3>
               <p style={{ margin: '5px 0', fontSize: '1.1rem' }}>
@@ -227,39 +227,39 @@ function DoctorPanel() {
         </div>
       )}
 
-      <div className="main-command-center">
+      <div className="flex h-full gap-5">
         
         {/* --- LEFT COLUMN: APPOINTMENT TABLE --- */}
-        <div className="column-left appointments-section">
-          <div className="section-card">
-            <div className="card-header-pro">
+        <div className="flex-[1.1] flex flex-col h-[calc(100%-80px)]">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl h-full p-6 shadow-[0_10px_30px_rgba(0,0,0,0.05)] flex flex-col border border-slate-200 dark:border-slate-700">
+            <div className="flex justify-between items-center mb-5 border-b-2 border-slate-100 dark:border-slate-700 pb-4">
               <h3>Today's Appointments</h3>
-              <span className="count-badge">{appointmentsCount} Patients</span>
+              <span className="bg-indigo-50 dark:bg-indigo-900/30 text-[#0a4db8] dark:text-indigo-400 px-3 py-1 rounded-full text-[0.85rem] font-bold">{appointmentsCount} Patients</span>
             </div>
             
-            <div className="queue-action-box">
+            <div className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-xl text-center mb-5 border border-slate-200 dark:border-slate-700">
               <p>Current Token: <strong>{doctorInfo?.currentLiveToken || 0}</strong></p>
-              <button className="next-btn-pro" onClick={handleNextPatient}>
+              <button className="w-full p-4 bg-[#0a4db8] text-white rounded-xl font-bold border-none cursor-pointer transition-all hover:bg-[#083d91] hover:-translate-y-0.5 shadow-[0_4px_12px_rgba(10,77,184,0.2)]" onClick={handleNextPatient}>
                   CALL NEXT PATIENT
               </button>
             </div>
 
-            <div className="appointment-table-container">
-              <table className="appt-table">
+            <div className="mt-2.5 overflow-y-auto rounded-xl border border-slate-200 dark:border-slate-700 flex-1">
+              <table className="w-full border-collapse text-left bg-white dark:bg-slate-800">
                 <thead>
                   <tr>
-                    <th>Token</th>
-                    <th>Patient</th>
-                    <th>Issue</th>
-                    <th>Status</th>
+                    <th className="bg-slate-50 dark:bg-slate-800 p-3 text-[0.8rem] text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b-2 border-slate-200 dark:border-slate-700 sticky top-0">Token</th>
+                    <th className="bg-slate-50 dark:bg-slate-800 p-3 text-[0.8rem] text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b-2 border-slate-200 dark:border-slate-700 sticky top-0">Patient</th>
+                    <th className="bg-slate-50 dark:bg-slate-800 p-3 text-[0.8rem] text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b-2 border-slate-200 dark:border-slate-700 sticky top-0">Issue</th>
+                    <th className="bg-slate-50 dark:bg-slate-800 p-3 text-[0.8rem] text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b-2 border-slate-200 dark:border-slate-700 sticky top-0">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="active-row">
-                    <td><strong>#1</strong></td>
-                    <td>Ankita</td>
-                    <td>Fever/Headache</td>
-                    <td><span className="status-tag live">Live Now</span></td>
+                  <tr className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-[#0a4db8]">
+                    <td className="p-[15px] border-b border-slate-100 dark:border-slate-700 text-[0.9rem] text-slate-800 dark:text-slate-100"><strong>#1</strong></td>
+                    <td className="p-[15px] border-b border-slate-100 dark:border-slate-700 text-[0.9rem] text-slate-800 dark:text-slate-100">Ankita</td>
+                    <td className="p-[15px] border-b border-slate-100 dark:border-slate-700 text-[0.9rem] text-slate-800 dark:text-slate-100">Fever/Headache</td>
+                    <td className="p-[15px] border-b border-slate-100 dark:border-slate-700 text-[0.9rem] text-slate-800 dark:text-slate-100"><span className="px-2.5 py-1 rounded-md text-[0.75rem] font-semibold bg-green-100 text-green-700">Live Now</span></td>
                   </tr>
                 </tbody>
               </table>
@@ -268,70 +268,70 @@ function DoctorPanel() {
         </div>
 
         {/* --- RIGHT COLUMN: CHAT INTERFACE --- */}
-        <div className="column-right chat-section">
-          <div className="chat-container-pro">
-            <div className="chat-sidebar-pro">
-              <h4>Patient Chats</h4>
-              <div className="chat-patient-item active">
-                <div className="avatar">A</div>
-                <div className="chat-meta">
-                  <p className="chat-name">Ankita</p>
-                  <p className="chat-preview">Fever and...</p>
+        <div className="flex-[2] flex flex-col h-[calc(100%-80px)]">
+          <div className="flex bg-white dark:bg-slate-800 rounded-2xl h-full overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-slate-200 dark:border-slate-700">
+            <div className="w-[320px] border-r border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 flex flex-col">
+              <h4 className="p-[15px_20px] m-0 text-slate-500 dark:text-slate-400 text-[0.85rem] uppercase font-semibold">Patient Chats</h4>
+              <div className="p-[15px_20px] flex items-center gap-3 cursor-pointer transition-colors border-b border-slate-50 dark:border-slate-700 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-[#0a4db8]">
+                <div className="w-10 h-10 bg-[#0a4db8] text-white rounded-full flex items-center justify-center font-bold shrink-0">A</div>
+                <div className="flex flex-col">
+                  <p className="font-semibold text-[0.95rem] text-slate-800 dark:text-slate-100 m-0">Ankita</p>
+                  <p className="text-[0.8rem] text-slate-400 whitespace-nowrap overflow-hidden text-ellipsis max-w-[180px] m-0">Fever and...</p>
                 </div>
               </div>
             </div>
 
-            <div className="chat-window-pro">
-              <header className="chat-header-pro">
-                <div className="patient-status" style={{display: 'flex', alignItems: 'center', gap: '6px'}}>
+            <div className="flex-1 flex flex-col bg-slate-50 dark:bg-slate-900">
+              <header className="p-[15px_25px] bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                <div className="flex items-center gap-1.5" style={{display: 'flex', alignItems: 'center', gap: '6px'}}>
                   <strong>Ankita</strong> <Circle size={10} fill="#22c55e" color="#22c55e" /> <span style={{fontSize: '12px', color: '#64748b'}}>Online</span>
                 </div>
-                <button className="report-btn-subtle" onClick={handleReportClick} style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                <button className="bg-transparent text-slate-400 border border-slate-200 dark:border-slate-600 px-3.5 py-1.5 rounded-lg text-[0.8rem] font-medium cursor-pointer transition-all hover:text-red-500 hover:border-red-200 hover:bg-red-50 dark:hover:bg-red-900/30" onClick={handleReportClick} style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
                   <Flag size={14} /> Report
                 </button>
               </header>
 
-              <div className="message-list-pro">
+              <div className="flex-1 p-[25px] overflow-y-auto bg-[#eef2f7] dark:bg-slate-900/50 flex flex-col gap-3">
                 {/* AI Brief Banner */}
                 {messages.find(m => m.isAiBrief) && (
-                  <div className="ai-brief-banner slide-down">
-                    <span className="ai-icon"><Bot size={20} color="var(--accent, #0a4db8)" /></span>
+                  <div className="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-xl border border-blue-200 dark:border-blue-800 flex gap-3 animate-slideDown mb-2 text-sm text-blue-900 dark:text-blue-100">
+                    <span className="shrink-0"><Bot size={20} color="var(--accent, #0a4db8)" /></span>
                     <p><strong>Pre-Consultation Summary:</strong> {messages.find(m => m.isAiBrief).message.replace("System Auto-Brief: ", "")}</p>
                   </div>
                 )}
 
                 {messages.filter(m => !m.isAiBrief).map((m, i) => (
-                  <div key={i} className={`msg-row ${m.sender === doctorName ? "right" : "left"}`}>
-                    <div className="msg-bubble-pro">
+                  <div key={i} className={`flex w-full ${m.sender === doctorName ? "justify-end" : "justify-start"}`}>
+                    <div className="max-w-[70%] p-3 rounded-2xl text-[0.95rem] shadow-sm relative">
                       {m.audio ? <audio controls src={m.audio} /> : <p>{m.message}</p>}
-                      <span className="msg-time">{m.time}</span>
+                      <span className="block text-[0.7rem] mt-1 opacity-70 text-right">{m.time}</span>
                     </div>
                   </div>
                 ))}
-                {isPatientTyping && <div className="typing-indicator">Patient is typing...</div>}
+                {isPatientTyping && <div className="text-slate-400 text-sm animate-pulse ml-2">Patient is typing...</div>}
                 <div ref={chatEndRef} />
               </div>
 
               {/* ✅ Audio Preview with Discard Option */}
               {audioPreview && (
-                <div className="audio-preview-overlay">
-                  <button className="delete-mic-btn" onClick={() => {setAudioPreview(null); setRecordedBase64(null);}} title="Discard Recording"><X size={18} /></button>
+                <div className="bg-white dark:bg-slate-800 p-[15px_25px] border-t border-slate-200 dark:border-slate-700 flex items-center gap-4 animate-slideUp shadow-[0_-4px_10px_rgba(0,0,0,0.03)]">
+                  <button className="bg-red-100 text-red-500 border-none w-9 h-9 rounded-full cursor-pointer flex items-center justify-center text-lg transition-colors hover:bg-red-200" onClick={() => {setAudioPreview(null); setRecordedBase64(null);}} title="Discard Recording"><X size={18} /></button>
                   <audio src={audioPreview} controls style={{flex: 1, height: '35px'}} />
-                  <button className="pro-send-btn" onClick={handleConfirmSendAudio}><Send size={18} /></button>
+                  <button className="bg-[#0a4db8] text-white border-none w-[45px] h-[45px] rounded-full cursor-pointer flex items-center justify-center transition-colors hover:bg-[#083d91] shrink-0" onClick={handleConfirmSendAudio}><Send size={18} /></button>
                 </div>
               )}
 
-              <div className="input-area-pro">
+              <div className="p-5 bg-white dark:bg-slate-800 flex gap-3 items-center border-t border-slate-100 dark:border-slate-700">
                 <input 
                   value={reply} 
                   onChange={(e) => setReply(e.target.value)} 
-                  placeholder="Type medical advice..." 
+                  className="flex-1 p-[14px_20px] border border-slate-200 dark:border-slate-600 rounded-full outline-none bg-slate-50 dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 focus:border-[#0a4db8] transition-colors" placeholder="Type medical advice..." 
                   onKeyDown={(e) => e.key === 'Enter' && sendReply()} 
                 />
-                <button className={`pro-mic-btn ${isRecording ? "recording" : ""}`} onClick={isRecording ? stopRecording : startRecording}>
+                <button className={`bg-slate-100 dark:bg-slate-700 border-none text-[20px] cursor-pointer p-2.5 rounded-full transition-all flex items-center justify-center shrink-0 ${isRecording ? "bg-red-100 text-red-500 animate-pulse" : "text-slate-600 dark:text-slate-300"}`} onClick={isRecording ? stopRecording : startRecording}>
                   {isRecording ? <Square size={20} fill="currentColor" color="#ef4444" /> : <Mic size={20} />}
                 </button>
-                <button onClick={sendReply} className="pro-send-btn"><Send size={18} /></button>
+                <button onClick={sendReply} className="bg-[#0a4db8] text-white border-none w-[45px] h-[45px] rounded-full cursor-pointer flex items-center justify-center transition-colors hover:bg-[#083d91] shrink-0"><Send size={18} /></button>
               </div>
             </div>
           </div>

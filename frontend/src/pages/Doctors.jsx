@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Star, Calendar, Bot, Flag, Mic, Square, Send, X } from "lucide-react";
 import io from "socket.io-client";
-import "./Doctors.css";
+
 
 const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
 const socket = io(API_BASE);
@@ -336,7 +336,7 @@ const scheduleConsult = async () => {
 };
 
 
-  if (loading) return <div className="loader">Searching for specialists...</div>;
+  if (loading) return <div className="text-center text-slate-500 py-[40px] font-semibold text-[1.1rem]">Searching for specialists...</div>;
 
   const filteredDoctors = doctors.filter(doc => 
     doc.name.toLowerCase().includes(filter.toLowerCase()) || 
@@ -344,68 +344,68 @@ const scheduleConsult = async () => {
   );
 
   return (
-    <div className="doctors-container">
-      <h2 className="main-heading">Verified Specialists</h2>
-      <div className="search-container">
+    <div className="max-w-[1200px] mx-auto py-10 px-5">
+      <h2 className="text-center text-[2rem] font-bold text-slate-800 dark:text-slate-100 mb-8">Verified Specialists</h2>
+      <div className="flex justify-center mb-10">
         <input 
           type="text" 
           placeholder="Search..." 
-          className="search-input" 
+          className="w-full max-w-[600px] px-5 py-3 rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 shadow-sm focus:outline-none focus:border-accent transition-colors" 
           value={filter} 
           onChange={(e) => setFilter(e.target.value)} 
         />
       </div>
 
-      <div className="doctor-grid">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-[25px] md:grid-cols-1">
         {filteredDoctors.map((doc) => (
-          <div key={doc._id} className="doctor-card cuboidal-card">
-            <div className="image-wrapper">
+          <div key={doc._id} className="bg-white dark:bg-slate-800 rounded-xl overflow-hidden flex flex-col text-slate-800 dark:text-slate-100 border-2 border-[#71b1ff] shadow-[6px_6px_0px_#71b1ff] md:shadow-[4px_4px_0px_#71b1ff] transition-transform hover:-translate-y-1">
+            <div className="relative h-[250px]">
               <img 
                 src={doc.image ? `${API_BASE}/uploads/${doc.image}` : "/assets/doc1.jpg"}
                 alt={doc.name} 
-                className="doctor-photo" 
+                className="w-full h-full object-cover object-top" 
               />
-              <div className="rating-tag" style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+              <div className="absolute bottom-2.5 left-2.5 bg-[#00d293] text-white px-2.5 py-1 rounded-md font-bold text-sm shadow-sm" style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
                 <Star size={14} fill="currentColor" /> {doc.averageRating || "4.8"}
               </div>
             </div>
-            <div className="card-body">
-              <span className="specialty-label">{doc.specialization}</span>
-              <div className="live-queue-status">
-                <span className="pulse-icon">●</span> 
+            <div className="p-5 flex-1 flex flex-col">
+              <span className="text-[#71b1ff] text-[0.8rem] font-bold uppercase tracking-wider mb-2">{doc.specialization}</span>
+              <div className="bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[0.8rem] px-2.5 py-1 rounded-full inline-flex items-center gap-1.5 mb-2.5 border border-emerald-200 dark:border-emerald-800 self-start">
+                <span className="text-emerald-500 animate-pulse">●</span> 
                 <strong>Live Queue:</strong> {doc.queueLength || 0} Patients Waiting
               </div>
               <h3>{doc.name}</h3>
-              <p className="sub-text">{doc.degree} • {doc.experience} Years Exp.</p>
-              <p className="hospital-text">
+              <p className="text-slate-500 dark:text-slate-400 text-[0.85rem] mt-1">{doc.degree} • {doc.experience} Years Exp.</p>
+              <p className="text-sm mt-2 font-medium">
  {doc.hospitalName}<br/>
 <span style={{fontSize:"12px",color:"var(--text-secondary, #666)"}}>{doc.hospitalAddress}, {doc.city}</span>
 </p>
 
             </div>
-            <div className="card-footer">
-              <button className="btn-token" onClick={() => openBookingModal(doc)}>Book Token</button>
-              <button className="btn-consult" onClick={() => startConsultation(doc)}>Consult</button>
+            <div className="flex border-t border-slate-100 dark:border-slate-700">
+              <button className="flex-1 p-4 border-none cursor-pointer font-semibold bg-slate-50 dark:bg-slate-900/50 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" onClick={() => openBookingModal(doc)}>Book Token</button>
+              <button className="flex-1 p-4 border-none cursor-pointer font-semibold bg-[#0a4db8] text-white hover:bg-accent-hover transition-colors" onClick={() => startConsultation(doc)}>Consult</button>
             </div>
           </div>
         ))}
       </div>
 
       {showBookingModal && (
-        <div className="consult-overlay">
-          <div className="consult-modal modern-box">
-            <button className="absolute-close" onClick={() => setShowBookingModal(false)}>×</button>
-            <div className="menu-container fade-in">
-              <div className="bot-header">
-                <span className="bot-icon"><Calendar size={32} color="#0a4db8" /></span>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-[2000] p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-[450px] p-[35px] md:p-[25px] relative shadow-[0_20px_40px_rgba(0,0,0,0.2)] border border-slate-100 dark:border-slate-700 text-slate-800 dark:text-slate-100 pointer-events-auto">
+            <button className="absolute top-[15px] right-[20px] bg-transparent border-none text-[2rem] text-[#71b1ff] cursor-pointer transition-all hover:text-red-500 hover:rotate-90 z-10" onClick={() => setShowBookingModal(false)}>×</button>
+            <div className="animate-fadeIn">
+              <div className="text-center mb-[10px]">
+                <span className="inline-block text-[2.5rem] mb-[10px] animate-[float_3s_ease-in-out_infinite]"><Calendar size={32} color="#0a4db8" /></span>
                 <p>Book Appointment with <strong>{selectedDoc?.name}</strong></p>
               </div>
-              <div className="booking-form">
-                <input type="text" placeholder="Patient Full Name" className="modern-input" value={bookingData.patientName} onChange={(e) => setBookingData({...bookingData, patientName: e.target.value})} />
-                <input type="text" placeholder="Phone Number" className="modern-input" value={bookingData.phoneNumber} onChange={(e) => setBookingData({...bookingData, phoneNumber: e.target.value})} />
-                <textarea placeholder="Describe your health problem..." className="modern-textarea" value={bookingData.problem} onChange={(e) => setBookingData({...bookingData, problem: e.target.value})} />
-                <input type="date" className="modern-input" value={bookingData.date} onChange={(e) => setBookingData({...bookingData, date: e.target.value})} />
-                <button onClick={submitBooking} className="submit-booking-btn">Confirm & Get Token</button>
+              <div className="flex flex-col gap-[12px]">
+                <input type="text" placeholder="Patient Full Name" className="w-full p-[15px] border-2 border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl text-slate-800 dark:text-slate-100 outline-none focus:border-[#71b1ff] transition-colors" value={bookingData.patientName} onChange={(e) => setBookingData({...bookingData, patientName: e.target.value})} />
+                <input type="text" placeholder="Phone Number" className="w-full p-[15px] border-2 border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl text-slate-800 dark:text-slate-100 outline-none focus:border-[#71b1ff] transition-colors" value={bookingData.phoneNumber} onChange={(e) => setBookingData({...bookingData, phoneNumber: e.target.value})} />
+                <textarea placeholder="Describe your health problem..." className="w-full h-[120px] p-[15px] border-2 border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl text-slate-800 dark:text-slate-100 outline-none focus:border-[#71b1ff] transition-colors resize-none" value={bookingData.problem} onChange={(e) => setBookingData({...bookingData, problem: e.target.value})} />
+                <input type="date" className="w-full p-[15px] border-2 border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl text-slate-800 dark:text-slate-100 outline-none focus:border-[#71b1ff] transition-colors" value={bookingData.date} onChange={(e) => setBookingData({...bookingData, date: e.target.value})} />
+                <button onClick={submitBooking} className="flex-[2] w-full bg-[#0a4db8] text-white p-[12px] rounded-xl font-bold border-none cursor-pointer hover:bg-[#083d91] transition-colors">Confirm & Get Token</button>
               </div>
             </div>
           </div>
@@ -413,105 +413,105 @@ const scheduleConsult = async () => {
       )}
 
       {chatStep > 0 && (
-        <div className="consult-overlay">
-          <div className="consult-modal modern-box">
-            <button className="absolute-close" onClick={closeModal}>×</button>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-[2000] p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-[450px] p-[35px] md:p-[25px] relative shadow-[0_20px_40px_rgba(0,0,0,0.2)] border border-slate-100 dark:border-slate-700 text-slate-800 dark:text-slate-100 pointer-events-auto">
+            <button className="absolute top-[15px] right-[20px] bg-transparent border-none text-[2rem] text-[#71b1ff] cursor-pointer transition-all hover:text-red-500 hover:rotate-90 z-10" onClick={closeModal}>×</button>
             {chatStep === 1 && (
-              <div className="menu-container fade-in">
-                <div className="bot-header">
-                  <span className="bot-icon"><Bot size={32} color="#0a4db8" /></span>
+              <div className="animate-fadeIn">
+                <div className="text-center mb-[10px]">
+                  <span className="inline-block text-[2.5rem] mb-[10px] animate-[float_3s_ease-in-out_infinite]"><Bot size={32} color="#0a4db8" /></span>
                   <p>Connect with <strong>{selectedDoc?.name}</strong>?</p>
                 </div>
-                <textarea className="modern-textarea" placeholder="Describe symptoms..." value={symptoms} onChange={(e) => setSymptoms(e.target.value)} />
+                <textarea className="w-full h-[120px] p-[15px] border-2 border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl text-slate-800 dark:text-slate-100 outline-none focus:border-[#71b1ff] transition-colors resize-none" placeholder="Describe symptoms..." value={symptoms} onChange={(e) => setSymptoms(e.target.value)} />
                   {scheduleMode && (
-  <div className="schedule-box">
+  <div className="mt-4 flex flex-col gap-3 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-700">
     <h4>Schedule {scheduleMode} consultation</h4>
 
     <input
       type="date"
-      className="modern-input"
+      className="w-full p-[15px] border-2 border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl text-slate-800 dark:text-slate-100 outline-none focus:border-[#71b1ff] transition-colors"
       value={scheduleDate}
       onChange={(e)=>setScheduleDate(e.target.value)}
     />
 
     <input
       type="time"
-      className="modern-input"
+      className="w-full p-[15px] border-2 border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl text-slate-800 dark:text-slate-100 outline-none focus:border-[#71b1ff] transition-colors"
       value={scheduleTime}
       onChange={(e)=>setScheduleTime(e.target.value)}
     />
 
-    <button className="submit-booking-btn" onClick={scheduleConsult}>
+    <button className="flex-[2] w-full bg-[#0a4db8] text-white p-[12px] rounded-xl font-bold border-none cursor-pointer hover:bg-[#083d91] transition-colors" onClick={scheduleConsult}>
       Confirm Schedule
     </button>
   </div>
 )}
 
-                <div className="choice-grid">
-                  <div className="choice-item" onClick={() => handleModeSelection("Chat")}><span>Live Chat</span></div>
-                  <div className="choice-item" onClick={() => {
+                <div className="flex flex-col gap-[15px] mt-[20px]">
+                  <div className="flex items-center p-[15px] bg-slate-50 dark:bg-slate-900/50 rounded-2xl cursor-pointer transition-all border-2 border-transparent hover:scale-[1.03] hover:bg-white dark:hover:bg-slate-800 hover:border-[#71b1ff] hover:shadow-[0_10px_20px_rgba(113,177,255,0.1)] text-slate-800 dark:text-slate-100" onClick={() => handleModeSelection("Chat")}><span>Live Chat</span></div>
+                  <div className="flex items-center p-[15px] bg-slate-50 dark:bg-slate-900/50 rounded-2xl cursor-pointer transition-all border-2 border-transparent hover:scale-[1.03] hover:bg-white dark:hover:bg-slate-800 hover:border-[#71b1ff] hover:shadow-[0_10px_20px_rgba(113,177,255,0.1)] text-slate-800 dark:text-slate-100" onClick={() => {
                     setScheduleMode("voice");
                   }}> <span>Voice Call</span></div>
-                  <div className="choice-item" onClick={() => {
+                  <div className="flex items-center p-[15px] bg-slate-50 dark:bg-slate-900/50 rounded-2xl cursor-pointer transition-all border-2 border-transparent hover:scale-[1.03] hover:bg-white dark:hover:bg-slate-800 hover:border-[#71b1ff] hover:shadow-[0_10px_20px_rgba(113,177,255,0.1)] text-slate-800 dark:text-slate-100" onClick={() => {
                     setScheduleMode("video");
                   }}> <span>Video Call</span></div>
                 </div>
               </div>
             )}
             {chatStep === 2 && (
-              <div className="live-chat-view slide-up">
-                <div className="chat-header">
-                  <div className="doc-info"><div className="online-dot"></div><h4>{selectedDoc?.name}</h4></div>
-                  <div className="chat-header-actions">
-                    <button className="report-btn-danger" onClick={handleReportClick} style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+              <div className="animate-slideUp flex flex-col h-[600px] max-h-[85vh]">
+                <div className="flex justify-between items-center pb-[10px] border-b border-slate-100 dark:border-slate-700">
+                  <div className="flex items-center gap-[8px]"><div className="w-[10px] h-[10px] bg-[#00d293] rounded-full"></div><h4>{selectedDoc?.name}</h4></div>
+                  <div className="flex items-center gap-[10px]">
+                    <button className="text-red-500 bg-red-50 hover:bg-red-100 px-2 py-1 rounded text-[0.75rem] font-semibold border-none cursor-pointer transition-colors" onClick={handleReportClick} style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
                       <Flag size={14} /> Report
                     </button>
-                    <span className="mode-badge">{consultMode}</span>
+                    <span className="bg-accent/10 text-accent px-[8px] py-[4px] rounded text-[0.75rem] font-bold uppercase">{consultMode}</span>
                   </div>
                 </div>
-                <div className="chat-messages">
+                <div className="flex-1 overflow-y-auto p-[15px] flex flex-col gap-[12px] bg-[#f8fafc] dark:bg-slate-900/30">
                   {messages.map((msg, i) => (
-                    <div key={i} className={`message-bubble ${msg.sender === "Patient" ? "sent" : "received"}`}>
-                      {msg.audio ? <audio controls src={msg.audio} className="chat-audio" /> : <p>{msg.message}</p>}
-                      <span className="msg-time">{msg.time}</span>
+                    <div key={i} className={`max-w-[80%] p-[12px] rounded-2xl relative ${msg.sender === "Patient" ? "self-end bg-[#0a4db8] text-white rounded-br-sm" : "self-start bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-bl-sm shadow-sm border border-slate-100 dark:border-slate-600"}`}>
+                      {msg.audio ? <audio controls src={msg.audio} className="max-w-[100%] h-[35px] mt-[5px]" /> : <p>{msg.message}</p>}
+                      <span className="text-[0.65rem] opacity-70 mt-[4px] block text-right">{msg.time}</span>
                     </div>
                   ))}
-                  {isTyping && <div className="typing-dots">...</div>}
+                  {isTyping && <div className="text-slate-400 text-[0.85rem] animate-pulse">...</div>}
                   <div ref={chatEndRef} />
                 </div>
 
                 {isRecording && (
-                  <div className="recording-status fade-in">
-                    <div className="pulse-red"></div>
+                  <div className="flex items-center gap-[8px] text-red-500 font-bold mb-[10px] animate-fadeIn">
+                    <div className="w-[12px] h-[12px] bg-red-500 rounded-full animate-pulse shadow-[0_0_0_rgba(220,53,69,0.4)]"></div>
                     <span>Recording Audio...</span>
                   </div>
                 )}
                 {audioPreview && (
-                  <div className="audio-preview-bar">
+                  <div className="bg-[#f8f9fa] dark:bg-slate-800 p-[12px] border-t-2 border-[#007bff] flex flex-col items-center gap-[8px] rounded-lg mb-[8px]">
                     <audio src={audioPreview} controls />
                     <button onClick={cancelRecording} style={{display: 'flex', alignItems:'center', gap:'5px'}}><X size={16} /> Cancel</button>
                     <button onClick={handleConfirmSendAudio} style={{display: 'flex', alignItems:'center', gap:'5px'}}><Send size={16} /> Send</button>
                   </div>
                 )}
-                <div className="chat-input-area" style={{display: 'flex', gap: '10px'}}>
+                <div className="flex gap-[10px] p-[15px] border-t border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 mt-auto" style={{display: 'flex', gap: '10px'}}>
                   <input type="text" value={currentMsg} onChange={handleTyping} onKeyDown={(e) => e.key === "Enter" && sendMessage()} />
                   <button onClick={isRecording ? stopRecording : startRecording} style={{padding: '10px'}}>
                     {isRecording ? <Square size={20} fill="currentColor" color="var(--danger, #ef4444)" /> : <Mic size={20} />}
                   </button>
                   <button onClick={() => sendMessage()} style={{padding: '10px'}}><Send size={20} /></button>
                 </div>
-                <button className="end-session-btn" onClick={() => setChatStep(3)}>End & Rate</button>
+                <button className="w-full bg-[#0a4db8] hover:bg-[#083d91] text-white p-[15px] font-bold border-none cursor-pointer transition-colors mt-[10px] rounded-b-xl" onClick={() => setChatStep(3)}>End & Rate</button>
               </div>
             )}
             {chatStep === 3 && (
-              <div className="rating-container">
+              <div className="text-center p-[20px]">
                 <h3>Rate your experience</h3>
-                <div className="star-rating">
+                <div className="flex gap-[10px] justify-center my-[20px]">
                   {[1,2,3,4,5].map((s) => (
                     <button
                       type="button"
                       key={s}
-                      className={`star ${userRating >= s ? "active" : ""}`}
+                      className={`text-[34px] bg-transparent border-none cursor-pointer transition-all hover:scale-125 hover:text-[#ffd700] ${userRating >= s ? "text-[#ffc107]" : "text-[#cfcfcf]"}`}
                       onClick={() => setUserRating(s)}
                     >
                       <Star size={34} fill={userRating >= s ? "currentColor" : "none"} />
@@ -519,7 +519,7 @@ const scheduleConsult = async () => {
                   ))}
                 </div>
 
-                <button onClick={closeModal} className="submit-rating-btn">Submit</button>
+                <button onClick={closeModal} className="w-full bg-[#0a4db8] hover:bg-[#083d91] text-white p-[12px] rounded-xl font-bold border-none cursor-pointer transition-colors">Submit</button>
               </div>
             )}
           </div>

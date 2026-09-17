@@ -27,7 +27,7 @@ import MyProfile from "./pages/MyProfile";
 import NotFound from "./pages/NotFound";
 
 // ✅ Connect to your backend socket server
-const API_BASE = process.env.REACT_APP_API || "http://localhost:5000";
+const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
 const socket = io.connect(API_BASE);
 
 function AppContent() {

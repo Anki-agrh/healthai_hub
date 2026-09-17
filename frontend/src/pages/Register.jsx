@@ -144,17 +144,17 @@ function Register() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.iconCircle}>📋</div>
-      <h2 style={styles.heading}>HealthAI Hub - Register</h2>
+    <div className="max-w-[550px] mx-auto my-[40px] p-[35px_30px] rounded-[20px] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-[0_8px_30px_rgba(0,0,0,0.08)] font-sans">
+      <div className="w-[60px] h-[60px] rounded-full bg-gradient-to-br from-[#0a4db8]/10 to-[#6366f1]/10 flex items-center justify-center text-[1.6rem] mx-auto mb-[16px]">📋</div>
+      <h2 className="text-center text-accent text-[1.5rem] font-extrabold mb-[8px]">HealthAI Hub - Register</h2>
 
       {!role && (
-        <div style={{ textAlign: "center" }}>
-          <p style={styles.subtitle}>Select your role to get started</p>
-          <button style={styles.roleBtn} onClick={() => setRole("patient")}>
+        <div className="text-center">
+          <p className="text-slate-500 dark:text-slate-400 text-[0.95rem] mb-[20px] text-center">Select your role to get started</p>
+          <button className="w-full p-[16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-accent font-bold cursor-pointer text-[1rem] transition-all hover:bg-slate-50 dark:hover:bg-slate-700" onClick={() => setRole("patient")}>
             🧑 Register as Patient
           </button>
-          <button style={styles.roleBtn} onClick={() => setRole("doctor")}>
+          <button className="w-full p-[16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-accent font-bold cursor-pointer text-[1rem] transition-all hover:bg-slate-50 dark:hover:bg-slate-700" onClick={() => setRole("doctor")}>
             👨‍⚕️ Register as Doctor
           </button>
         </div>
@@ -162,12 +162,12 @@ function Register() {
 
       {role === "patient" && (
         <>
-          <h3 style={styles.sectionTitle}>Patient Registration</h3>
-          <input style={styles.input} placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} />
-          <input style={styles.input} placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <input style={styles.input} type="password" placeholder="Create Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          {otpSent && <input style={styles.input} placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} />}
-          <button style={styles.button} onClick={() => registerUser("patient")}>
+          <h3 className="text-slate-800 dark:text-slate-100 text-[1.1rem] font-bold mb-[16px]">Patient Registration</h3>
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} />
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" type="password" placeholder="Create Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          {otpSent && <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} />}
+          <button className="w-full p-[14px] bg-gradient-to-br from-[#0a4db8] to-[#1e6ff0] text-white border-none rounded-[12px] font-bold cursor-pointer mt-[10px] text-[1rem] shadow-[0_4px_15px_rgba(10,77,184,0.25)] transition-all hover:-translate-y-[2px]" onClick={() => registerUser("patient")}>
             {otpSent ? "Verify & Register" : "Send OTP"}
           </button>
         </>
@@ -175,54 +175,54 @@ function Register() {
 
       {role === "doctor" && (
         <>
-          <h3 style={styles.sectionTitle}>Doctor Registration</h3>
+          <h3 className="text-slate-800 dark:text-slate-100 text-[1.1rem] font-bold mb-[16px]">Doctor Registration</h3>
 
-          <div style={styles.imageUpload}>
-            {preview && <img src={preview} alt="Preview" style={styles.previewImg} />}
-            <label style={styles.uploadLabel}>
+          <div className="text-center mb-[20px]">
+            {preview && <img src={preview} alt="Preview" className="w-[100px] h-[100px] rounded-full object-cover mb-[10px] border-[3px] border-accent mx-auto" />}
+            <label className="block text-accent cursor-pointer font-bold text-[0.95rem]">
               📷 Upload Photo
               <input type="file" hidden onChange={handleImageUpload} accept="image/*" />
             </label>
           </div>
 
-          <input style={styles.input} placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} />
-          <input style={styles.input} placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <input style={styles.input} type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} />
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
           
-          <input style={styles.input} placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} />
-          <input style={styles.input} placeholder="Specialization (e.g. Cardiologist)" value={specialization} onChange={(e) => setSpecialization(e.target.value)} />
-          <input style={styles.input} placeholder="Experience (e.g. 5 Years)" value={experience} onChange={(e) => setExperience(e.target.value)} />
-          <input style={styles.input} placeholder="Degree (e.g. MBBS, MD)" value={degree} onChange={(e) => setDegree(e.target.value)} />
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Specialization (e.g. Cardiologist)" value={specialization} onChange={(e) => setSpecialization(e.target.value)} />
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Experience (e.g. 5 Years)" value={experience} onChange={(e) => setExperience(e.target.value)} />
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Degree (e.g. MBBS, MD)" value={degree} onChange={(e) => setDegree(e.target.value)} />
           
-          <input style={styles.input} placeholder="Hospital Name" value={hospitalName} onChange={(e) => setHospitalName(e.target.value)} />
-          <input style={styles.input} placeholder="Hospital Address" value={hospitalAddress} onChange={(e) => setHospitalAddress(e.target.value)} />
-          <input style={styles.input} placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} />
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Hospital Name" value={hospitalName} onChange={(e) => setHospitalName(e.target.value)} />
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Hospital Address" value={hospitalAddress} onChange={(e) => setHospitalAddress(e.target.value)} />
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} />
           
           <textarea 
-            style={{ ...styles.input, minHeight: "80px", fontFamily: "inherit", resize: "vertical" }} 
+            className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent min-h-[80px] font-inherit resize-y" 
             placeholder="Tell us about yourself (Bio)" 
             value={bio} 
             onChange={(e) => setBio(e.target.value)} 
           />
 
-          <div style={styles.fileBox}>
-            <label style={styles.fileLabel}>Medical License</label>
+          <div className="mb-[15px] p-[14px] bg-slate-50 dark:bg-slate-900 rounded-[12px] border border-dashed border-slate-200 dark:border-slate-700">
+            <label className="block mb-[8px] font-semibold text-[0.9rem] text-slate-800 dark:text-slate-100">Medical License</label>
             <input type="file" onChange={(e) => setLicenseFile(e.target.files[0])} />
           </div>
 
-          <div style={styles.fileBox}>
-            <label style={styles.fileLabel}>Aadhaar Card</label>
+          <div className="mb-[15px] p-[14px] bg-slate-50 dark:bg-slate-900 rounded-[12px] border border-dashed border-slate-200 dark:border-slate-700">
+            <label className="block mb-[8px] font-semibold text-[0.9rem] text-slate-800 dark:text-slate-100">Aadhaar Card</label>
             <input type="file" onChange={(e) => setAadhaarFile(e.target.files[0])} />
           </div>
 
-          <div style={styles.fileBox}>
-            <label style={styles.fileLabel}>Degree Certificate</label>
+          <div className="mb-[15px] p-[14px] bg-slate-50 dark:bg-slate-900 rounded-[12px] border border-dashed border-slate-200 dark:border-slate-700">
+            <label className="block mb-[8px] font-semibold text-[0.9rem] text-slate-800 dark:text-slate-100">Degree Certificate</label>
             <input type="file" onChange={(e) => setDegreeCertFile(e.target.files[0])} />
           </div>
 
-          {otpSent && <input style={styles.input} placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} />}
+          {otpSent && <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} />}
 
-          <button style={styles.button} onClick={() => registerUser("doctor")}>
+          <button className="w-full p-[14px] bg-gradient-to-br from-[#0a4db8] to-[#1e6ff0] text-white border-none rounded-[12px] font-bold cursor-pointer mt-[10px] text-[1rem] shadow-[0_4px_15px_rgba(10,77,184,0.25)] transition-all hover:-translate-y-[2px]" onClick={() => registerUser("doctor")}>
             {otpSent ? "Verify & Register" : "Send OTP"}
           </button>
         </>
@@ -230,116 +230,5 @@ function Register() {
     </div>
   );
 }
-
-const styles = {
-  container: {
-    maxWidth: "550px",
-    margin: "40px auto",
-    padding: "35px 30px",
-    borderRadius: "20px",
-    background: "var(--card-bg, #fff)",
-    border: "1px solid var(--border-color, #e2e8f0)",
-    boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
-    fontFamily: "'Inter', 'Segoe UI', sans-serif",
-  },
-  iconCircle: {
-    width: "60px",
-    height: "60px",
-    borderRadius: "50%",
-    background: "linear-gradient(135deg, rgba(10, 77, 184, 0.1), rgba(99, 102, 241, 0.1))",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "1.6rem",
-    margin: "0 auto 16px",
-  },
-  heading: {
-    textAlign: "center",
-    color: "var(--accent, #0a4db8)",
-    fontSize: "1.5rem",
-    fontWeight: 800,
-    marginBottom: "8px",
-  },
-  subtitle: {
-    color: "var(--text-secondary, #64748b)",
-    fontSize: "0.95rem",
-    marginBottom: "20px",
-  },
-  sectionTitle: {
-    color: "var(--text-primary, #1e293b)",
-    fontSize: "1.1rem",
-    fontWeight: 700,
-    marginBottom: "16px",
-  },
-  input: {
-    width: "100%",
-    padding: "14px 16px",
-    marginBottom: "12px",
-    borderRadius: "12px",
-    border: "1px solid var(--input-border, #e2e8f0)",
-    boxSizing: "border-box",
-    fontSize: "0.95rem",
-    background: "var(--input-bg, white)",
-    color: "var(--text-primary, #1e293b)",
-    outline: "none",
-  },
-  button: {
-    width: "100%",
-    padding: "14px",
-    background: "linear-gradient(135deg, #0a4db8, #1e6ff0)",
-    color: "white",
-    border: "none",
-    borderRadius: "12px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    marginTop: "10px",
-    fontSize: "1rem",
-    boxShadow: "0 4px 15px rgba(10, 77, 184, 0.25)",
-    transition: "all 0.3s",
-  },
-  roleBtn: {
-    width: "100%",
-    padding: "16px",
-    marginBottom: "12px",
-    borderRadius: "12px",
-    border: "1px solid var(--border-color, #e2e8f0)",
-    background: "var(--card-bg, #fff)",
-    color: "var(--accent, #0a4db8)",
-    fontWeight: "bold",
-    cursor: "pointer",
-    fontSize: "1rem",
-    transition: "all 0.3s",
-  },
-  imageUpload: { textAlign: "center", marginBottom: "20px" },
-  previewImg: {
-    width: "100px",
-    height: "100px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    marginBottom: "10px",
-    border: "3px solid var(--accent, #0a4db8)",
-  },
-  uploadLabel: {
-    display: "block",
-    color: "var(--accent, #0a4db8)",
-    cursor: "pointer",
-    fontWeight: "bold",
-    fontSize: "0.95rem",
-  },
-  fileBox: {
-    marginBottom: "15px",
-    padding: "14px",
-    background: "var(--bg-primary, #f9f9f9)",
-    borderRadius: "12px",
-    border: "1px dashed var(--border-color, #e2e8f0)",
-  },
-  fileLabel: {
-    display: "block",
-    marginBottom: "8px",
-    fontWeight: "600",
-    fontSize: "0.9rem",
-    color: "var(--text-primary, #1e293b)",
-  },
-};
 
 export default Register;

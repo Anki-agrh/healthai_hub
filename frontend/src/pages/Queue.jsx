@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import io from "socket.io-client";
-import "./Queue.css";
+
 
 const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
 const socket = io(API_BASE);
@@ -145,46 +145,46 @@ if (loading)
 
 
   return (
-    <div className="queue-container">
-      <h2 className="main-heading">Patient Health Dashboard</h2>
+    <div className="max-w-[700px] mx-auto my-[40px] p-[20px] overflow-hidden font-sans bg-slate-50 dark:bg-slate-900 transition-colors">
+      <h2 className="text-center text-accent mb-[30px] text-3xl font-bold">Patient Health Dashboard</h2>
 
-      <div className="tab-menu">
-        <button className={activeTab === "live" ? "active" : ""} onClick={() => setActiveTab("live")}>Live Queue</button>
-        <button className={activeTab === "history" ? "active" : ""} onClick={() => setActiveTab("history")}>Medical History</button>
+      <div className="flex justify-center gap-[10px] mb-[30px] border-b-2 border-slate-200 dark:border-slate-700 pb-[10px]">
+        <button className={`bg-transparent border-none p-[10px_20px] text-[16px] font-semibold cursor-pointer transition-colors ${activeTab === "live" ? "text-accent border-b-[3px] border-accent" : "text-slate-500 dark:text-slate-400"}`} onClick={() => setActiveTab("live")}>Live Queue</button>
+        <button className={`bg-transparent border-none p-[10px_20px] text-[16px] font-semibold cursor-pointer transition-colors ${activeTab === "history" ? "text-accent border-b-[3px] border-accent" : "text-slate-500 dark:text-slate-400"}`} onClick={() => setActiveTab("history")}>Medical History</button>
       </div>
 
       {/* ================= LIVE QUEUE ================= */}
       {activeTab === "live" ? (
-        <div className="tab-content fade-in">
+        <div className="animate-fadeIn">
           {!myAppointment ? (
-            <div className="no-data">No active tokens for today.</div>
+            <div className="text-center text-slate-400 p-[50px] font-medium">No active tokens for today.</div>
           ) : (
             <>
-            <div className="queue-section">
-              <div className="status-box cuboidal-card">
-                <div className="token-display">
-                  <p>Currently Called</p>
-                  <div className="token-number">{liveToken}</div>
+            <div className="flex flex-col items-center gap-[18px]">
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-[15px] p-[40px] text-center w-full max-w-[520px] transition-transform shadow-md">
+                <div className="mb-5">
+                  <p className="text-[14px] text-slate-500 dark:text-slate-400 uppercase tracking-[1px] font-semibold">Currently Called</p>
+                  <div className="text-[64px] font-extrabold text-accent my-[10px]">{liveToken}</div>
                 </div>
 
-                <div className="user-token-details">
-                  <p>Your Token: <strong>{myAppointment.tokenNumber}</strong></p>
+                <div className="text-slate-800 dark:text-slate-100 text-lg">
+                  <p className="mb-2">Your Token: <strong className="text-xl">{myAppointment.tokenNumber}</strong></p>
 
                   {liveToken === myAppointment.tokenNumber ? (
-                    <div className="alert success">🟢 It's your turn! Please enter.</div>
+                    <div className="text-emerald-600 dark:text-emerald-400 font-bold p-3 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg">🟢 It's your turn! Please enter.</div>
                   ) : (
-                    <p className="wait-time">
+                    <p className="text-orange-500 font-semibold">
                       Estimated Wait: {(myAppointment.tokenNumber - liveToken) * 10} mins
                     </p>
                   )}
                 </div>
               </div>
 
-              <div className="queue-footer">
+              <div className="mt-[18px] w-full max-w-[520px] mx-auto text-center bg-blue-50/50 dark:bg-blue-900/10 border border-dashed border-blue-200 dark:border-blue-800 p-[22px_20px] rounded-[14px]">
                 </div>
-                <p>After your visit, upload prescription/report here:</p>
+                <p className="mb-[12px] text-[14px] text-slate-700 dark:text-slate-300 font-medium">After your visit, upload prescription/report here:</p>
 
-                <label className="upload-btn">
+                <label className="inline-flex items-center justify-center gap-[8px] mt-[12px] p-[12px_22px] bg-gradient-to-br from-[#0a4db8] to-[#3b82f6] text-white font-semibold text-[14px] rounded-[10px] cursor-pointer transition-all shadow-[0_6px_16px_rgba(10,77,184,0.25)] hover:-translate-y-[2px] hover:shadow-[0_10px_25px_rgba(10,77,184,0.35)]">
                   📷 Upload Medical Report
                   <input
                     type="file"
@@ -200,25 +200,25 @@ if (loading)
 
       /* ================= MEDICAL HISTORY ================= */
 
-        <div className="tab-content fade-in">
+        <div className="animate-fadeIn">
           {history.length === 0 ? (
-            <div className="no-data">No medical records uploaded yet.</div>
+            <div className="text-center text-slate-400 p-[50px] font-medium">No medical records uploaded yet.</div>
           ) : (
-            <div className="history-list">
+            <div className="flex flex-col gap-[15px]">
               {history.map((record, index) => (
-                <div key={index} className="history-card cuboidal-card">
-                  <div className="history-header">
-                    <span className="date-tag">{record.date}</span>
+                <div key={index} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[12px] p-[20px] text-left transition-all shadow-sm hover:-translate-y-[3px] hover:shadow-[0_5px_15px_rgba(0,0,0,0.1)] text-slate-800 dark:text-slate-100">
+                  <div className="flex justify-between mb-[10px]">
+                    <span className="text-[12px] text-slate-500 dark:text-slate-400 font-bold">{record.date}</span>
                   </div>
 
-                  <h4>Doctor: {record.doctorId}</h4>
+                  <h4 className="text-lg font-semibold">Doctor: {record.doctorId}</h4>
 
                   <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
                     <a
                       href={`${API_BASE}/uploads/${record.file}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="view-report-btn"
+                      className="inline-block mt-[12px] p-[8px_14px] bg-blue-50 dark:bg-blue-900/30 rounded-[8px] no-underline text-accent font-semibold transition-colors hover:bg-accent hover:text-white"
                       style={{ flex: 1, textAlign: "center" }}
                     >
                       📄 View Record
@@ -226,7 +226,7 @@ if (loading)
                     <button 
                       onClick={() => getAiSummary(record.file)} 
                       disabled={summarizing === record.file}
-                      className="view-report-btn"
+                      className="inline-block mt-[12px] p-[8px_14px] bg-blue-50 dark:bg-blue-900/30 rounded-[8px] no-underline text-accent font-semibold transition-colors hover:bg-accent hover:text-white"
                       style={{ flex: 1, background: "#10b981" }}
                     >
                       {summarizing === record.file ? "🤖 Reading..." : "✨ AI Summarize"}

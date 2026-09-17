@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useToast } from "../context/ToastContext";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import "./MyProfile.css";
+
 
 function MyProfile() {
   const [isEditing, setIsEditing] = useState(false);
@@ -130,81 +130,81 @@ function MyProfile() {
 };
 
   return (
-    <div className="profile-container-pro">
-      <div className="profile-card-pro">
-        <div className="profile-header-pro">
-          <div className="image-upload-wrapper">
-            <img src={profile.profilePic} alt="Doctor" className="profile-img-pro" />
+    <div className="flex justify-center p-10 bg-slate-50 dark:bg-slate-900 min-h-[90vh] transition-colors">
+      <div className="bg-white dark:bg-slate-800 w-full max-w-[800px] rounded-2xl p-[30px] shadow-[0_10px_30px_rgba(0,0,0,0.05)] text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700">
+        <div className="flex flex-col md:flex-row items-center gap-[30px] border-b-2 border-slate-100 dark:border-slate-700 pb-[25px] mb-[25px]">
+          <div className="relative w-[150px] h-[150px]">
+            <img src={profile.profilePic} alt="Doctor" className="w-full h-full rounded-full object-cover border-4 border-[#0a4db8]" />
             {isEditing && (
-              <label className="upload-btn">
+              <label className="absolute bottom-0 left-0 bg-[#0a4db8]/80 text-white w-full text-center text-[12px] py-1 cursor-pointer rounded-b-full">
                 📷 Change Photo
                 <input type="file" hidden onChange={handleImageUpload} />
               </label>
             )}
           </div>
-          <div className="header-text-pro">
+          <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <h1>{profile.name || "Dr. Name"}</h1>
-            <p className="specialty-tag">{profile.specialization || "General Physician"}</p>
+            <p className="bg-blue-50 dark:bg-blue-900/30 text-accent px-[15px] py-[5px] rounded-full inline-block font-bold mt-2.5">{profile.specialization || "General Physician"}</p>
           </div>
         </div>
 
-        <div className="profile-tabs">
-          <button className={`tab-btn ${activeTab === 'Personal' ? 'active' : ''}`} onClick={() => setActiveTab("Personal")}>Personal Details</button>
-          <button className={`tab-btn ${activeTab === 'Analytics' ? 'active' : ''}`} onClick={() => setActiveTab("Analytics")}>Health Analytics</button>
+        <div className="flex gap-[15px] mt-5 mb-[25px] border-b-2 border-slate-100 dark:border-slate-700 pb-2.5">
+          <button className={`bg-transparent border-none text-[1.1rem] font-bold cursor-pointer p-[8px_16px] rounded-lg transition-colors ${activeTab === "Personal" ? "bg-accent text-white" : "text-slate-500 dark:text-slate-400"}`} onClick={() => setActiveTab("Personal")}>Personal Details</button>
+          <button className={`bg-transparent border-none text-[1.1rem] font-bold cursor-pointer p-[8px_16px] rounded-lg transition-colors ${activeTab === "Analytics" ? "bg-accent text-white" : "text-slate-500 dark:text-slate-400"}`} onClick={() => setActiveTab("Analytics")}>Health Analytics</button>
         </div>
 
         {activeTab === "Personal" ? (
-          <div className="fade-in">
-            <div className="profile-details-grid">
-          <div className="info-group">
-            <label>Degree</label>
-            {isEditing ? <input value={profile.degree} onChange={(e) => setProfile({...profile, degree: e.target.value})} /> : <p>{profile.degree || "MBBS, MD"}</p>}
+          <div className="animate-fadeIn">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-slate-500 dark:text-slate-400 text-[0.85rem]">Degree</label>
+            {isEditing ? <input className="text-[1.1rem] font-semibold text-slate-800 dark:text-slate-100 w-full border-none bg-transparent border-b border-slate-200 dark:border-slate-600 outline-none pb-1" value={profile.degree} onChange={(e) => setProfile({...profile, degree: e.target.value})} /> : <p className="text-[1.1rem] font-semibold text-slate-800 dark:text-slate-100 w-full border-b border-slate-200 dark:border-slate-600 pb-1">{profile.degree || "MBBS, MD"}</p>}
           </div>
-          <div className="info-group">
-            <label>Experience</label>
-            {isEditing ? <input value={profile.experience} onChange={(e) => setProfile({...profile, experience: e.target.value})} /> : <p>{profile.experience || "0"} Years</p>}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-slate-500 dark:text-slate-400 text-[0.85rem]">Experience</label>
+            {isEditing ? <input className="text-[1.1rem] font-semibold text-slate-800 dark:text-slate-100 w-full border-none bg-transparent border-b border-slate-200 dark:border-slate-600 outline-none pb-1" value={profile.experience} onChange={(e) => setProfile({...profile, experience: e.target.value})} /> : <p className="text-[1.1rem] font-semibold text-slate-800 dark:text-slate-100 w-full border-b border-slate-200 dark:border-slate-600 pb-1">{profile.experience || "0"} Years</p>}
           </div>
-          <div className="info-group">
-            <label>Hospital</label>
-            {isEditing ? <input value={profile.hospital} onChange={(e) => setProfile({...profile, hospital: e.target.value})} /> : <p>{profile.hospital || "HealthAI Hub Clinic"}</p>}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-slate-500 dark:text-slate-400 text-[0.85rem]">Hospital</label>
+            {isEditing ? <input className="text-[1.1rem] font-semibold text-slate-800 dark:text-slate-100 w-full border-none bg-transparent border-b border-slate-200 dark:border-slate-600 outline-none pb-1" value={profile.hospital} onChange={(e) => setProfile({...profile, hospital: e.target.value})} /> : <p className="text-[1.1rem] font-semibold text-slate-800 dark:text-slate-100 w-full border-b border-slate-200 dark:border-slate-600 pb-1">{profile.hospital || "HealthAI Hub Clinic"}</p>}
           </div>
-          <div className="info-group">
-            <label>Age</label>
-            {isEditing ? <input value={profile.age} onChange={(e) => setProfile({...profile, age: e.target.value})} /> : <p>{profile.age || "N/A"}</p>}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-slate-500 dark:text-slate-400 text-[0.85rem]">Age</label>
+            {isEditing ? <input className="text-[1.1rem] font-semibold text-slate-800 dark:text-slate-100 w-full border-none bg-transparent border-b border-slate-200 dark:border-slate-600 outline-none pb-1" value={profile.age} onChange={(e) => setProfile({...profile, age: e.target.value})} /> : <p className="text-[1.1rem] font-semibold text-slate-800 dark:text-slate-100 w-full border-b border-slate-200 dark:border-slate-600 pb-1">{profile.age || "N/A"}</p>}
           </div>
         </div>
 
-        <div className="bio-section">
-          <label>Professional Summary</label>
-          {isEditing ? <textarea value={profile.bio} onChange={(e) => setProfile({...profile, bio: e.target.value})} /> : <p>{profile.bio || "Dedicated healthcare professional..."}</p>}
+        <div className="mt-6 flex flex-col gap-1.5">
+          <label className="text-slate-500 dark:text-slate-400 text-[0.85rem]">Professional Summary</label>
+          {isEditing ? <textarea className="text-[1rem] p-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 w-full h-[100px] resize-none outline-none focus:border-accent" value={profile.bio} onChange={(e) => setProfile({...profile, bio: e.target.value})} /> : <p className="text-[1rem] text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-lg border border-slate-100 dark:border-slate-700 leading-relaxed">{profile.bio || "Dedicated healthcare professional..."}</p>}
         </div>
 
         <p>{profile.hospital}</p>
 <p>{profile.hospitalAddress}, {profile.city}</p>
 
 
-        <div className="profile-actions">
+        <div className="mt-8">
           {isEditing ? (
-            <button className="save-btn-pro" onClick={handleSave}>Save Changes</button>
+            <button className="w-full p-4 rounded-xl border-none font-bold cursor-pointer mt-[30px] bg-emerald-500 hover:bg-emerald-600 text-white transition-colors" onClick={handleSave}>Save Changes</button>
           ) : (
-            <button className="edit-btn-pro" onClick={() => setIsEditing(true)}>Edit Details</button>
+            <button className="w-full p-4 rounded-xl border-none font-bold cursor-pointer mt-[30px] bg-accent hover:bg-accent-hover text-white transition-colors" onClick={() => setIsEditing(true)}>Edit Details</button>
           )}
         </div>
           </div>
         ) : (
-          <div className="analytics-tab fade-in">
-            <h2 style={{color: 'var(--text-primary)', marginBottom: '20px'}}>Health Journey</h2>
+          <div className="animate-fadeIn">
+            <h2 className="text-slate-800 dark:text-slate-100 mb-5 text-2xl font-bold">Health Journey</h2>
             
-            <div className="vitals-input-form">
-              <input type="number" placeholder="Blood Pressure (sys)" value={newVital.bloodPressure} onChange={(e) => setNewVital({...newVital, bloodPressure: e.target.value})} />
-              <input type="number" placeholder="Sugar (mg/dL)" value={newVital.sugar} onChange={(e) => setNewVital({...newVital, sugar: e.target.value})} />
-              <input type="number" placeholder="Weight (kg)" value={newVital.weight} onChange={(e) => setNewVital({...newVital, weight: e.target.value})} />
-              <button onClick={handleAddVital} className="add-vital-btn">Log Vitals</button>
+            <div className="flex flex-wrap items-center gap-[15px] bg-slate-50 dark:bg-slate-900/50 p-5 rounded-xl mb-[30px] border border-slate-200 dark:border-slate-700">
+              <input className="flex-1 min-w-[150px] p-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-accent" type="number" placeholder="Blood Pressure (sys)" value={newVital.bloodPressure} onChange={(e) => setNewVital({...newVital, bloodPressure: e.target.value})} />
+              <input className="flex-1 min-w-[150px] p-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-accent" type="number" placeholder="Sugar (mg/dL)" value={newVital.sugar} onChange={(e) => setNewVital({...newVital, sugar: e.target.value})} />
+              <input className="flex-1 min-w-[150px] p-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none focus:border-accent" type="number" placeholder="Weight (kg)" value={newVital.weight} onChange={(e) => setNewVital({...newVital, weight: e.target.value})} />
+              <button onClick={handleAddVital} className="p-[12px_25px] bg-emerald-500 hover:bg-emerald-600 text-white border-none rounded-lg font-bold cursor-pointer transition-colors">Log Vitals</button>
             </div>
 
-            <div className="charts-grid">
-              <div className="chart-card">
-                <h3>Blood Pressure & Sugar Trend</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <h3 className="mb-5 text-slate-800 dark:text-slate-100 text-center font-bold">Blood Pressure & Sugar Trend</h3>
                 <ResponsiveContainer width="100%" height={250}>
                   <LineChart data={vitalsData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color, #eee)" />
@@ -218,8 +218,8 @@ function MyProfile() {
                 </ResponsiveContainer>
               </div>
 
-              <div className="chart-card">
-                <h3>Weight Journey</h3>
+              <div className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <h3 className="mb-5 text-slate-800 dark:text-slate-100 text-center font-bold">Weight Journey</h3>
                 <ResponsiveContainer width="100%" height={250}>
                   <BarChart data={vitalsData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
