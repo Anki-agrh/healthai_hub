@@ -1,0 +1,12 @@
+{
+  "env": {
+    "CI": "false",
+    "GENERATE_SOURCEMAP": "false"
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
