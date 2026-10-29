@@ -111,7 +111,7 @@ function AppContent() {
 
         {/* --- PROFILE (Protected) --- */}
         <Route path="/my-profile" element={
-          <ProtectedRoute allowedRoles={["doctor"]}>
+          <ProtectedRoute allowedRoles={["patient", "doctor"]}>
             <div className="page-transition"><MyProfile /></div>
           </ProtectedRoute>
         } />

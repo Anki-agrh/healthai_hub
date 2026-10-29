@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
+import { UserPlus } from "lucide-react";
 
 function Register() {
   const navigate = useNavigate();
@@ -101,7 +102,7 @@ function Register() {
 
     if (selectedRole === "doctor") {
       formData.append("specialization", specialization);
-      formData.append("experience", experience);
+      formData.append("experience", parseInt(String(experience).replace(/[^\d]/g, "")) || 0);
       formData.append("hospitalName", hospitalName);
       formData.append("hospitalAddress", hospitalAddress);
       formData.append("city", city);
@@ -132,6 +133,8 @@ function Register() {
         } else {
           setRole("");
           setOtpSent(false);
+          setOtp("");
+          setName(""); setEmail(""); setPassword("");
           showToast("Admin will review your documents shortly.", "info");
         }
       } else {
@@ -145,17 +148,19 @@ function Register() {
 
   return (
     <div className="max-w-[550px] mx-auto my-[40px] p-[35px_30px] rounded-[20px] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-[0_8px_30px_rgba(0,0,0,0.08)] font-sans">
-      <div className="w-[60px] h-[60px] rounded-full bg-gradient-to-br from-[#0a4db8]/10 to-[#6366f1]/10 flex items-center justify-center text-[1.6rem] mx-auto mb-[16px]">📋</div>
+      <div className="w-[60px] h-[60px] rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-[16px]">
+        <UserPlus className="text-accent" size={26} />
+      </div>
       <h2 className="text-center text-accent text-[1.5rem] font-extrabold mb-[8px]">HealthAI Hub - Register</h2>
 
       {!role && (
         <div className="text-center">
           <p className="text-slate-500 dark:text-slate-400 text-[0.95rem] mb-[20px] text-center">Select your role to get started</p>
           <button className="w-full p-[16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-accent font-bold cursor-pointer text-[1rem] transition-all hover:bg-slate-50 dark:hover:bg-slate-700" onClick={() => setRole("patient")}>
-            🧑 Register as Patient
+            Register as Patient
           </button>
           <button className="w-full p-[16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-accent font-bold cursor-pointer text-[1rem] transition-all hover:bg-slate-50 dark:hover:bg-slate-700" onClick={() => setRole("doctor")}>
-            👨‍⚕️ Register as Doctor
+            Register as Doctor
           </button>
         </div>
       )}
@@ -180,7 +185,7 @@ function Register() {
           <div className="text-center mb-[20px]">
             {preview && <img src={preview} alt="Preview" className="w-[100px] h-[100px] rounded-full object-cover mb-[10px] border-[3px] border-accent mx-auto" />}
             <label className="block text-accent cursor-pointer font-bold text-[0.95rem]">
-              📷 Upload Photo
+              Upload Profile Photo
               <input type="file" hidden onChange={handleImageUpload} accept="image/*" />
             </label>
           </div>
@@ -191,7 +196,7 @@ function Register() {
           
           <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} />
           <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Specialization (e.g. Cardiologist)" value={specialization} onChange={(e) => setSpecialization(e.target.value)} />
-          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Experience (e.g. 5 Years)" value={experience} onChange={(e) => setExperience(e.target.value)} />
+          <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" type="number" min="0" placeholder="Years of Experience (e.g. 5)" value={experience} onChange={(e) => setExperience(e.target.value)} />
           <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Degree (e.g. MBBS, MD)" value={degree} onChange={(e) => setDegree(e.target.value)} />
           
           <input className="w-full p-[14px_16px] mb-[12px] rounded-[12px] border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-[0.95rem] text-slate-800 dark:text-slate-100 outline-none box-border focus:border-accent" placeholder="Hospital Name" value={hospitalName} onChange={(e) => setHospitalName(e.target.value)} />

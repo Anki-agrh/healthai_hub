@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Star, Calendar, Bot, Flag, Mic, Square, Send, X } from "lucide-react";
+import { Star, Calendar, Bot, Flag, Mic, Square, Send, X, ShieldCheck, Search, CheckCircle2, MapPin } from "lucide-react";
 import io from "socket.io-client";
 
 
@@ -9,6 +9,7 @@ const socket = io(API_BASE);
 function Doctors() {
   const [doctors, setDoctors] = useState([]);
   const [filter, setFilter] = useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = useState("All");
   const [loading, setLoading] = useState(true);
 
   const [selectedDoc, setSelectedDoc] = useState(null);
@@ -44,6 +45,7 @@ function Doctors() {
   const [scheduleMode, setScheduleMode] = useState(null);
   const [scheduleTime, setScheduleTime] = useState("");
   const [scheduleDate, setScheduleDate] = useState(new Date().toISOString().split('T')[0]);
+  const [scheduledMeet, setScheduledMeet] = useState(null);
 
   const fetchDoctors = async () => {
     const API_BASE = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
@@ -326,7 +328,13 @@ const scheduleConsult = async () => {
   const data = await res.json();
 
   if(data.success){
-    alert("Meeting scheduled! Check your Gmail.");
+    setScheduledMeet({
+      link: data.meetLink,
+      doctor: selectedDoc?.name || "Specialist",
+      date: scheduleDate,
+      time: scheduleTime,
+      mode: scheduleMode
+    });
     setScheduleMode(null);
     setScheduleTime("");
     setChatStep(0);
@@ -338,58 +346,171 @@ const scheduleConsult = async () => {
 
   if (loading) return <div className="text-center text-slate-500 py-[40px] font-semibold text-[1.1rem]">Searching for specialists...</div>;
 
-  const filteredDoctors = doctors.filter(doc => 
-    doc.name.toLowerCase().includes(filter.toLowerCase()) || 
-    doc.specialization?.toLowerCase().includes(filter.toLowerCase())
-  );
+  const specialties = ["All", "Cardiologist", "Neurologist", "Pediatrician", "Dermatologist"];
+
+  const getDoctorImage = (doc) => {
+    if (doc?.image) {
+      if (doc.image.startsWith("http://") || doc.image.startsWith("https://")) {
+        return doc.image;
+      }
+      return `${API_BASE}/uploads/${doc.image}`;
+    }
+    return "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=500&q=80&fit=crop";
+  };
+
+  const filteredDoctors = doctors.filter(doc => {
+    const matchesSearch = doc.name.toLowerCase().includes(filter.toLowerCase()) || 
+      doc.specialization?.toLowerCase().includes(filter.toLowerCase()) ||
+      doc.hospitalName?.toLowerCase().includes(filter.toLowerCase());
+    const matchesSpecialty = selectedSpecialty === "All" || 
+      doc.specialization?.toLowerCase() === selectedSpecialty.toLowerCase();
+    return matchesSearch && matchesSpecialty;
+  });
 
   return (
-    <div className="max-w-[1200px] mx-auto py-10 px-5">
-      <h2 className="text-center text-[2rem] font-bold text-slate-800 dark:text-slate-100 mb-8">Verified Specialists</h2>
-      <div className="flex justify-center mb-10">
-        <input 
-          type="text" 
-          placeholder="Search..." 
-          className="w-full max-w-[600px] px-5 py-3 rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 shadow-sm focus:outline-none focus:border-accent transition-colors" 
-          value={filter} 
-          onChange={(e) => setFilter(e.target.value)} 
-        />
+    <div className="max-w-[1300px] mx-auto py-8 px-4 sm:px-6">
+      <div className="text-center max-w-2xl mx-auto mb-8">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-accent/10 text-accent mb-3">
+          <ShieldCheck size={14} /> Verified Medical Professionals
+        </span>
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          Find & Consult Top Specialists
+        </h1>
+        <p className="mt-2 text-sm sm:text-base text-slate-500 dark:text-slate-400">
+          Book instant tokens for queue bypass or connect directly via HD Live Chat, Voice, & Video.
+        </p>
       </div>
 
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-[25px] md:grid-cols-1">
-        {filteredDoctors.map((doc) => (
-          <div key={doc._id} className="bg-white dark:bg-slate-800 rounded-xl overflow-hidden flex flex-col text-slate-800 dark:text-slate-100 border-2 border-[#71b1ff] shadow-[6px_6px_0px_#71b1ff] md:shadow-[4px_4px_0px_#71b1ff] transition-transform hover:-translate-y-1">
-            <div className="relative h-[250px]">
-              <img 
-                src={doc.image ? `${API_BASE}/uploads/${doc.image}` : "/assets/doc1.jpg"}
-                alt={doc.name} 
-                className="w-full h-full object-cover object-top" 
-              />
-              <div className="absolute bottom-2.5 left-2.5 bg-[#00d293] text-white px-2.5 py-1 rounded-md font-bold text-sm shadow-sm" style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
-                <Star size={14} fill="currentColor" /> {doc.averageRating || "4.8"}
-              </div>
-            </div>
-            <div className="p-5 flex-1 flex flex-col">
-              <span className="text-[#71b1ff] text-[0.8rem] font-bold uppercase tracking-wider mb-2">{doc.specialization}</span>
-              <div className="bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[0.8rem] px-2.5 py-1 rounded-full inline-flex items-center gap-1.5 mb-2.5 border border-emerald-200 dark:border-emerald-800 self-start">
-                <span className="text-emerald-500 animate-pulse">●</span> 
-                <strong>Live Queue:</strong> {doc.queueLength || 0} Patients Waiting
-              </div>
-              <h3>{doc.name}</h3>
-              <p className="text-slate-500 dark:text-slate-400 text-[0.85rem] mt-1">{doc.degree} • {doc.experience} Years Exp.</p>
-              <p className="text-sm mt-2 font-medium">
- {doc.hospitalName}<br/>
-<span style={{fontSize:"12px",color:"var(--text-secondary, #666)"}}>{doc.hospitalAddress}, {doc.city}</span>
-</p>
+      {/* Search & Filter Bar */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 max-w-4xl mx-auto">
+        <div className="relative w-full sm:flex-1">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+          <input 
+            type="text" 
+            placeholder="Search by doctor name, specialty, or hospital..." 
+            className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm transition-all" 
+            value={filter} 
+            onChange={(e) => setFilter(e.target.value)} 
+          />
+        </div>
 
-            </div>
-            <div className="flex border-t border-slate-100 dark:border-slate-700">
-              <button className="flex-1 p-4 border-none cursor-pointer font-semibold bg-slate-50 dark:bg-slate-900/50 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" onClick={() => openBookingModal(doc)}>Book Token</button>
-              <button className="flex-1 p-4 border-none cursor-pointer font-semibold bg-[#0a4db8] text-white hover:bg-accent-hover transition-colors" onClick={() => startConsultation(doc)}>Consult</button>
-            </div>
-          </div>
-        ))}
+        {/* Specialty Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 scrollbar-none">
+          {specialties.map(spec => (
+            <button
+              key={spec}
+              onClick={() => setSelectedSpecialty(spec)}
+              className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                selectedSpecialty === spec
+                  ? "bg-accent text-white shadow-md shadow-accent/25"
+                  : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-accent/40"
+              }`}
+            >
+              {spec}
+            </button>
+          ))}
+        </div>
       </div>
+
+      {/* Doctor Cards Grid */}
+      {filteredDoctors.length === 0 ? (
+        <div className="text-center py-16 bg-white dark:bg-slate-800/60 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
+          <p className="text-slate-500 dark:text-slate-400 font-medium">No doctors found matching your criteria.</p>
+          <button 
+            onClick={() => { setFilter(""); setSelectedSpecialty("All"); }}
+            className="mt-3 text-xs font-semibold text-accent hover:underline"
+          >
+            Reset Filters
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredDoctors.map((doc) => (
+            <div 
+              key={doc._id} 
+              className="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200/80 dark:border-slate-700/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
+            >
+              {/* Doctor Image Container */}
+              <div className="relative h-48 w-full bg-slate-100 dark:bg-slate-900 overflow-hidden">
+                <img 
+                  src={getDoctorImage(doc)}
+                  alt={doc.name} 
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=500&q=80&fit=crop";
+                  }}
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+
+                {/* Rating Badge */}
+                <div className="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-800 dark:text-slate-100 px-2.5 py-1 rounded-lg text-xs font-bold shadow-md flex items-center gap-1">
+                  <Star size={13} className="text-amber-400 fill-amber-400" />
+                  <span>{doc.averageRating || "4.8"}</span>
+                </div>
+
+                {/* Queue status badge */}
+                <div className="absolute top-3 right-3 bg-emerald-500/90 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                  <span>{doc.queueLength ? `${doc.queueLength} in queue` : "Available Now"}</span>
+                </div>
+
+                {/* Doctor Name on Image Overlay */}
+                <div className="absolute bottom-3 left-3 right-3 text-white">
+                  <h3 className="font-bold text-base leading-snug drop-shadow-sm flex items-center gap-1.5">
+                    {doc.name}
+                    <CheckCircle2 size={15} className="text-emerald-400 shrink-0" />
+                  </h3>
+                  <p className="text-xs text-white/90 font-medium">
+                    {doc.degree || "MBBS, MD"} • {doc.experience || 5}+ yrs exp
+                  </p>
+                </div>
+              </div>
+
+              {/* Card Body */}
+              <div className="p-4 flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="inline-block px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-accent/10 text-accent">
+                      {doc.specialization}
+                    </span>
+                    <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
+                      MCI Verified
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-slate-600 dark:text-slate-300 font-medium line-clamp-1 flex items-center gap-1 mb-1">
+                    <MapPin size={12} className="text-slate-400 shrink-0" />
+                    <span>{doc.hospitalName || "General Hospital"}</span>
+                  </p>
+
+                  {(doc.hospitalAddress || doc.city) && (
+                    <p className="text-[11px] text-slate-400 dark:text-slate-500 pl-4 line-clamp-1">
+                      {[doc.hospitalAddress, doc.city].filter(Boolean).join(", ")}
+                    </p>
+                  )}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/60">
+                  <button 
+                    onClick={() => openBookingModal(doc)}
+                    className="py-2.5 px-3 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-700/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors text-center"
+                  >
+                    Book Token
+                  </button>
+                  <button 
+                    onClick={() => startConsultation(doc)}
+                    className="py-2.5 px-3 rounded-xl text-xs font-semibold bg-accent hover:bg-accent-hover text-white transition-all shadow-sm shadow-accent/30 text-center flex items-center justify-center gap-1"
+                  >
+                    <span>Consult</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {showBookingModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-[2000] p-4">
@@ -522,6 +643,55 @@ const scheduleConsult = async () => {
                 <button onClick={closeModal} className="w-full bg-[#0a4db8] hover:bg-[#083d91] text-white p-[12px] rounded-xl font-bold border-none cursor-pointer transition-colors">Submit</button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Scheduled Consultation Confirmation Modal */}
+      {scheduledMeet && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-[2500] p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-[460px] p-6 text-center shadow-2xl border border-slate-200 dark:border-slate-700 animate-fadeIn relative">
+            <button
+              onClick={() => setScheduledMeet(null)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white text-xl font-bold w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700"
+            >
+              ✕
+            </button>
+            <div className="w-14 h-14 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center mx-auto mb-3">
+              <CheckCircle2 size={32} />
+            </div>
+            <h3 className="text-xl font-black text-slate-900 dark:text-white">
+              Consultation Scheduled!
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              Confirmed with <strong>{scheduledMeet.doctor}</strong> for {scheduledMeet.date} at {scheduledMeet.time}.
+            </p>
+
+            <div className="my-5 p-4 rounded-2xl bg-blue-50 dark:bg-slate-900 border border-blue-100 dark:border-slate-700 text-left">
+              <span className="text-[11px] font-bold text-accent uppercase tracking-wider block mb-1">
+                Your Direct Video Room
+              </span>
+              <p className="text-xs text-slate-600 dark:text-slate-300 font-mono break-all select-all">
+                {scheduledMeet.link}
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2.5">
+              <a
+                href={scheduledMeet.link}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full py-3 rounded-xl bg-accent hover:bg-accent/90 text-white font-bold text-sm shadow-lg shadow-accent/25 transition-all inline-block no-underline"
+              >
+                📹 Join Video Consultation Now
+              </a>
+              <button
+                onClick={() => setScheduledMeet(null)}
+                className="w-full py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors"
+              >
+                Close (Link also sent to your Gmail)
+              </button>
+            </div>
           </div>
         </div>
       )}

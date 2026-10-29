@@ -61,7 +61,7 @@ function DoctorAppointments() {
 
   return (
     <div>
-      <h2>👨‍⚕️ Doctor Appointments</h2>
+      <h2>Doctor Appointments</h2>
 
       {appointments.map(a => (
         <div key={a._id}>

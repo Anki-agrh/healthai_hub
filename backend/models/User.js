@@ -10,10 +10,16 @@ const userSchema = new mongoose.Schema({
   points: { type: Number, default: 0 },
   lastReset: { type: String, default: "" },
 
+  // --- PATIENT SPECIFIC FIELDS ---
+  age: { type: String, default: "" },
+  bloodGroup: { type: String, default: "" },
+  emergencyContact: { type: String, default: "" },
+  allergies: { type: String, default: "" },
+
   // --- DOCTOR SPECIFIC FIELDS ---
   specialization: String,
   degree: String,
-  experience: Number,
+  experience: { type: Number, default: 0 },
   hospitalName: String,
   hospitalAddress: String,
   city: String,

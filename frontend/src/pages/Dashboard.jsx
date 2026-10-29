@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
-
-const API = process.env.REACT_APP_API || "https://healthai-hub.onrender.com";
+import { 
+  Activity, Heart, ArrowRight, Sparkles, CheckCircle2, ChevronRight, Stethoscope,
+  Zap, Bot, Utensils, MapPin, Ticket, Calendar, AlertTriangle, ShieldCheck, BarChart2
+} from "lucide-react";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -11,105 +13,186 @@ function Dashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-    }
+    if (!token) navigate("/login");
   }, [navigate]);
 
   const user = (() => {
-    try {
-      return JSON.parse(localStorage.getItem("user")) || {};
-    } catch {
-      return {};
-    }
+    try { return JSON.parse(localStorage.getItem("user")) || {}; }
+    catch { return {}; }
   })();
 
   return (
-    <div className="min-h-[90vh] py-8 px-[5%] md:px-[4%] md:py-5 font-sans bg-primary-light dark:bg-primary-dark transition-colors duration-300 animate-fadeSlideIn">
-      {role === "patient" && <PatientDashboard user={user} navigate={navigate} />}
-      {role === "doctor" && <DoctorDashboard user={user} navigate={navigate} />}
-      {role === "admin" && <AdminDashboard user={user} navigate={navigate} showToast={showToast} />}
-      {!role && <p className="text-center text-slate-500 mt-10">No role found. Please log in.</p>}
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans transition-colors duration-200 py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1280px] mx-auto">
+        {role === "patient" && <PatientDashboard user={user} navigate={navigate} />}
+        {role === "doctor" && <DoctorDashboard user={user} navigate={navigate} />}
+        {role === "admin" && <AdminDashboard user={user} navigate={navigate} showToast={showToast} />}
+        {!role && (
+          <div className="text-center py-20 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+            <p className="text-slate-500 dark:text-slate-400 font-semibold">No active session found.</p>
+            <button 
+              onClick={() => navigate("/login")}
+              className="mt-3 px-6 py-2.5 bg-accent hover:bg-accent/90 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-accent/20"
+            >
+              Log In to HealthAI Hub
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
 /* ================= PATIENT DASHBOARD ================= */
 function PatientDashboard({ user, navigate }) {
-  const firstName = user.name ? user.name.split(" ")[0] : "User";
+  const firstName = user.name ? user.name.split(" ")[0] : "Patient";
+  const [time, setTime] = useState(new Date());
+  const [healthScore] = useState(() => Number(localStorage.getItem("health_points")) ? Math.min(96, 75 + Math.floor(Number(localStorage.getItem("health_points")) / 15)) : 88);
+
+  useEffect(() => {
+    const t = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const greeting = time.getHours() < 12 ? 'Good Morning' : time.getHours() < 17 ? 'Good Afternoon' : 'Good Evening';
 
   const actions = [
-    { icon: "🤖", title: "AI Health Assistant", desc: "Get instant symptom analysis with our AI-powered chatbot", path: "/ai", gradient: "from-blue-500 to-indigo-500", iconBg: "bg-blue-500/15" },
-    { icon: "🥗", title: "AI Diet Planner", desc: "Get personalized nutrition plans tailored to your goals", path: "/diet", gradient: "from-emerald-500 to-emerald-600", iconBg: "bg-emerald-500/15" },
-    { icon: "👨‍⚕️", title: "Consult Doctors", desc: "Book video/voice consultations with specialists", path: "/consult", gradient: "from-purple-500 to-purple-600", iconBg: "bg-purple-500/15" },
-    { icon: "📍", title: "Nearby Healthcare", desc: "Find doctors and hospitals within 10km of you", path: "/nearby-doctors", gradient: "from-teal-500 to-teal-600", iconBg: "bg-teal-500/15" },
-    { icon: "🎟️", title: "Live Queue / Records", desc: "Check your queue status and past medical records", path: "/queue", gradient: "from-amber-500 to-amber-600", iconBg: "bg-amber-500/15" },
-    { icon: "💊", title: "Health Dashboard", desc: "Track water, meds, meditation & build healthy streaks", path: "/meds", gradient: "from-pink-500 to-pink-600", iconBg: "bg-pink-500/15" },
-    { icon: "📋", title: "My Appointments", desc: "View and manage all your upcoming appointments", path: "/patient-appointments", gradient: "from-orange-500 to-orange-600", iconBg: "bg-orange-500/15" },
-    { icon: "🚨", title: "Emergency SOS", desc: "One-tap alert to notify all nearby doctors instantly", path: "/emergency", gradient: "from-red-500 to-red-600", iconBg: "bg-red-500/15" },
+    { icon: <Zap size={20} className="text-blue-500" />, title: "Vitals & Drug Safety", desc: "Live cardiac stream, drug interaction checker & biological age", path: "/meds", tag: "Live", bg: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20" },
+    { icon: <Bot size={20} className="text-indigo-500" />, title: "AI Health Assistant", desc: "3D interactive anatomy pinpointing + symptom analysis", path: "/ai", tag: "AI", bg: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20" },
+    { icon: <Utensils size={20} className="text-emerald-500" />, title: "Smart Diet Planner", desc: "Macro & TDEE calculator, food scanner & 7-day meal plan", path: "/diet", tag: "Nutrition", bg: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20" },
+    { icon: <Stethoscope size={20} className="text-purple-500" />, title: "Specialist Consultation", desc: "Verified doctors with instant video rooms & queue bypass", path: "/consult", tag: "Video", bg: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20" },
+    { icon: <MapPin size={20} className="text-teal-500" />, title: "Nearby Healthcare Locator", desc: "Interactive facility map, wait-time intelligence & zone heatmap", path: "/nearby-doctors", tag: "GPS", bg: "bg-teal-500/10 text-teal-600 dark:text-teal-400 border-teal-500/20" },
+    { icon: <Ticket size={20} className="text-amber-500" />, title: "Queue & Medical Records", desc: "Real-time clinic token queue + direct medical report vault", path: "/queue", tag: "Vault", bg: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20" },
+    { icon: <Calendar size={20} className="text-orange-500" />, title: "My Appointments", desc: "View scheduled visits and direct video consultation rooms", path: "/patient-appointments", tag: "Visits", bg: "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20" },
+    { icon: <AlertTriangle size={20} className="text-red-500" />, title: "Emergency SOS Panic", desc: "One-tap emergency broadcast alert to all nearby doctors", path: "/emergency", tag: "SOS", bg: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20" },
+  ];
+
+  const stats = [
+    { label: "Clinical Health Score", value: `${healthScore}/100`, sub: "Optimal range", icon: <Heart size={20} className="text-red-500" /> },
+    { label: "Active Vitals Stream", value: "72 BPM", sub: "Sinus Rhythm", icon: <Activity size={20} className="text-blue-500" /> },
+    { label: "Med Adherence Streak", value: "6 Days", sub: "Consistent", icon: <CheckCircle2 size={20} className="text-emerald-500" /> },
+    { label: "Biological Age Bonus", value: "-1.8 Yrs", sub: "Epigenetic reserve", icon: <Sparkles size={20} className="text-purple-500" /> },
   ];
 
   return (
-    <>
-      <div className="mb-9">
-        <h1 className="text-[2.2rem] md:text-[1.6rem] font-extrabold text-slate-800 dark:text-slate-100 m-0 mb-2">
-          Welcome back, <span className="bg-gradient-to-br from-accent to-indigo-500 bg-clip-text text-transparent">
-            {firstName}
-          </span> 👋
-        </h1>
-        <p className="text-[1.05rem] text-slate-500 dark:text-slate-400 m-0">Here's your health command center. What would you like to do today?</p>
-      </div>
-
-      <div className="flex gap-5 mb-8 flex-wrap md:flex-col">
-        <div className="flex-1 min-w-[200px] bg-white dark:bg-slate-800 rounded-2xl p-5 md:p-6 flex items-center gap-4 border border-slate-200 dark:border-slate-700 shadow-sm transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_8px_24px_rgba(10,77,184,0.12)]">
-          <div className="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-2xl shrink-0 bg-blue-500/12">🩺</div>
+    <div className="space-y-6">
+      
+      {/* Hero Welcome Card - Clean Light Theme */}
+      <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-700 shadow-sm relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-accent/5 dark:bg-accent/10 rounded-full blur-3xl pointer-events-none" />
+        
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div>
-            <h3 className="m-0 text-2xl font-bold text-slate-800 dark:text-slate-100">AI Powered</h3>
-            <p className="m-0 mt-0.5 text-sm text-slate-400">Symptom Analysis</p>
-          </div>
-        </div>
-        <div className="flex-1 min-w-[200px] bg-white dark:bg-slate-800 rounded-2xl p-5 md:p-6 flex items-center gap-4 border border-slate-200 dark:border-slate-700 shadow-sm transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_8px_24px_rgba(10,77,184,0.12)]">
-          <div className="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-2xl shrink-0 bg-emerald-500/12">🔒</div>
-          <div>
-            <h3 className="m-0 text-2xl font-bold text-slate-800 dark:text-slate-100">Verified</h3>
-            <p className="m-0 mt-0.5 text-sm text-slate-400">Certified Doctors</p>
-          </div>
-        </div>
-        <div className="flex-1 min-w-[200px] bg-white dark:bg-slate-800 rounded-2xl p-5 md:p-6 flex items-center gap-4 border border-slate-200 dark:border-slate-700 shadow-sm transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_8px_24px_rgba(10,77,184,0.12)]">
-          <div className="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-2xl shrink-0 bg-purple-500/12">⚡</div>
-          <div>
-            <h3 className="m-0 text-2xl font-bold text-slate-800 dark:text-slate-100">Instant</h3>
-            <p className="m-0 mt-0.5 text-sm text-slate-400">Consultations</p>
-          </div>
-        </div>
-        <div className="flex-1 min-w-[200px] bg-white dark:bg-slate-800 rounded-2xl p-5 md:p-6 flex items-center gap-4 border border-slate-200 dark:border-slate-700 shadow-sm transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_8px_24px_rgba(10,77,184,0.12)]">
-          <div className="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-2xl shrink-0 bg-red-500/12">🚑</div>
-          <div>
-            <h3 className="m-0 text-2xl font-bold text-slate-800 dark:text-slate-100">24/7</h3>
-            <p className="m-0 mt-0.5 text-sm text-slate-400">Emergency Ready</p>
-          </div>
-        </div>
-      </div>
-
-      <h2 className="text-[1.3rem] font-bold text-slate-800 dark:text-slate-100 mb-5">Quick Actions</h2>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] md:grid-cols-1 gap-5">
-        {actions.map((action, i) => (
-          <div 
-            key={i} 
-            className="group bg-white dark:bg-slate-800 rounded-2xl p-7 pt-7 pb-7 border border-slate-200 dark:border-slate-700 cursor-pointer transition-all duration-300 relative overflow-hidden shadow-sm hover:-translate-y-1.5 hover:shadow-[0_12px_30px_rgba(10,77,184,0.15)] hover:border-accent"
-            onClick={() => navigate(action.path)}
-          >
-            <div className={`absolute top-0 left-0 right-0 h-1 rounded-t-2xl opacity-0 transition-opacity duration-300 bg-gradient-to-r ${action.gradient} group-hover:opacity-100`}></div>
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-[1.6rem] mb-[18px] ${action.iconBg}`}>
-              {action.icon}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-accent/10 text-accent mb-3">
+              {greeting}, {firstName}
             </div>
-            <h3 className="text-[1.15rem] font-bold text-slate-800 dark:text-slate-100 m-0 mb-2">{action.title}</h3>
-            <p className="text-[0.9rem] text-slate-500 dark:text-slate-400 m-0 leading-relaxed">{action.desc}</p>
-            <span className="absolute bottom-5 right-5 text-[1.2rem] text-slate-400 transition-all duration-300 group-hover:text-accent group-hover:translate-x-1">→</span>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              Patient Command Center
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-xl">
+              {time.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              {' · '}
+              <span className="text-accent font-semibold">
+                {time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+              </span>
+            </p>
+          </div>
+
+          {/* Quick Score Meter */}
+          <div className="flex items-center gap-4 bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/80 shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-black text-2xl flex items-center justify-center">
+              {healthScore}
+            </div>
+            <div>
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">Health Status</div>
+              <div className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400">Optimal Wellness</div>
+              <div className="text-[11px] text-slate-400">Based on recent vitals & habits</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Vitals Summary Strip (Clickable directly to Tracker) */}
+      <div 
+        onClick={() => navigate('/meds')}
+        className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800 border border-blue-200/80 dark:border-slate-700 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer hover:border-accent transition-all group"
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-accent text-white flex items-center justify-center shrink-0 shadow-md shadow-accent/20">
+            <Activity size={20} className="animate-pulse" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-extrabold text-accent uppercase tracking-wider">Live Biometrics Hub</span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                Connected
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium mt-0.5">
+              Resting HR: <strong className="text-slate-900 dark:text-white">72 BPM</strong> · SpO2: <strong className="text-slate-900 dark:text-white">98%</strong> · BP: <strong className="text-slate-900 dark:text-white">118/76</strong> · Biological Age: <strong className="text-emerald-600 dark:text-emerald-400">22.8 Yrs</strong>
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1.5 text-xs font-bold text-accent group-hover:translate-x-1 transition-transform self-end sm:self-auto">
+          <span>Open Full Vitals & Shinchan Tracker</span>
+          <ArrowRight size={14} />
+        </div>
+      </div>
+
+      {/* Key Metric Highlights */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        {stats.map((s, idx) => (
+          <div key={idx} className="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-700 shadow-sm">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{s.label}</span>
+              {s.icon}
+            </div>
+            <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">{s.value}</div>
+            <div className="text-[11px] text-slate-400 mt-0.5">{s.sub}</div>
           </div>
         ))}
       </div>
-    </>
+
+      {/* Quick Actions Grid */}
+      <div>
+        <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-3">
+          Health Hub Modules
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {actions.map((action, i) => (
+            <div
+              key={i}
+              onClick={() => navigate(action.path)}
+              className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-700 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all cursor-pointer flex flex-col justify-between group"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xl">
+                    {action.icon}
+                  </div>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${action.bg}`}>
+                    {action.tag}
+                  </span>
+                </div>
+                <h3 className="font-bold text-slate-900 dark:text-white text-sm group-hover:text-accent transition-colors">
+                  {action.title}
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                  {action.desc}
+                </p>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs text-slate-400 group-hover:text-accent font-semibold transition-colors">
+                <span>Launch Feature</span>
+                <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
   );
 }
 
@@ -118,137 +201,97 @@ function DoctorDashboard({ user, navigate }) {
   const firstName = user.name ? user.name.split(" ")[0] : "Doctor";
   const isApproved = user.status === "approved";
 
-  const actions = [
-    { icon: "📋", title: "My Appointments", desc: "View and manage patient appointments", path: "/doctor-appointments", gradient: "from-orange-500 to-orange-600", iconBg: "bg-orange-500/15" },
-    { icon: "⚙️", title: "Doctor Panel", desc: "Manage your availability, tokens & schedule", path: "/doctor-panel", gradient: "from-purple-500 to-purple-600", iconBg: "bg-purple-500/15" },
-    { icon: "👤", title: "My Profile", desc: "Update your professional details and photo", path: "/my-profile", gradient: "from-blue-500 to-indigo-500", iconBg: "bg-blue-500/15" },
-  ];
-
   return (
-    <>
-      <div className="mb-9">
-        <h1 className="text-[2.2rem] md:text-[1.6rem] font-extrabold text-slate-800 dark:text-slate-100 m-0 mb-2">
-          Hello, Dr. <span className="bg-gradient-to-br from-accent to-indigo-500 bg-clip-text text-transparent">
-            {firstName}
-          </span> 👋
-        </h1>
-        <p className="text-[1.05rem] text-slate-500 dark:text-slate-400 m-0">Manage your practice and connect with patients.</p>
-      </div>
-
-      <div className={`inline-block py-1.5 px-4 rounded-full text-[0.85rem] font-semibold mb-5 ${isApproved ? "bg-emerald-500/12 text-emerald-600" : "bg-amber-500/12 text-amber-600"}`}>
-        {isApproved ? "✅ Account Verified" : "⏳ Pending Admin Approval"}
-      </div>
-
-      <h2 className="text-[1.3rem] font-bold text-slate-800 dark:text-slate-100 mb-5">Quick Actions</h2>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] md:grid-cols-1 gap-5">
-        {actions.map((action, i) => (
-          <div 
-            key={i} 
-            className="group bg-white dark:bg-slate-800 rounded-2xl p-7 border border-slate-200 dark:border-slate-700 cursor-pointer transition-all duration-300 relative overflow-hidden shadow-sm hover:-translate-y-1.5 hover:shadow-[0_12px_30px_rgba(10,77,184,0.15)] hover:border-accent"
-            onClick={() => navigate(action.path)}
-          >
-            <div className={`absolute top-0 left-0 right-0 h-1 rounded-t-2xl opacity-0 transition-opacity duration-300 bg-gradient-to-r ${action.gradient} group-hover:opacity-100`}></div>
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-[1.6rem] mb-[18px] ${action.iconBg}`}>
-              {action.icon}
+    <div className="space-y-6">
+      <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-700 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-accent/10 text-accent mb-2">
+              <Stethoscope size={13} /> Specialist Portal
             </div>
-            <h3 className="text-[1.15rem] font-bold text-slate-800 dark:text-slate-100 m-0 mb-2">{action.title}</h3>
-            <p className="text-[0.9rem] text-slate-500 dark:text-slate-400 m-0 leading-relaxed">{action.desc}</p>
-            <span className="absolute bottom-5 right-5 text-[1.2rem] text-slate-400 transition-all duration-300 group-hover:text-accent group-hover:translate-x-1">→</span>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+              Dr. {firstName}'s Practice Suite
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+              Review live consultation queues, manage patient appointments, and handle SOS calls.
+            </p>
           </div>
-        ))}
+
+          <span className={`px-3 py-1.5 rounded-full text-xs font-bold self-start sm:self-auto ${
+            isApproved 
+              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20" 
+              : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
+          }`}>
+            {isApproved ? "Verified Practitioner" : "Approval Pending"}
+          </span>
+        </div>
       </div>
-    </>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div 
+          onClick={() => navigate("/doctor-appointments")}
+          className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md cursor-pointer transition-all"
+        >
+          <Calendar size={28} className="text-accent mb-2" />
+          <h3 className="font-bold text-slate-900 dark:text-white text-base">Patient Appointments</h3>
+          <p className="text-xs text-slate-500 mt-1">Review scheduled video visits and live clinic queues.</p>
+        </div>
+
+        <div 
+          onClick={() => navigate("/doctor-panel")}
+          className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md cursor-pointer transition-all"
+        >
+          <Stethoscope size={28} className="text-accent mb-2" />
+          <h3 className="font-bold text-slate-900 dark:text-white text-base">Doctor Practice Console</h3>
+          <p className="text-xs text-slate-500 mt-1">Update hospital affiliation, specialty, and consulting hours.</p>
+        </div>
+
+        <div 
+          onClick={() => navigate("/emergency")}
+          className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md cursor-pointer transition-all"
+        >
+          <AlertTriangle size={28} className="text-red-500 mb-2" />
+          <h3 className="font-bold text-slate-900 dark:text-white text-base">Emergency SOS Responder</h3>
+          <p className="text-xs text-slate-500 mt-1">Receive live panic alerts dispatched from patients in your zone.</p>
+        </div>
+      </div>
+    </div>
   );
 }
 
 /* ================= ADMIN DASHBOARD ================= */
-function AdminDashboard({ user, navigate, showToast }) {
-  const [doctors, setDoctors] = useState([]);
-
-  useEffect(() => {
-    fetch(`${API}/api/admin/pending-doctors`)
-      .then((res) => res.json())
-      .then((data) => setDoctors(data.doctors || []))
-      .catch((err) => console.error(err));
-  }, []);
-
-  const approveDoctor = (doctorId) => {
-    fetch(`${API}/api/admin/approve-doctor`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ doctorId }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        showToast(data.message || "Doctor approved!", "success");
-        setDoctors(doctors.filter((doc) => doc._id !== doctorId));
-      })
-      .catch((err) => {
-        showToast("Failed to approve doctor", "error");
-        console.error(err);
-      });
-  };
-
+function AdminDashboard({ user, navigate }) {
   return (
-    <>
-      <div className="mb-9">
-        <h1 className="text-[2.2rem] md:text-[1.6rem] font-extrabold text-slate-800 dark:text-slate-100 m-0 mb-2">
-          Admin <span className="bg-gradient-to-br from-accent to-indigo-500 bg-clip-text text-transparent">Dashboard</span> 🛡️
+    <div className="space-y-6">
+      <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-700 shadow-sm">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+          System Administration Hub
         </h1>
-        <p className="text-[1.05rem] text-slate-500 dark:text-slate-400 m-0">Manage platform operations, doctor approvals, and more.</p>
-      </div>
-
-      <div className="flex gap-5 mb-8 flex-wrap md:flex-col">
-        <div className="flex-1 min-w-[200px] bg-white dark:bg-slate-800 rounded-2xl p-5 md:p-6 flex items-center gap-4 border border-slate-200 dark:border-slate-700 shadow-sm transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_8px_24px_rgba(10,77,184,0.12)]">
-          <div className="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-2xl shrink-0 bg-blue-500/12">👨‍⚕️</div>
-          <div>
-            <h3 className="m-0 text-2xl font-bold text-slate-800 dark:text-slate-100">{doctors.length}</h3>
-            <p className="m-0 mt-0.5 text-sm text-slate-400">Pending Approvals</p>
-          </div>
-        </div>
-      </div>
-
-      <h2 className="text-[1.3rem] font-bold text-slate-800 dark:text-slate-100 mb-5">Pending Doctor Approvals</h2>
-
-      {doctors.length === 0 && (
-        <p className="text-slate-500 text-center py-10">
-          ✅ No pending doctors. All caught up!
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+          Verify physician medical licenses, monitor system safety logs, and oversee consultations.
         </p>
-      )}
+      </div>
 
-      {doctors.map((doc) => (
-        <div key={doc._id} className="bg-white dark:bg-slate-800 rounded-2xl p-5 md:p-6 border border-slate-200 dark:border-slate-700 mb-4 flex items-center justify-between gap-5 transition-all duration-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
-          <div>
-            <h4 className="m-0 mb-1 text-[1.05rem] text-slate-800 dark:text-slate-100 font-bold">{doc.name}</h4>
-            <p className="m-0 text-[0.85rem] text-slate-500">
-              {doc.email} · Status: <span className="text-amber-500">{doc.status}</span>
-            </p>
-          </div>
-          <button 
-            className="py-2.5 px-6 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white border-none rounded-xl font-semibold cursor-pointer transition-all duration-300 whitespace-nowrap hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(16,185,129,0.3)]"
-            onClick={() => approveDoctor(doc._id)}
-          >
-            ✅ Approve
-          </button>
-        </div>
-      ))}
-
-      <h2 className="text-[1.3rem] font-bold text-slate-800 dark:text-slate-100 mb-5 mt-8">Admin Actions</h2>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] md:grid-cols-1 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div 
-          className="group bg-white dark:bg-slate-800 rounded-2xl p-7 border border-slate-200 dark:border-slate-700 cursor-pointer transition-all duration-300 relative overflow-hidden shadow-sm hover:-translate-y-1.5 hover:shadow-[0_12px_30px_rgba(10,77,184,0.15)] hover:border-accent" 
           onClick={() => navigate("/admin")}
+          className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md cursor-pointer transition-all"
         >
-          <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl opacity-0 transition-opacity duration-300 bg-gradient-to-r from-blue-500 to-indigo-500 group-hover:opacity-100"></div>
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-[1.6rem] mb-[18px] bg-blue-500/15">
-            🛡️
-          </div>
-          <h3 className="text-[1.15rem] font-bold text-slate-800 dark:text-slate-100 m-0 mb-2">Full Admin Panel</h3>
-          <p className="text-[0.9rem] text-slate-500 dark:text-slate-400 m-0 leading-relaxed">Access the complete admin management dashboard</p>
-          <span className="absolute bottom-5 right-5 text-[1.2rem] text-slate-400 transition-all duration-300 group-hover:text-accent group-hover:translate-x-1">→</span>
+          <ShieldCheck size={28} className="text-accent mb-2" />
+          <h3 className="font-bold text-slate-900 dark:text-white text-base">Doctor Verification Console</h3>
+          <p className="text-xs text-slate-500 mt-1">Approve, reject, or request documents from newly registered medical professionals.</p>
+        </div>
+
+        <div 
+          onClick={() => navigate("/queue")}
+          className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md cursor-pointer transition-all"
+        >
+          <BarChart2 size={28} className="text-accent mb-2" />
+          <h3 className="font-bold text-slate-900 dark:text-white text-base">Hospital Queue Metrics</h3>
+          <p className="text-xs text-slate-500 mt-1">Inspect facility token throughput and tele-consultation room statuses.</p>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

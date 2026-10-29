@@ -17,12 +17,18 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 router.put("/update-profile", doctorUpload.single("image"), async (req, res) => {
   try {
-    const { userId, name, degree, specialization, hospitalName, experience, bio } = req.body;
-    const updateData = { name, degree, specialization, hospitalName, experience, bio };
+    const { userId, name, degree, specialization, hospitalName, hospitalAddress, city, experience, bio, phone, age, bloodGroup, emergencyContact, allergies } = req.body;
+    const updateData = { name, degree, specialization, hospitalName, hospitalAddress, city, bio, phone, age, bloodGroup, emergencyContact, allergies };
+    if (experience !== undefined && experience !== "") {
+      updateData.experience = parseInt(String(experience).replace(/[^\d]/g, "")) || 0;
+    }
     if (req.file) updateData.image = req.file.filename;
-    const updatedDoctor = await User.findByIdAndUpdate(userId, updateData, { new: true });
-    res.json({ success: true, doctor: updatedDoctor });
-  } catch (err) { res.status(500).json({ success: false }); }
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true }).select("-password");
+    res.json({ success: true, user: updatedUser, doctor: updatedUser });
+  } catch (err) { 
+    console.error("UPDATE_PROFILE ERROR:", err);
+    res.status(500).json({ success: false, message: err.message }); 
+  }
 });
 
 router.get("/search", async (req, res) => {
@@ -131,13 +137,10 @@ router.get("/approved", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const doctor = await User.findById(req.params.id).lean();
-    if (!doctor) return res.status(404).json({ message: "Doctor not found" });
-    res.json({
-      _id: doctor._id, name: doctor.name, degree: doctor.degree, specialization: doctor.specialization,
-      experience: doctor.experience, hospitalName: doctor.hospitalName, bio: doctor.bio, age: doctor.age, image: doctor.image || null
-    });
-  } catch (err) { res.status(500).json({ message: "Failed to fetch doctor profile" }); }
+    const user = await User.findById(req.params.id).select("-password").lean();
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
+  } catch (err) { res.status(500).json({ message: "Failed to fetch profile" }); }
 });
 
 module.exports = router;

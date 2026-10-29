@@ -40,13 +40,17 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       role: req.body.role,
       specialization: req.body.specialization || "",
-      experience: req.body.experience || "",
+      experience: req.body.experience ? (parseInt(String(req.body.experience).replace(/[^\d]/g, "")) || 0) : 0,
       degree: req.body.degree || "",
       hospitalName: req.body.hospitalName || "",
       hospitalAddress: req.body.hospitalAddress || "",
       city: req.body.city || "",
       phone: req.body.phone || "",
       bio: req.body.bio || "",
+      age: req.body.age || "",
+      bloodGroup: req.body.bloodGroup || "",
+      emergencyContact: req.body.emergencyContact || "",
+      allergies: req.body.allergies || "",
       status: req.body.role === "doctor" ? "pending" : "approved",
       image: req.files?.image?.[0]?.filename || null,
       aadhaarCard: req.files?.aadhaar?.[0]?.filename || null,
@@ -68,7 +72,7 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User exists" });
     }
     console.error("REGISTER ERROR:", err);
-    res.status(500).json({ message: "Registration failed" });
+    res.status(500).json({ message: err.message || "Registration failed" });
   }
 };
 

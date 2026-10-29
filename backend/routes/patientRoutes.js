@@ -13,10 +13,17 @@ const reportUpload = multer({
 router.post("/upload-report", reportUpload.single("report"), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ success: false, message: "No file uploaded" });
-    const { patientId, doctorId, appointmentId, date } = req.body;
-    const newReport = new PatientReport({ patientId, doctorId, appointmentId, date, file: req.file.filename });
+    const { patientId, doctorId, doctorName, reportTitle, appointmentId, date } = req.body;
+    const finalDoctor = doctorName || doctorId || "General Practice / Self-Upload";
+    const newReport = new PatientReport({
+      patientId,
+      doctorId: finalDoctor,
+      appointmentId: appointmentId || "Direct-Upload",
+      date: date || new Date().toISOString().split("T")[0],
+      file: req.file.filename
+    });
     await newReport.save();
-    res.json({ success: true, file: req.file.filename });
+    res.json({ success: true, file: req.file.filename, report: newReport });
   } catch (err) { res.status(500).json({ success: false }); }
 });
 

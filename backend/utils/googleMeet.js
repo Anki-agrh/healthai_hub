@@ -43,11 +43,17 @@ async function createMeeting(doctorEmail, patientEmail, date, time) {
       }
     });
 
-    return event.data.hangoutLink;
+    if (event.data && event.data.hangoutLink) {
+      return event.data.hangoutLink;
+    }
+    const roomCode = `HealthAI-Hub-${Math.random().toString(36).substring(2, 8)}-${Date.now().toString().slice(-4)}`;
+    return `https://meet.jit.si/${roomCode}`;
   } catch (error) {
-    console.error("Google Meet API Error (Fallback to pending link):", error.message);
-    return "https://meet.google.com/pending-authorization"; // Graceful fallback
+    console.error("Google Meet API Error (Falling back to instant video room):", error.message);
+    const roomCode = `HealthAI-Hub-${Math.random().toString(36).substring(2, 8)}-${Date.now().toString().slice(-4)}`;
+    return `https://meet.jit.si/${roomCode}`;
   }
 }
 
 module.exports = createMeeting;
+

@@ -75,14 +75,14 @@ function Navbar() {
         <span className={`block w-6 h-[2.5px] bg-slate-800 dark:bg-slate-100 rounded-sm transition-all duration-300 ${mobileOpen ? '-rotate-45 translate-x-[5px] -translate-y-[5px]' : ''}`}></span>
       </button>
 
-      <div className={`${mobileOpen ? 'flex fixed top-14 left-0 right-0 bottom-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex-col items-center justify-start pt-10 gap-2 z-[1999] animate-slideDown' : 'hidden'} md:flex md:gap-5 md:static md:bg-transparent md:flex-row`}>
-        {["/ai", "/diet", "/nearby-doctors", "/consult", "/queue", "/meds"].map((path) => (
+      <div className={`${mobileOpen ? 'flex fixed inset-0 top-[57px] bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 flex-col items-center justify-start pt-10 gap-2 z-[1998] overflow-y-auto animate-slideDown' : 'hidden'} md:flex md:gap-5 md:static md:bg-transparent md:flex-row md:overflow-visible`}>
+        {["/ai", "/diet", "/nearby-doctors", "/consult", "/queue", "/meds", "/dashboard"].map((path) => (
           <Link 
             key={path} 
             to={path} 
-            className={`no-underline font-semibold transition-colors duration-300 relative py-1 md:py-1 ${mobileOpen ? 'text-[1.15rem] py-3.5 px-7 w-4/5 text-center rounded-xl hover:bg-accent-light' : 'text-[0.95rem]'} ${location.pathname === path ? 'text-accent ' + (mobileOpen ? 'bg-accent-light' : 'after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-accent after:rounded-sm') : 'text-slate-500 hover:text-accent'}`}
+            className={`no-underline font-semibold transition-colors duration-300 relative py-1 md:py-1 ${mobileOpen ? 'text-[1.15rem] py-3.5 px-7 w-4/5 text-center rounded-xl hover:bg-accent-light' : 'text-[0.85rem] lg:text-[0.92rem]'} ${location.pathname === path ? 'text-accent ' + (mobileOpen ? 'bg-accent-light' : 'after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-accent after:rounded-sm') : 'text-slate-500 hover:text-accent'}`}
           >
-            {path === "/ai" ? "AI Assistant" : path === "/diet" ? "Diet Plan" : path === "/nearby-doctors" ? "Nearby Doctors" : path === "/consult" ? "Consult" : path === "/queue" ? "Live Records" : "Dashboard"}
+            {path === "/ai" ? "AI Assistant" : path === "/diet" ? "Diet Plan" : path === "/nearby-doctors" ? "Nearby Doctors" : path === "/consult" ? "Consult" : path === "/queue" ? "Live Records" : path === "/meds" ? "Vitals Tracker" : "Dashboard"}
           </Link>
         ))}
         {user?.role === "admin" && (
@@ -130,7 +130,7 @@ function Navbar() {
                     <Link to="/doctor-panel" className="block py-3 px-4 no-underline text-slate-800 dark:text-slate-200 text-[0.9rem] font-medium transition-colors hover:bg-accent-light hover:text-accent" onClick={() => setShowMenu(false)}>Doctor Panel</Link>
                   )}
                   <Link 
-                    to={user.role === "doctor" ? "/my-profile" : "/"} 
+                    to="/my-profile"
                     className="block py-3 px-4 no-underline text-slate-800 dark:text-slate-200 text-[0.9rem] font-medium transition-colors hover:bg-accent-light hover:text-accent"
                     onClick={() => setShowMenu(false)}
                   >

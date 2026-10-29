@@ -24,7 +24,7 @@ function PatientAppointments() {
 
   return (
     <div>
-      <h2>📅 Book Appointment</h2>
+      <h2>Book Appointment</h2>
 
       <input type="date" onChange={e => setDate(e.target.value)} />
       <input type="time" onChange={e => setTime(e.target.value)} />

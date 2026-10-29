@@ -53,7 +53,7 @@ function Emergency() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center text-center min-h-[80vh] p-[40px_20px] font-sans bg-slate-50 dark:bg-slate-900 transition-colors">
+    <div className="flex flex-col items-center justify-center text-center min-h-[80vh] p-[40px_20px] font-sans bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
       <h2 className="text-[2rem] text-slate-800 dark:text-slate-100 mb-[30px] font-bold">🚨 Emergency SOS</h2>
       
       {!showForm && !alertSent && (

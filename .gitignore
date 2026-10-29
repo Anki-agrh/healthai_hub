@@ -28,6 +28,11 @@ frontend/build/
 logs/
 
 # ======================
+# Temporary scripts
+# ======================
+backend/scripts/
+
+# ======================
 # OS junk files
 # ======================
 .DS_Store

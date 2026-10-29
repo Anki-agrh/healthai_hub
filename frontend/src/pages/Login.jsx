@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
+import { LogIn } from "lucide-react";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -47,7 +48,9 @@ function Login() {
 
   return (
     <div className="max-w-[420px] mx-auto my-[60px] p-[40px_30px] rounded-[20px] font-sans shadow-[0_8px_30px_rgba(0,0,0,0.08)] text-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-      <div className="w-[60px] h-[60px] rounded-full bg-gradient-to-br from-[#0a4db8]/10 to-[#6366f1]/10 flex items-center justify-center text-[1.6rem] mx-auto mb-[16px]">🔐</div>
+      <div className="w-[60px] h-[60px] rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-[16px]">
+        <LogIn className="text-accent" size={26} />
+      </div>
       <h2 className="text-accent mb-[6px] text-[1.6rem] font-extrabold">Welcome Back</h2>
       <p className="text-slate-500 dark:text-slate-400 text-[0.95rem] mb-[28px]">Log in to your HealthAI Hub account</p>
 
